@@ -1,0 +1,294 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CTABlock from '../components/CTABlock.astro';
+
+const milestones = [
+  { year: '2006', note: 'Started in tech as a brand marketer at a small agency in Paris. Learned that most "strategy" decks died on contact with a real customer.' },
+  { year: '2011', note: 'First real operating role. Discovered that shipping beats pitching, and that the shortest distance between a problem and a fix is usually a conversation, not a meeting.' },
+  { year: '2014', note: 'First exit. Loud, messy, deeply educational. Promised myself the next one would be quieter.' },
+  { year: '2018', note: 'Second exit. Quieter. Kept the promise.' },
+  { year: '2021', note: 'Joined Tango as SVP Marketing. Built a team, a brand, and a lot of opinions about what "brand" means when nobody is buying from a banner anymore.' },
+  { year: '2026', note: 'Stepping into fractional CEO, advisor, and coaching work. Fewer companies. Deeper with each.' },
+];
+
+const principles = [
+  {
+    title: 'Clarity before cleverness.',
+    body: 'I would rather say the obvious thing first and be useful than say the interesting thing first and be impressive. Most founders are drowning in clever. They need a person who will tell them the obvious, out loud, once.',
+  },
+  {
+    title: 'Story is strategy.',
+    body: 'Every organization runs on a story. When the story is clear, the org chart feels like decoration. When the story fractures, no amount of process can paper over it. Most of my work is making the story honest again.',
+  },
+  {
+    title: 'Two identities, one person.',
+    body: 'I hold the operator and the human at the same time. The spreadsheet and the late-night conversation. People work with me because both show up. Not because I hide one to seem more serious.',
+  },
+  {
+    title: 'Less, better.',
+    body: 'I take on a small number of companies. I say no often. The work only compounds when there is room in my week to think about it, and yours, properly.',
+  },
+];
+---
+
+<BaseLayout
+  title="About Stève Cattin"
+  description="Twenty years in tech, two exits, and the long road that led to fractional CEO, executive advisor, and coaching work."
+>
+  <!-- Hero -->
+  <section class="about-hero container">
+    <p class="eyebrow">About</p>
+    <h1 class="about-hero__title">
+      Operator by trade.<br />
+      <span class="accent">Human</span> by choice.
+    </h1>
+    <p class="about-hero__lede">
+      I'm Stève Cattin. I've spent twenty years inside tech companies – as a
+      brand lead, an operator, a founder, and now as the person founders call
+      when something isn't quite right and they can't name what yet.
+    </p>
+  </section>
+
+  <!-- The long version -->
+  <section class="about-body container-prose section-tight">
+    <h2>The long version.</h2>
+
+    <p>
+      I grew up between languages and cities, which probably explains why I'm
+      drawn to people who are translating between worlds – a technical
+      founder learning to be a storyteller, a marketer learning to run a P&amp;L,
+      a CEO trying to build a company that matches who they actually are
+      rather than who they thought they were supposed to be.
+    </p>
+
+    <p>
+      My first job in tech was at a small agency, where I learned that a
+      brand is not a logo and a strategy is not a deck. My first operating
+      role taught me that shipping beats pitching, and that most of the work
+      of leadership is unglamorous. My first exit taught me what victory
+      feels like. My second taught me that the victory is quieter than you
+      expect, and you should protect the quiet.
+    </p>
+
+    <p>
+      Along the way I built two companies, sold two companies, ran marketing
+      at Tango, hired people whose careers I'm proud to have been a small
+      part of, and lost a few friends to the wrong job at the wrong company.
+      All of it is in the soup.
+    </p>
+
+    <h2>Why I work this way now.</h2>
+
+    <p>
+      The obvious next move after a marketing SVP role would be another
+      marketing SVP role, or a CMO seat. I looked at both honestly and
+      realized that what I actually like doing – the part that gives me
+      energy instead of spending it – is the quiet conversation with a
+      leader about what is really going on. Not the dashboard. The thing
+      underneath.
+    </p>
+
+    <p>
+      So the work shifted. Fractional CEO for founders who need an operator
+      in the seat. Executive advisor for CEOs who want a sparring partner
+      who's done this before. Coaching for leaders who sense that the
+      hardest problem is the one in the mirror, not the market.
+    </p>
+
+    <p>
+      Fewer companies. More depth. That's the trade.
+    </p>
+  </section>
+
+  <!-- Timeline -->
+  <section class="about-timeline section container">
+    <header class="about-timeline__header">
+      <p class="eyebrow">Path</p>
+      <h2>Twenty years, compressed.</h2>
+    </header>
+
+    <ol class="about-timeline__list">
+      {milestones.map((m) => (
+        <li class="about-timeline__item">
+          <span class="about-timeline__year">{m.year}</span>
+          <p class="about-timeline__note">{m.note}</p>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <hr class="rule" />
+
+  <!-- Principles -->
+  <section class="about-principles section container">
+    <header class="about-principles__header">
+      <p class="eyebrow">How I work</p>
+      <h2>Four things I try not to forget.</h2>
+    </header>
+
+    <div class="about-principles__grid">
+      {principles.map((p, i) => (
+        <article class="about-principles__card">
+          <span class="eyebrow eyebrow-amber">№ {String(i + 1).padStart(2, '0')}</span>
+          <h3>{p.title}</h3>
+          <p>{p.body}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <CTABlock
+    id="book"
+    eyebrow="If this resonates"
+    headline="Let's have the conversation before anything else."
+    body="A twenty-minute intro call. No deck, no pre-work. I'll ask what's actually going on. If the fit is real, we'll both know by the end."
+    ctaLabel="Book an intro call"
+    ctaHref="mailto:hello@stevecattin.com?subject=Intro%20call"
+    secondaryLabel="Read some writing first"
+    secondaryHref="/blog"
+  />
+</BaseLayout>
+
+<style>
+  /* -------- Hero -------- */
+  .about-hero {
+    padding-block: clamp(4rem, 4vw + 3rem, 7rem);
+    max-width: 900px;
+  }
+
+  .about-hero .eyebrow {
+    margin-bottom: var(--space-6);
+  }
+
+  .about-hero__title {
+    font-family: var(--font-display);
+    font-size: var(--text-hero);
+    line-height: 0.98;
+    letter-spacing: -0.035em;
+    margin-bottom: var(--space-6);
+  }
+  .about-hero__title .accent {
+    color: var(--color-cobalt);
+  }
+
+  .about-hero__lede {
+    font-size: var(--text-lg);
+    line-height: var(--lh-normal);
+    color: var(--color-graphite);
+    max-width: 58ch;
+  }
+
+  /* -------- Body -------- */
+  .about-body h2 {
+    font-family: var(--font-display);
+    font-size: var(--text-2xl);
+    letter-spacing: var(--tracking-tight);
+    margin-top: var(--space-12);
+    margin-bottom: var(--space-5);
+  }
+  .about-body h2:first-child { margin-top: 0; }
+
+  .about-body p {
+    font-size: 1.05rem;
+    line-height: var(--lh-prose);
+    margin-bottom: var(--space-5);
+    color: var(--color-ink);
+  }
+
+  /* -------- Timeline -------- */
+  .about-timeline__header {
+    margin-bottom: var(--space-10);
+    max-width: 680px;
+  }
+
+  .about-timeline__header h2 {
+    font-family: var(--font-display);
+    font-size: var(--text-display);
+    letter-spacing: var(--tracking-tight);
+    margin-top: var(--space-3);
+  }
+
+  .about-timeline__list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .about-timeline__item {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: var(--space-8);
+    padding-block: var(--space-6);
+    border-top: 1px solid var(--color-line);
+    align-items: baseline;
+  }
+  .about-timeline__item:last-child {
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .about-timeline__year {
+    font-family: var(--font-mono);
+    font-size: var(--text-base);
+    color: var(--color-cobalt);
+    font-weight: 500;
+    letter-spacing: var(--tracking-mono);
+  }
+
+  .about-timeline__note {
+    font-size: 1.02rem;
+    line-height: var(--lh-normal);
+    color: var(--color-ink);
+    max-width: 60ch;
+  }
+
+  /* -------- Principles -------- */
+  .about-principles__header {
+    margin-bottom: var(--space-10);
+    max-width: 680px;
+  }
+
+  .about-principles__header h2 {
+    font-family: var(--font-display);
+    font-size: var(--text-display);
+    letter-spacing: var(--tracking-tight);
+    margin-top: var(--space-3);
+  }
+
+  .about-principles__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-6);
+  }
+
+  .about-principles__card {
+    background: var(--color-mist);
+    padding: var(--space-8);
+    border-radius: var(--radius-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .about-principles__card h3 {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    letter-spacing: var(--tracking-tight);
+    color: var(--color-ink);
+  }
+
+  .about-principles__card p {
+    font-size: 0.98rem;
+    line-height: var(--lh-normal);
+    color: var(--color-graphite);
+  }
+
+  @media (max-width: 800px) {
+    .about-timeline__item {
+      grid-template-columns: 1fr;
+      gap: var(--space-2);
+    }
+    .about-principles__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

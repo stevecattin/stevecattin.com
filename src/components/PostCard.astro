@@ -1,0 +1,132 @@
+---
+export interface Props {
+  href: string;
+  title: string;
+  description: string;
+  category: string;
+  pubDate: Date;
+  readingTime?: string;
+  index?: number;
+}
+
+const { href, title, description, category, pubDate, readingTime, index } = Astro.props;
+
+const dateLabel = pubDate.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric',
+});
+---
+
+<article class="card">
+  <a href={href} class="card__link">
+    <header class="card__meta">
+      <span class="eyebrow">{category}</span>
+      <span class="card__dot" aria-hidden="true"></span>
+      <time datetime={pubDate.toISOString()} class="eyebrow">{dateLabel}</time>
+      {readingTime && (
+        <>
+          <span class="card__dot" aria-hidden="true"></span>
+          <span class="eyebrow">{readingTime}</span>
+        </>
+      )}
+    </header>
+
+    <h3 class="card__title">{title}</h3>
+    <p class="card__desc">{description}</p>
+
+    <span class="card__arrow" aria-hidden="true">→</span>
+  </a>
+
+  {index !== undefined && (
+    <span class="card__index eyebrow">№ {String(index).padStart(2, '0')}</span>
+  )}
+</article>
+
+<style>
+  .card {
+    position: relative;
+    border-top: 1px solid var(--color-line);
+    padding-block: var(--space-8);
+    transition: background var(--dur-med) var(--ease-out);
+  }
+
+  .card:hover {
+    background: var(--color-mist);
+  }
+
+  .card__link {
+    display: block;
+    color: inherit;
+    position: relative;
+    padding-right: var(--space-10);
+  }
+
+  .card__link:hover { color: inherit; }
+
+  .card__meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-bottom: var(--space-3);
+    flex-wrap: wrap;
+  }
+
+  .card__dot {
+    width: 3px;
+    height: 3px;
+    background: var(--color-ash);
+    border-radius: 50%;
+  }
+
+  .card__title {
+    font-family: var(--font-display);
+    font-size: var(--text-2xl);
+    font-weight: 500;
+    letter-spacing: var(--tracking-tight);
+    color: var(--color-ink);
+    margin-bottom: var(--space-3);
+    transition: color var(--dur-fast) var(--ease-out);
+  }
+
+  .card__link:hover .card__title {
+    color: var(--color-cobalt);
+  }
+
+  .card__desc {
+    font-size: var(--text-base);
+    line-height: var(--lh-normal);
+    color: var(--color-graphite);
+    max-width: 60ch;
+  }
+
+  .card__arrow {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    color: var(--color-ash);
+    transition: transform var(--dur-med) var(--ease-out), color var(--dur-fast) var(--ease-out);
+  }
+
+  .card__link:hover .card__arrow {
+    color: var(--color-cobalt);
+    transform: translate(4px, -50%);
+  }
+
+  .card__index {
+    position: absolute;
+    top: var(--space-8);
+    right: 0;
+    color: var(--color-ash);
+    display: none;
+  }
+
+  @media (min-width: 900px) {
+    .card__link {
+      padding-right: var(--space-16);
+    }
+  }
+</style>

@@ -1,17 +1,373 @@
 ---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostCard from '../components/PostCard.astro';
+import CTABlock from '../components/CTABlock.astro';
+import { getCollection } from 'astro:content';
 
+const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+const recentPosts = allPosts
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
+
+const nowPlaying = [
+  { label: 'Location', value: 'Between Paris and New York' },
+  { label: 'Availability', value: 'Taking 1 new advisory client in Q3' },
+  { label: 'Reading', value: 'Old McKinsey memos, mostly for the footnotes' },
+];
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout
+  title="Stève Cattin – Fractional CEO, advisor, coach"
+  description="Fractional CEO, executive advisor, and coach. Twenty years in tech, two exits, and a belief that we're all made of stories."
+>
+  <!-- =========================================================
+       HERO
+       ========================================================= -->
+  <section class="hero container-wide">
+    <div class="hero__meta">
+      <span class="eyebrow">Est. 2006</span>
+      <span class="hero__dot" aria-hidden="true"></span>
+      <span class="eyebrow">Fractional · Advisory · Coaching</span>
+    </div>
+
+    <h1 class="hero__headline">
+      We're all made<br />
+      of <span class="accent">stories.</span>
+    </h1>
+
+    <p class="hero__lede">
+      I'm Stève. For twenty years I've helped founders and executives build
+      companies that make sense – to the market, to their teams, and to
+      themselves. Two exits, a few hard lessons, and a growing suspicion that
+      most operational problems are story problems in disguise.
+    </p>
+
+    <div class="hero__actions">
+      <a href="#book" class="hero__btn hero__btn--primary">
+        Book a call
+        <span aria-hidden="true">→</span>
+      </a>
+      <a href="/about" class="hero__btn hero__btn--ghost">More about me</a>
+    </div>
+
+    <aside class="hero__now">
+      <p class="eyebrow eyebrow-amber">Now</p>
+      <ul class="hero__now-list">
+        {nowPlaying.map((item) => (
+          <li>
+            <span class="eyebrow">{item.label}</span>
+            <span class="hero__now-value">{item.value}</span>
+          </li>
+        ))}
+      </ul>
+    </aside>
+  </section>
+
+  <hr class="rule" />
+
+  <!-- =========================================================
+       WORK WITH ME — three engagement modes
+       ========================================================= -->
+  <section class="work section container-wide" id="work">
+    <header class="work__header">
+      <p class="eyebrow">What I do</p>
+      <h2 class="work__title">Three ways in.</h2>
+      <p class="work__intro">
+        Different flavors of the same work – helping leaders see their company
+        clearly, decide what's next, and build the version that survives
+        contact with reality.
+      </p>
+    </header>
+
+    <div class="work__grid">
+      <article class="work__card">
+        <p class="eyebrow">01 / Fractional CEO</p>
+        <h3>Two or three days a week, inside the machine.</h3>
+        <p>
+          For founders who need an operator in the seat, not a slide deck on
+          the wall. I run the company alongside you – strategy, exec
+          hiring, the boring ops that compound.
+        </p>
+        <a href="#book" class="work__link">Start a conversation →</a>
+      </article>
+
+      <article class="work__card">
+        <p class="eyebrow">02 / Executive Advisor</p>
+        <h3>Monthly cadence. Unfiltered opinions.</h3>
+        <p>
+          For CEOs and founders who already have a team and a plan – and
+          want a sparring partner who's done this before. We meet, we talk,
+          I tell you what I actually think.
+        </p>
+        <a href="#book" class="work__link">Request a slot →</a>
+      </article>
+
+      <article class="work__card">
+        <p class="eyebrow">03 / Coaching</p>
+        <h3>The person behind the role.</h3>
+        <p>
+          For leaders who suspect the hardest problem isn't the business. It
+          rarely is. Private, structured work on the story you're running
+          underneath the one the org sees.
+        </p>
+        <a href="#book" class="work__link">See if it fits →</a>
+      </article>
+    </div>
+  </section>
+
+  <hr class="rule" />
+
+  <!-- =========================================================
+       WRITING — recent posts
+       ========================================================= -->
+  <section class="writing section container-wide" id="writing">
+    <header class="writing__header">
+      <div>
+        <p class="eyebrow">Writing</p>
+        <h2 class="writing__title">Notes, mostly.</h2>
+      </div>
+      <a href="/blog" class="writing__all">All writing →</a>
+    </header>
+
+    <div class="writing__list">
+      {recentPosts.map((post, i) => (
+        <PostCard
+          href={`/blog/${post.slug}/`}
+          title={post.data.title}
+          description={post.data.description}
+          category={post.data.category}
+          pubDate={post.data.pubDate}
+          readingTime={post.data.readingTime}
+          index={i + 1}
+        />
+      ))}
+    </div>
+  </section>
+
+  <!-- =========================================================
+       CTA — book a call
+       ========================================================= -->
+  <CTABlock
+    id="book"
+    eyebrow="Work together"
+    headline="If the fit is real, we'll both know in twenty minutes."
+    body="A short intro call, no deck, no pre-work. If we're a match, we'll figure out the shape of it. If not, I'll try to point you to someone better suited."
+    ctaLabel="Book an intro call"
+    ctaHref="mailto:hello@stevecattin.com?subject=Intro%20call"
+    secondaryLabel="Email directly"
+    secondaryHref="mailto:hello@stevecattin.com"
+  />
+</BaseLayout>
+
+<style>
+  /* -------- Hero -------- */
+  .hero {
+    padding-block: clamp(5rem, 6vw + 3rem, 9rem);
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-10);
+  }
+
+  .hero__meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .hero__dot {
+    width: 3px;
+    height: 3px;
+    background: var(--color-ash);
+    border-radius: 50%;
+  }
+
+  .hero__headline {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: var(--text-hero);
+    line-height: 0.98;
+    letter-spacing: -0.035em;
+    color: var(--color-ink);
+    max-width: 14ch;
+  }
+
+  .hero__headline .accent {
+    color: var(--color-cobalt);
+  }
+
+  .hero__lede {
+    font-size: var(--text-lg);
+    line-height: var(--lh-normal);
+    max-width: 58ch;
+    color: var(--color-graphite);
+  }
+
+  .hero__actions {
+    display: flex;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+  }
+
+  .hero__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: 0.85rem 1.4rem;
+    border-radius: var(--radius-pill);
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: all var(--dur-fast) var(--ease-out);
+  }
+
+  .hero__btn--primary {
+    background: var(--color-ink);
+    color: var(--color-paper);
+  }
+  .hero__btn--primary:hover {
+    background: var(--color-cobalt);
+    color: var(--color-paper);
+  }
+
+  .hero__btn--ghost {
+    color: var(--color-ink);
+    border: 1px solid var(--color-line);
+  }
+  .hero__btn--ghost:hover {
+    border-color: var(--color-ink);
+    color: var(--color-ink);
+  }
+
+  .hero__now {
+    margin-top: var(--space-6);
+    padding: var(--space-6);
+    background: var(--color-mist);
+    border-radius: var(--radius-lg);
+    max-width: 560px;
+  }
+
+  .hero__now .eyebrow {
+    margin-bottom: var(--space-3);
+  }
+
+  .hero__now-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .hero__now-list li {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: var(--space-4);
+    font-size: 0.95rem;
+  }
+
+  .hero__now-value {
+    color: var(--color-ink);
+  }
+
+  /* -------- Work -------- */
+  .work__header {
+    max-width: 680px;
+    margin-bottom: var(--space-12);
+  }
+
+  .work__title {
+    font-family: var(--font-display);
+    font-size: var(--text-display);
+    letter-spacing: var(--tracking-tight);
+    margin-block: var(--space-3) var(--space-4);
+  }
+
+  .work__intro {
+    font-size: var(--text-lg);
+    line-height: var(--lh-normal);
+    color: var(--color-graphite);
+    max-width: 58ch;
+  }
+
+  .work__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-6);
+  }
+
+  .work__card {
+    background: var(--color-mist);
+    border-radius: var(--radius-lg);
+    padding: var(--space-8);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    transition: transform var(--dur-med) var(--ease-out);
+  }
+
+  .work__card:hover {
+    transform: translateY(-4px);
+  }
+
+  .work__card h3 {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    letter-spacing: var(--tracking-tight);
+    line-height: var(--lh-snug);
+    color: var(--color-ink);
+  }
+
+  .work__card p {
+    font-size: 0.98rem;
+    line-height: var(--lh-normal);
+    color: var(--color-graphite);
+  }
+
+  .work__link {
+    margin-top: auto;
+    padding-top: var(--space-4);
+    font-family: var(--font-mono);
+    font-size: var(--text-mono-sm);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+    color: var(--color-cobalt);
+  }
+
+  /* -------- Writing -------- */
+  .writing__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: var(--space-8);
+    gap: var(--space-6);
+  }
+
+  .writing__title {
+    font-family: var(--font-display);
+    font-size: var(--text-display);
+    letter-spacing: var(--tracking-tight);
+    margin-top: var(--space-3);
+  }
+
+  .writing__all {
+    font-family: var(--font-mono);
+    font-size: var(--text-mono-sm);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+    color: var(--color-graphite);
+    padding-bottom: var(--space-2);
+  }
+  .writing__all:hover { color: var(--color-cobalt); }
+
+  .writing__list {
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  @media (max-width: 960px) {
+    .work__grid { grid-template-columns: 1fr; }
+    .hero__now-list li { grid-template-columns: 1fr; gap: var(--space-1); }
+  }
+
+  @media (max-width: 640px) {
+    .writing__header { flex-direction: column; align-items: flex-start; }
+    .hero__now { padding: var(--space-5); }
+  }
+</style>

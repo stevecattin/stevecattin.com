@@ -1,0 +1,93 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const categories = [...new Set(posts.map((p) => p.data.category))];
+---
+
+<BaseLayout
+  title="Writing – Stève Cattin"
+  description="Essays on leadership, brand, founding, and the quieter seasons in between."
+>
+  <section class="blog-hero container">
+    <p class="eyebrow">Writing</p>
+    <h1 class="blog-hero__title">
+      Notes from the work.
+    </h1>
+    <p class="blog-hero__lede">
+      Essays on leadership, brand, founding, and the quieter seasons in
+      between. Published when I have something honest to say, not on a
+      schedule.
+    </p>
+
+    <ul class="blog-hero__tags">
+      {categories.map((c) => (
+        <li class="eyebrow">{c}</li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="container blog-list section-tight">
+    {posts.map((post, i) => (
+      <PostCard
+        href={`/blog/${post.slug}/`}
+        title={post.data.title}
+        description={post.data.description}
+        category={post.data.category}
+        pubDate={post.data.pubDate}
+        readingTime={post.data.readingTime}
+        index={i + 1}
+      />
+    ))}
+  </section>
+</BaseLayout>
+
+<style>
+  .blog-hero {
+    padding-block: clamp(4rem, 4vw + 3rem, 7rem);
+    max-width: 900px;
+  }
+
+  .blog-hero .eyebrow {
+    margin-bottom: var(--space-5);
+  }
+
+  .blog-hero__title {
+    font-family: var(--font-display);
+    font-size: var(--text-hero);
+    line-height: 0.98;
+    letter-spacing: -0.035em;
+    margin-bottom: var(--space-5);
+    max-width: 18ch;
+  }
+
+  .blog-hero__lede {
+    font-size: var(--text-lg);
+    line-height: var(--lh-normal);
+    color: var(--color-graphite);
+    max-width: 58ch;
+    margin-bottom: var(--space-8);
+  }
+
+  .blog-hero__tags {
+    list-style: none;
+    display: flex;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+  }
+
+  .blog-hero__tags li {
+    padding: 0.4rem 0.8rem;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-pill);
+    color: var(--color-graphite);
+  }
+
+  .blog-list {
+    border-bottom: 1px solid var(--color-line);
+  }
+</style>

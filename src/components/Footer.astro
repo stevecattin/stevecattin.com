@@ -1,0 +1,105 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="container-wide footer__inner">
+    <div class="footer__col">
+      <p class="eyebrow">Stève Cattin</p>
+      <p class="footer__tag">We're all made of <span class="accent">stories</span>.</p>
+    </div>
+
+    <div class="footer__col">
+      <p class="eyebrow">Elsewhere</p>
+      <ul class="footer__links">
+        <li><a href="https://www.linkedin.com/in/stevecattin" rel="me">LinkedIn</a></li>
+        <li><a href="mailto:hello@stevecattin.com">Email</a></li>
+        <li><a href="/rss.xml">RSS</a></li>
+      </ul>
+    </div>
+
+    <div class="footer__col">
+      <p class="eyebrow">Work</p>
+      <ul class="footer__links">
+        <li><a href="/about">About</a></li>
+        <li><a href="/blog">Writing</a></li>
+        <li><a href="#book">Book a call</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="container-wide footer__base">
+    <p>© {year} Stève Cattin</p>
+    <p class="footer__build">Built with Astro. Hosted quietly.</p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    border-top: 1px solid var(--color-line);
+    padding-top: var(--space-16);
+    padding-bottom: var(--space-8);
+    margin-top: var(--space-24);
+  }
+
+  .footer__inner {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: var(--space-10);
+    padding-bottom: var(--space-10);
+  }
+
+  .footer__col .eyebrow {
+    margin-bottom: var(--space-3);
+  }
+
+  .footer__tag {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    color: var(--color-ink);
+    letter-spacing: var(--tracking-tight);
+    max-width: 30ch;
+    line-height: var(--lh-snug);
+  }
+
+  .footer__links {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .footer__links a {
+    color: var(--color-graphite);
+    font-size: 0.95rem;
+  }
+
+  .footer__links a:hover { color: var(--color-cobalt); }
+
+  .footer__base {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--color-line);
+    font-family: var(--font-mono);
+    font-size: var(--text-mono-xs);
+    color: var(--color-ash);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+  }
+
+  @media (max-width: 720px) {
+    .footer__inner {
+      grid-template-columns: 1fr 1fr;
+    }
+    .footer__col:first-child {
+      grid-column: 1 / -1;
+    }
+    .footer__base {
+      flex-direction: column;
+      gap: var(--space-2);
+      align-items: flex-start;
+    }
+  }
+</style>
