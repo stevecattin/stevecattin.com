@@ -24,7 +24,7 @@ const {
 
 <section class="cta" id={id}>
   <div class="container cta__inner">
-    <p class="eyebrow eyebrow-amber">{eyebrow}</p>
+    <p class="cta__eyebrow">{eyebrow}</p>
     <h2 class="cta__headline">{headline}</h2>
     {body && <p class="cta__body">{body}</p>}
 
@@ -49,7 +49,13 @@ const {
     max-width: 920px;
   }
 
-  .cta .eyebrow {
+  .cta__eyebrow {
+    font-family: var(--font-mono);
+    font-size: var(--text-mono-sm);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-cobalt);
+    font-weight: 500;
     margin-bottom: var(--space-4);
   }
 
@@ -81,10 +87,11 @@ const {
     display: inline-flex;
     align-items: center;
     gap: var(--space-2);
-    padding: 0.8rem 1.4rem;
-    border-radius: var(--radius-pill);
-    font-size: 0.95rem;
+    padding: 13px 22px;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
     font-weight: 500;
+    letter-spacing: 0.01em;
     transition: background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
   }
 

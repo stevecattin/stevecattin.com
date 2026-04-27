@@ -129,7 +129,7 @@ const principles = [
     <div class="about-principles__grid">
       {principles.map((p, i) => (
         <article class="about-principles__card">
-          <span class="eyebrow eyebrow-amber">№ {String(i + 1).padStart(2, '0')}</span>
+          <span class="about-principles__num">№ {String(i + 1).padStart(2, '0')}</span>
           <h3>{p.title}</h3>
           <p>{p.body}</p>
         </article>
@@ -261,12 +261,22 @@ const principles = [
   }
 
   .about-principles__card {
-    background: var(--color-mist);
+    background: var(--color-white);
+    border: 0.5px solid var(--color-line);
     padding: var(--space-8);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-md);
     display: flex;
     flex-direction: column;
     gap: var(--space-3);
+  }
+
+  .about-principles__num {
+    font-family: var(--font-mono);
+    font-size: var(--text-mono-sm);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-cobalt);
+    font-weight: 500;
   }
 
   .about-principles__card h3 {

@@ -98,8 +98,28 @@ em { font-style: italic; }
   font-weight: 500;
 }
 
-.eyebrow-amber {
-  color: var(--color-amber);
+/* Cobalt pill eyebrow — hero mark, "stevecattin.com · v4" treatment */
+.eyebrow-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--text-mono-sm);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-cobalt);
+  background: var(--color-cobalt-tint);
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  font-weight: 500;
+}
+
+.eyebrow-pill .dot-mark {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-cobalt);
+  display: inline-block;
 }
 
 /* ============================================================
