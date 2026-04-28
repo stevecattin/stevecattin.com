@@ -5,9 +5,10 @@ export interface Props {
   category: string;
   pubDate: Date;
   readingTime?: string;
+  wide?: boolean;
 }
 
-const { href, title, category, pubDate, readingTime } = Astro.props;
+const { href, title, category, pubDate, readingTime, wide = false } = Astro.props;
 
 // Direction 06 date format: 2026.04.12 (dotted, ISO-ish)
 const y = pubDate.getFullYear();
@@ -19,7 +20,7 @@ const dateLabel = `${y}.${m}.${d}`;
 const readingLabel = readingTime ? readingTime.replace(/\s*read$/i, '') : null;
 ---
 
-<a href={href} class="post-card">
+<a href={href} class:list={["post-card", { "post-card--wide": wide }]}>
   <div class="post-card__cat">{category}</div>
   <div class="post-card__title">{title}</div>
   <div class="post-card__meta">
@@ -75,5 +76,25 @@ const readingLabel = readingTime ? readingTime.replace(/\s*read$/i, '') : null;
     color: var(--color-ash);
     letter-spacing: var(--tracking-mono);
     margin-top: var(--space-3);
+  }
+
+  .post-card--wide {
+    grid-column: span 2;
+    padding: var(--space-6);
+  }
+
+  .post-card--wide .post-card__title {
+    font-size: 18px;
+    max-width: 30ch;
+  }
+
+  @media (max-width: 960px) {
+    .post-card--wide {
+      grid-column: span 1;
+      padding: var(--space-4);
+    }
+    .post-card--wide .post-card__title {
+      font-size: 15px;
+    }
   }
 </style>

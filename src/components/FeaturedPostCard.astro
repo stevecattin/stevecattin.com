@@ -1,0 +1,128 @@
+---
+export interface Props {
+  href: string;
+  title: string;
+  description: string;
+  category: string;
+  pubDate: Date;
+  readingTime?: string;
+}
+
+const { href, title, description, category, pubDate, readingTime } = Astro.props;
+
+// Direction 06 date format: 2026.04.12
+const y = pubDate.getFullYear();
+const m = String(pubDate.getMonth() + 1).padStart(2, '0');
+const d = String(pubDate.getDate()).padStart(2, '0');
+const dateLabel = `${y}.${m}.${d}`;
+
+const readingLabel = readingTime ? readingTime.replace(/\s*read$/i, '') : null;
+---
+
+<a href={href} class="featured">
+  <div class="featured__meta">
+    <span class="featured__cat">{category}</span>
+    <span class="featured__dot" aria-hidden="true"></span>
+    <time datetime={pubDate.toISOString()}>{dateLabel}</time>
+    {readingLabel && (
+      <>
+        <span class="featured__dot" aria-hidden="true"></span>
+        <span>{readingLabel}</span>
+      </>
+    )}
+  </div>
+
+  <h2 class="featured__title">{title}</h2>
+  <p class="featured__lede">{description}</p>
+
+  <span class="featured__cta">
+    Read essay <span class="arrow" aria-hidden="true">→</span>
+  </span>
+</a>
+
+<style>
+  .featured {
+    display: block;
+    padding: var(--space-10) var(--space-8);
+    background: var(--color-white);
+    border: 0.5px solid var(--color-line);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    color: var(--color-ink);
+    transition:
+      border-color var(--dur-fast) var(--ease-out),
+      box-shadow var(--dur-med) var(--ease-out);
+    margin-bottom: var(--space-8);
+  }
+
+  .featured:hover {
+    border-color: var(--color-cobalt);
+    box-shadow: 0 6px 24px -10px rgba(40, 48, 255, 0.18);
+  }
+
+  .featured:hover .arrow {
+    transform: translateX(4px);
+  }
+
+  .featured__meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-family: var(--font-mono);
+    font-size: var(--text-mono-sm);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+    color: var(--color-ash);
+    margin-bottom: var(--space-5);
+    flex-wrap: wrap;
+  }
+
+  .featured__cat {
+    color: var(--color-cobalt);
+    font-weight: 500;
+  }
+
+  .featured__dot {
+    width: 3px;
+    height: 3px;
+    background: var(--color-ash);
+    border-radius: 50%;
+  }
+
+  .featured__title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 1.5rem + 2vw, 3rem);
+    line-height: var(--lh-tight);
+    letter-spacing: var(--tracking-tight);
+    margin-bottom: var(--space-4);
+    max-width: 24ch;
+  }
+
+  .featured__lede {
+    font-size: var(--text-lg);
+    line-height: var(--lh-normal);
+    color: var(--color-graphite);
+    max-width: 58ch;
+    margin-bottom: var(--space-6);
+  }
+
+  .featured__cta {
+    font-family: var(--font-mono);
+    font-size: var(--text-mono-sm);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+    color: var(--color-cobalt);
+    font-weight: 500;
+  }
+
+  .arrow {
+    display: inline-block;
+    transition: transform var(--dur-fast) var(--ease-out);
+  }
+
+  @media (max-width: 640px) {
+    .featured {
+      padding: var(--space-8) var(--space-6);
+    }
+  }
+</style>
