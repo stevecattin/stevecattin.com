@@ -15,39 +15,63 @@ const recentPosts = allPosts
 >
   <section class="hero">
     <div class="hero__inner container-wide">
-      <p class="eyebrow-pill">
-        <span class="dot-mark" aria-hidden="true"></span>
-        Fractional. Executive Advisor. Coaching.
-      </p>
+      <div class="hero__lede">
+        <div class="hero__copy">
+          <p class="eyebrow-pill">
+            <span class="dot-mark" aria-hidden="true"></span>
+            Fractional Executive. Operator. Sparring Partner.
+          </p>
 
-      <h1 class="hero__headline">
-        We're all made of <em class="hero__accent">stories.</em>
-      </h1>
+          <h1 class="hero__headline">
+            We're all made of <em class="hero__accent">stories.</em>
+          </h1>
 
-      <p class="hero__sub">
-        The person your network sends you to when things get complicated.
-        Essays, frameworks, and the occasional strong opinion – alongside
-        fractional executive, advisory, and coaching work for founders who want
-        a sharp second brain in the room.
-      </p>
+          <p class="hero__sub">
+            Hi, I'm Stève! I love helping founders, executives and their teams
+            when things get complicated. 15+ years of B2B Tech and 2
+            acquisitions in. Here's what I keep finding: when something isn't
+            working, it's rarely just the plan. And it's rarely just the team.
+            It's usually the space between them.
+          </p>
 
-      <div class="hero__cta-row">
-        <a href="mailto:hello@stevecattin.com?subject=Intro%20call" class="hero__cta hero__cta--primary">
-          Book a conversation →
-        </a>
-      </div>
+          <div class="hero__cta-row">
+            <a href="mailto:hello@stevecattin.com?subject=Intro%20call" class="hero__cta hero__cta--primary">
+              Let's chat →
+            </a>
+          </div>
+        </div>
 
-      <div class="feed-preview">
-        {recentPosts.map((post) => (
-          <PostCard
-            href={`/blog/${post.slug}/`}
-            title={post.data.title}
-            category={post.data.category}
-            pubDate={post.data.pubDate}
-            readingTime={post.data.readingTime}
+        <figure class="hero__portrait">
+          <img
+            src="/portrait.png"
+            alt="Portrait of Stève Cattin"
+            width="1792"
+            height="2390"
+            loading="eager"
+            decoding="async"
           />
-        ))}
+        </figure>
       </div>
+
+      <section class="recent" aria-labelledby="recent-title">
+        <header class="recent__head">
+          <h2 id="recent-title" class="recent__title">Recent thinking</h2>
+
+          <p class="recent__sub">Essays, frameworks, and the occasional strong opinion.</p>
+        </header>
+
+        <div class="feed-preview">
+          {recentPosts.map((post) => (
+            <PostCard
+              href={`/blog/${post.slug}/`}
+              title={post.data.title}
+              category={post.data.category}
+              pubDate={post.data.pubDate}
+              readingTime={post.data.readingTime}
+            />
+          ))}
+        </div>
+      </section>
     </div>
   </section>
 </BaseLayout>
@@ -56,7 +80,75 @@ const recentPosts = allPosts
   /* -------- Hero (the entire homepage in Direction 06) -------- */
   .hero {
     background: var(--color-paper);
-    padding-block: clamp(80px, 8vw, 144px);
+    padding-top: clamp(48px, 5vw, 96px);
+    padding-bottom: clamp(80px, 8vw, 144px);
+  }
+
+  /* Asymmetric two-column lede: copy on the left, portrait on the right.
+     Portrait is anchored to the hairline below; text floats centered in
+     the row so it sits balanced between nav and hairline, with breathing
+     room above the eyebrow and below the CTA. The min-height guarantees
+     enough vertical space for that breathing room at any container width. */
+  .hero__lede {
+    display: grid;
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+    gap: clamp(32px, 5vw, 72px);
+    min-height: clamp(560px, 55vh, 680px);
+    margin-bottom: 0;
+  }
+
+  .hero__copy {
+    /* keep the existing copy block intact; just lets the portrait sit beside it */
+    min-width: 0;
+    align-self: center;
+  }
+
+  .hero__portrait {
+    margin: 0;
+    aspect-ratio: 3 / 4;
+    max-width: 460px;
+    justify-self: end;
+    align-self: end;
+    width: 100%;
+    /* Clip the cast shadow at the figure's bottom edge so it doesn't
+       bleed past the hairline into the feed-preview below. */
+    overflow: hidden;
+  }
+
+  .hero__portrait img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: bottom;
+    /* Two stacked drop-shadows that follow the silhouette via the PNG's
+       alpha channel — re-creates the "photographed against a wall" cast
+       shadow without bringing the wall rectangle back. Warm-gray tone
+       sits more naturally on warm paper than pure black. */
+    filter:
+      drop-shadow(0 3px 8px rgba(40, 35, 30, 0.10))
+      drop-shadow(8px 16px 36px rgba(40, 35, 30, 0.14));
+  }
+
+  /* Mobile: stack with the portrait above, kept rectangular and modest.
+     No hairline to anchor to up there — portrait just sits at the top. */
+  @media (max-width: 760px) {
+    .hero__lede {
+      grid-template-columns: 1fr;
+      gap: var(--space-8);
+      margin-bottom: var(--space-10);
+    }
+
+    .hero__portrait {
+      order: -1;
+      max-width: 160px;
+      justify-self: start;
+    }
+  }
+
+  /* Reset the hero__cta-row bottom margin — the lede grid handles spacing now. */
+  .hero__lede .hero__cta-row {
+    margin-bottom: 0;
   }
 
   .eyebrow-pill {
@@ -131,13 +223,41 @@ const recentPosts = allPosts
     color: var(--color-paper);
   }
 
+  /* -------- Recent writings section -------- */
+  .recent {
+    /* Hairline lives here now: divides the hero from the writings section.
+       Portrait grounds on this line above. */
+    border-top: 0.5px solid var(--color-line);
+    padding-top: clamp(40px, 4vw, 64px);
+  }
+
+  .recent__head {
+    margin-bottom: var(--space-8);
+    max-width: 720px;
+  }
+
+  .recent__title {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: var(--text-2xl);
+    line-height: var(--lh-snug);
+    letter-spacing: var(--tracking-tight);
+    color: var(--color-ink);
+    margin: 0 0 var(--space-2);
+  }
+
+  .recent__sub {
+    font-size: var(--text-base);
+    line-height: var(--lh-normal);
+    color: var(--color-graphite);
+    margin: 0;
+  }
+
   /* -------- Post feed preview -------- */
   .feed-preview {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: var(--space-4);
-    padding-top: var(--space-8);
-    border-top: 0.5px solid var(--color-line);
   }
 
   @media (max-width: 960px) {
