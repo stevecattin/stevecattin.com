@@ -8,7 +8,10 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
 const [featured, ...rest] = posts;
-const categories = [...new Set(posts.map((p) => p.data.category))];
+// Derived from posts — new categories appear automatically when used
+const categories = ['Leadership', 'Marketing', 'Founding', 'Personal'].filter(
+  (c) => posts.some((p) => p.data.category === c)
+);
 ---
 
 <BaseLayout
@@ -26,40 +29,69 @@ const categories = [...new Set(posts.map((p) => p.data.category))];
       schedule.
     </p>
 
-    <ul class="blog-hero__tags">
-      <li class="eyebrow is-active">All</li>
+    <ul class="blog-hero__tags" id="category-filters">
+      <li>
+        <button class="eyebrow filter-btn is-active" data-filter="all">All</button>
+      </li>
       {categories.map((c) => (
-        <li class="eyebrow">{c}</li>
+        <li>
+          <button class="eyebrow filter-btn" data-filter={c}>{c}</button>
+        </li>
       ))}
     </ul>
   </section>
 
   <section class="container blog-list section-tight">
     {featured && (
-      <FeaturedPostCard
-        href={`/blog/${featured.slug}/`}
-        title={featured.data.title}
-        description={featured.data.description}
-        category={featured.data.category}
-        pubDate={featured.data.pubDate}
-        readingTime={featured.data.readingTime}
-      />
+      <div data-post-category={featured.data.category}>
+        <FeaturedPostCard
+          href={`/blog/${featured.slug}/`}
+          title={featured.data.title}
+          description={featured.data.description}
+          category={featured.data.category}
+          pubDate={featured.data.pubDate}
+          readingTime={featured.data.readingTime}
+        />
+      </div>
     )}
 
     <div class="blog-grid">
       {rest.map((post, i) => (
-        <PostCard
-          href={`/blog/${post.slug}/`}
-          title={post.data.title}
-          category={post.data.category}
-          pubDate={post.data.pubDate}
-          readingTime={post.data.readingTime}
-          wide={i % 5 === 3}
-        />
+        <div data-post-category={post.data.category}>
+          <PostCard
+            href={`/blog/${post.slug}/`}
+            title={post.data.title}
+            category={post.data.category}
+            pubDate={post.data.pubDate}
+            readingTime={post.data.readingTime}
+            wide={i % 5 === 3}
+          />
+        </div>
       ))}
     </div>
   </section>
 </BaseLayout>
+
+<script>
+  const filterBtns = document.querySelectorAll<HTMLButtonElement>('.filter-btn');
+  const postItems = document.querySelectorAll<HTMLElement>('[data-post-category]');
+
+  filterBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const filter = btn.dataset.filter!;
+
+      // Update active button
+      filterBtns.forEach((b) => b.classList.remove('is-active'));
+      btn.classList.add('is-active');
+
+      // Show / hide posts
+      postItems.forEach((item) => {
+        const match = filter === 'all' || item.dataset.postCategory === filter;
+        item.style.display = match ? '' : 'none';
+      });
+    });
+  });
+</script>
 
 <style>
   .blog-hero {
@@ -95,14 +127,24 @@ const categories = [...new Set(posts.map((p) => p.data.category))];
     flex-wrap: wrap;
   }
 
-  .blog-hero__tags li {
+  .filter-btn {
     padding: 6px 10px;
     border: 0.5px solid var(--color-line);
     border-radius: var(--radius-sm);
     color: var(--color-graphite);
+    background: transparent;
+    cursor: pointer;
+    transition: border-color var(--dur-fast) var(--ease-out),
+                color var(--dur-fast) var(--ease-out),
+                background var(--dur-fast) var(--ease-out);
   }
 
-  .blog-hero__tags li.is-active {
+  .filter-btn:hover {
+    border-color: var(--color-cobalt);
+    color: var(--color-cobalt);
+  }
+
+  .filter-btn.is-active {
     border-color: var(--color-cobalt);
     color: var(--color-cobalt);
     background: var(--color-cobalt-tint);
