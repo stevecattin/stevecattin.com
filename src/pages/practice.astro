@@ -1,0 +1,387 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CTABlock from '../components/CTABlock.astro';
+
+const pillars = [
+  {
+    title: 'A steady hand when everything else is moving.',
+    body: 'Twice I have been the constant while a company around me went through existential change. At Locatee, after losing the largest client, we went from 70+ people to 14 in two waves of downsizing. My job stopped being marketing – it became keeping the remaining team focused, listening, holding things together while the M&A process ran in the background. At Tango, through a leadership rebuild and a CRO seat that cycled three times in two years, I rebuilt the marketing organisation and held GTM on rails. Two very different storms, same disposition. That is not luck.',
+  },
+  {
+    title: 'EU-to-NA expansion. Execution, not exposure.',
+    body: 'I led Locatee\'s first North American expansion from Europe. Opened the office, hired the first four people, navigated the cultural shift, the hiring differences, the positioning that does not show up in any playbook. Most European fractional executives have NA exposure – a few trips, some remote collaboration. I have done the actual work of building something there from nothing. If your next chapter involves the US, that is directly relevant.',
+  },
+  {
+    title: 'Two exits. On the second, I was at the table.',
+    body: 'Aspediens acquired by CSC/DXC. Locatee acquired by Tango. Two very different exits, both as part of the leadership team. On the second, I worked the M&A process itself – at the table with our co-CEOs, CFO, board, and the acquirer, while also holding the team together on the other side of the wall. Most marketing executives are downstream of M&A. They get the announcement and manage the comms. I was in the room where the deal was being shaped.',
+  },
+  {
+    title: 'A framework for the AI shift on every marketer\'s desk.',
+    body: 'The AI Marketing Ascendancy Framework (AIMA) is my answer to the question every marketing leader is sitting with right now: what does AI actually change, and how do we respond without losing what made us good? Not a tool list – a model for what to automate, what to protect, and how to evolve a marketing organisation as the landscape shifts. I built it from the inside, running a real team in real time.',
+  },
+];
+
+const modes = [
+  {
+    title: 'Fractional executive.',
+    body: 'One to three days a week, in the seat. I run marketing or GTM alongside you, hire who needs hiring, and have all the other conversations a founder needs to have along the way.',
+  },
+  {
+    title: 'Advisory.',
+    body: 'A monthly cadence, outside the org chart. Sparring partner for founders and CEOs who already have a team and a plan, and want a senior operator to think with.',
+  },
+  {
+    title: 'Coaching.',
+    body: 'Private 1:1 work for leaders who suspect the hardest problem isn\'t the business. Structured, confidential, and focused on the person behind the role.',
+  },
+];
+
+const audiences = [
+  {
+    tag: 'Founders & CEOs',
+    body: 'who want a senior operator in their corner – not someone to run campaigns, but someone who can sit in all the rooms.',
+  },
+  {
+    tag: 'European → North America',
+    body: 'a European company starting to think seriously about North America, wanting someone who has actually made that transition work.',
+  },
+  {
+    tag: 'GTM straining quietly',
+    body: 'GTM holding up on the surface but the engine underneath is straining – better to address it before it becomes visible.',
+  },
+  {
+    tag: 'Pre-exit / strategic moment',
+    body: 'approaching an exit or a significant strategic moment, wanting someone in the room who has been through one.',
+  },
+];
+---
+
+<BaseLayout
+  title="Practice – Stève Cattin"
+  description="What I bring to fractional executive, advisor, and coaching engagements – the pattern, the proof, and the shape of the work."
+>
+  <!-- Hero -->
+  <section class="practice-hero container">
+    <p class="eyebrow">Practice</p>
+    <h1 class="practice-hero__title">
+      What I bring to <span class="accent">the room.</span>
+    </h1>
+    <p class="practice-hero__lede">
+      Most fractional executives will tell you they think like a founder. I want
+      to give you the honest version. I have never founded a company. But I have
+      been in the room with founders through every version of hard – the
+      downsize, the leadership shake-up, the revolving CRO door, the M&A
+      process, the quiet moments when nobody else in the building knows what
+      to say. That is a different kind of partner.
+    </p>
+  </section>
+
+  <!-- What makes this different -->
+  <section class="practice-body container-prose section-tight">
+    <h2>Twenty years operating. Fifteen of them in tech. All in-house.</h2>
+
+    <p>
+      Agency work is excellent – and it keeps you at arm's length from the
+      company by design. I have never had that arm's length. I have been
+      inside the walls when things went wrong, and inside the walls when they
+      went right. That combination of depth and proximity is what I bring.
+    </p>
+
+    <p>
+      I have worked across PropTech, food-tech, industrial, enterprise IT, and
+      hospitality – startups, Series A, scale-ups, Fortune 500. Not a vertical
+      specialist. A pattern recogniser. Companies in motion – the ones
+      pivoting, expanding, restructuring – tend to benefit from that more
+      than from industry expertise alone.
+    </p>
+  </section>
+
+  <!-- Pillars -->
+  <section class="practice-pillars section container">
+    <header class="practice-pillars__header">
+      <p class="eyebrow">The specifics</p>
+      <h2>Four things, with proof.</h2>
+    </header>
+
+    <div class="practice-pillars__grid">
+      {pillars.map((p, i) => (
+        <article class="practice-pillars__card">
+          <span class="practice-pillars__num">№ {String(i + 1).padStart(2, '0')}</span>
+          <h3>{p.title}</h3>
+          <p>{p.body}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <!-- Engagement modes -->
+  <section class="practice-modes section container">
+    <header class="practice-modes__header">
+      <p class="eyebrow">Ways in</p>
+      <h2>Three shapes the work takes.</h2>
+    </header>
+
+    <div class="practice-modes__grid">
+      {modes.map((m, i) => (
+        <article class="practice-modes__card">
+          <span class="practice-modes__num">№ {String(i + 1).padStart(2, '0')}</span>
+          <h3>{m.title}</h3>
+          <p>{m.body}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <hr class="rule" />
+
+  <!-- Portfolio shape -->
+  <section class="practice-body container-prose section-tight">
+    <h2>Portfolio shape, on purpose.</h2>
+
+    <p>
+      After six years at Locatee and Tango – including a closing chapter as
+      the through-line for GTM through an intense period of change – I am
+      stepping into a new shape of work this summer.
+    </p>
+
+    <p>
+      Fractional and advisory mandates across a small number of companies,
+      plus bandwidth for a longer-term project of my own. I am not looking
+      to fill a dance card. I am looking for two or three companies where
+      the work actually matters and where I can show up as a genuine partner,
+      not a service provider.
+    </p>
+  </section>
+
+  <hr class="rule" />
+
+  <!-- Who this is for -->
+  <section class="practice-audiences section container">
+    <header class="practice-audiences__header">
+      <p class="eyebrow">Who this is for</p>
+      <h2>If you recognise yourself here.</h2>
+    </header>
+
+    <ol class="practice-audiences__list">
+      {audiences.map((a) => (
+        <li class="practice-audiences__item">
+          <span class="practice-audiences__tag">{a.tag}</span>
+          <p class="practice-audiences__note">{a.body}</p>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <CTABlock
+    id="book"
+    eyebrow="Let's find out"
+    headline="The best way to know is a conversation."
+    body="Twenty minutes. No deck, no pitch. I'll ask what's actually going on, and we'll see whether this makes sense for both of us."
+    ctaLabel="Book an intro call"
+    ctaHref="mailto:hello@stevecattin.com?subject=Intro%20call"
+    secondaryLabel="Read some writing first"
+    secondaryHref="/blog"
+  />
+</BaseLayout>
+
+<style>
+  /* -------- Hero -------- */
+  .practice-hero {
+    padding-block: clamp(4rem, 4vw + 3rem, 7rem);
+    max-width: 900px;
+  }
+
+  .practice-hero .eyebrow {
+    margin-bottom: var(--space-6);
+  }
+
+  .practice-hero__title {
+    font-family: var(--font-display);
+    font-size: var(--text-hero);
+    line-height: 0.98;
+    letter-spacing: -0.035em;
+    margin-bottom: var(--space-6);
+  }
+  .practice-hero__title .accent {
+    color: var(--color-cobalt);
+  }
+
+  .practice-hero__lede {
+    font-size: var(--text-lg);
+    line-height: var(--lh-normal);
+    color: var(--color-graphite);
+    max-width: 60ch;
+  }
+
+  /* -------- Body prose (shared register with About) -------- */
+  .practice-body h2 {
+    font-family: var(--font-display);
+    font-size: var(--text-2xl);
+    letter-spacing: var(--tracking-tight);
+    margin-top: var(--space-12);
+    margin-bottom: var(--space-5);
+  }
+  .practice-body h2:first-child { margin-top: 0; }
+
+  .practice-body p {
+    font-size: 1.05rem;
+    line-height: var(--lh-prose);
+    margin-bottom: var(--space-5);
+    color: var(--color-ink);
+  }
+
+  /* -------- Pillars -------- */
+  .practice-pillars__header {
+    margin-bottom: var(--space-10);
+    max-width: 680px;
+  }
+  .practice-pillars__header h2 {
+    font-family: var(--font-display);
+    font-size: var(--text-display);
+    letter-spacing: var(--tracking-tight);
+    margin-top: var(--space-3);
+  }
+
+  .practice-pillars__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-6);
+  }
+
+  .practice-pillars__card {
+    background: var(--color-white);
+    border: 0.5px solid var(--color-line);
+    padding: var(--space-8);
+    border-radius: var(--radius-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .practice-pillars__num {
+    font-family: var(--font-mono);
+    font-size: var(--text-mono-sm);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-cobalt);
+    font-weight: 500;
+  }
+
+  .practice-pillars__card h3 {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    letter-spacing: var(--tracking-tight);
+    color: var(--color-ink);
+  }
+
+  .practice-pillars__card p {
+    font-size: 0.98rem;
+    line-height: var(--lh-normal);
+    color: var(--color-graphite);
+  }
+
+  /* -------- Modes (engagement shapes) -------- */
+  .practice-modes__header {
+    margin-bottom: var(--space-10);
+    max-width: 680px;
+  }
+  .practice-modes__header h2 {
+    font-family: var(--font-display);
+    font-size: var(--text-display);
+    letter-spacing: var(--tracking-tight);
+    margin-top: var(--space-3);
+  }
+
+  .practice-modes__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-6);
+  }
+
+  .practice-modes__card {
+    background: var(--color-white);
+    border: 0.5px solid var(--color-line);
+    padding: var(--space-7);
+    border-radius: var(--radius-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .practice-modes__num {
+    font-family: var(--font-mono);
+    font-size: var(--text-mono-sm);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-cobalt);
+    font-weight: 500;
+  }
+
+  .practice-modes__card h3 {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    letter-spacing: var(--tracking-tight);
+    color: var(--color-ink);
+  }
+
+  .practice-modes__card p {
+    font-size: 0.98rem;
+    line-height: var(--lh-normal);
+    color: var(--color-graphite);
+  }
+
+  /* -------- Audiences -------- */
+  .practice-audiences__header {
+    margin-bottom: var(--space-10);
+    max-width: 680px;
+  }
+  .practice-audiences__header h2 {
+    font-family: var(--font-display);
+    font-size: var(--text-display);
+    letter-spacing: var(--tracking-tight);
+    margin-top: var(--space-3);
+  }
+
+  .practice-audiences__list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .practice-audiences__item {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: var(--space-8);
+    padding-block: var(--space-6);
+    border-top: 1px solid var(--color-line);
+    align-items: baseline;
+  }
+  .practice-audiences__item:last-child {
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .practice-audiences__tag {
+    font-family: var(--font-mono);
+    font-size: var(--text-mono-sm);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-cobalt);
+    font-weight: 500;
+  }
+
+  .practice-audiences__note {
+    font-size: 1.02rem;
+    line-height: var(--lh-normal);
+    color: var(--color-ink);
+    max-width: 62ch;
+  }
+
+  @media (max-width: 800px) {
+    .practice-pillars__grid { grid-template-columns: 1fr; }
+    .practice-modes__grid { grid-template-columns: 1fr; }
+    .practice-audiences__item {
+      grid-template-columns: 1fr;
+      gap: var(--space-2);
+    }
+  }
+</style>

@@ -14,6 +14,7 @@ const isActive = (href: string) =>
     <nav class="nav__links" aria-label="Primary">
       <a href="/" class:list={['nav__link', { 'is-active': isActive('/') }]}>Home</a>
       <a href="/about" class:list={['nav__link', { 'is-active': isActive('/about') }]}>About</a>
+      <a href="/practice" class:list={['nav__link', { 'is-active': isActive('/practice') }]}>Practice</a>
       <a href="/blog" class:list={['nav__link', { 'is-active': isActive('/blog') }]}>Writing</a>
       <a href="mailto:hello@stevecattin.com?subject=Intro%20call" class="nav__cta">Book a call</a>
     </nav>

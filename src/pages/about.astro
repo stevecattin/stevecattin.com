@@ -3,30 +3,33 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import CTABlock from '../components/CTABlock.astro';
 
 const milestones = [
-  { year: '2006', note: 'Started in tech as a brand marketer at a small agency in Paris. Learned that most "strategy" decks died on contact with a real customer.' },
-  { year: '2011', note: 'First real operating role. Discovered that shipping beats pitching, and that the shortest distance between a problem and a fix is usually a conversation, not a meeting.' },
-  { year: '2014', note: 'First exit. Loud, messy, deeply educational. Promised myself the next one would be quieter.' },
-  { year: '2018', note: 'Second exit. Quieter. Kept the promise.' },
-  { year: '2021', note: 'Joined Tango as SVP Marketing. Built a team, a brand, and a lot of opinions about what "brand" means when nobody is buying from a banner anymore.' },
-  { year: '2026', note: 'Stepping into fractional CEO, advisor, and coaching work. Fewer companies. Deeper with each.' },
+  { year: '2026', note: 'Opening a new "fractional" chapter, for more diversity but also with care for each engagement.' },
+  { year: '2025', note: 'SVP Marketing at Tango. Came in through the acquisition, took the team over, ended up on the executive leadership team of the company that bought us. PE-backed, US-headquartered. Combining American ambition with European execution.' },
+  { year: '2024', note: 'Second exit: Locatee acquired by Tango. We restructured the company and ran a sale process under pressure. I sat at the table with our co-CEOs, CFO, board, and the acquirer – while holding the team together through it.' },
+  { year: '2020', note: 'Joined Locatee post Series A as Head of Marketing. Building the organization for scale.' },
+  { year: '2017', note: 'Bringing Good Food at Work to more employees, as Growth Lead at FELFEL. A passion for a physical product, designed and shipped into real offices.' },
+  { year: '2016', note: 'First exit. Aspediens acquired by CSC/DXC Technology. Suddenly colleagues on every continent and a Fortune 500 brand to integrate. The work shifted to building bridges – between teams, countries, and two very different ways of doing business.' },
+  { year: '2013', note: 'Joined Aspediens as Head of Marketing. 30 people on day one. 100+ the day we were acquired.' },
+  { year: '2012', note: 'Coordinating digital marketing across 25 countries at Parker Hannifin. First taste of how a Fortune 500 actually moves – and where the gap sits between HQ and the field.' },
+  { year: '2005', note: 'First job. École hôtelière de Lausanne – seven years, intern to manager. The world\'s leading hospitality school doesn\'t just teach you to love detail. It trains you to read a room: who feels welcome, who doesn\'t, what the energy needs. Years later, colleagues would call this out as something they noticed about working with me. The origin is here.' },
 ];
 
 const principles = [
   {
     title: 'Clarity before cleverness.',
-    body: 'I would rather say the obvious thing first and be useful than say the interesting thing first and be impressive. Most founders are drowning in clever. They need a person who will tell them the obvious, out loud, once.',
+    body: 'I would rather say the obvious thing first and be useful than say the interesting thing first and be impressive. Most founders are drowning in clever. What they need is a person who will tell them the obvious, out loud.',
   },
   {
     title: 'Story is strategy.',
-    body: 'Every organization runs on a story. When the story is clear, the org chart feels like decoration. When the story fractures, no amount of process can paper over it. Most of my work is making the story honest again.',
+    body: 'Every organization runs on a story. When it is clear, all the cogs align and everything compounds. When it fractures, no amount of process can paper over it. That\'s where I work: making the story legible, honest, actionable.',
   },
   {
-    title: 'Two identities, one person.',
-    body: 'I hold the operator and the human at the same time. The spreadsheet and the late-night conversation. People work with me because both show up. Not because I hide one to seem more serious.',
+    title: 'A love for human beings.',
+    body: 'I hold the operator and the human at the same time… and the spreadsheet and the late-night conversation. People work with me because business and the people who make the business matter equally. I listen, make it safe and hold space. Oh, and I tell jokes.',
   },
   {
-    title: 'Less, better.',
-    body: 'I take on a small number of companies. I say no often. The work only compounds when there is room in my week to think about it, and yours, properly.',
+    title: 'Less is better.',
+    body: 'I want to work with a small number of companies. I will say no when it\'s not essential. The work only compounds when there is room in my week to think about it, and yours, properly.',
   },
 ];
 ---
@@ -39,8 +42,7 @@ const principles = [
   <section class="about-hero container">
     <p class="eyebrow">About</p>
     <h1 class="about-hero__title">
-      Fifteen years in B2B tech.<br />
-      Love asking <span class="accent">(obvious)</span> questions.
+      Twenty years building teams, brands, and asking the <span class="accent">(obvious)</span> questions.
     </h1>
     <p class="about-hero__lede">
       Hi, I'm Stève. I help founders and senior leaders solve their challenges,
@@ -76,22 +78,23 @@ const principles = [
       rather than who they thought they were supposed to be.
     </p>
 
-    <p>
+    <blockquote class="about-pullquote">
       I've been lucky enough to do that work from the inside and lived through
       some very defining experiences: 2 acquisitions, building and scaling
       small-team Series A companies and also the difficult task of downsizing
-      them, with care. From VC-funded startups in Switzerland, Fortune 500
+      them. From VC-funded startups in Switzerland, Fortune 500
       companies, and all the way to the executive leadership of a
       US-headquartered, PE-backed company. From Marketing to People, to
       Operations. From hands-on work with the team – aligning elements on a
       slide deck – to strategic conversations with my peers and the Board.
+    <br><br>
+    <p>
+      Through it all, one constant: <strong>the better path is one made of curiosity,
+      lack of ego and a genuine love for succeeding collectively rather than
+      individually.</strong>
     </p>
 
-    <p>
-      Through it all, one constant: the better path is one made of curiosity,
-      lack of ego and a genuine love for succeeding collectively rather than
-      individually.
-    </p>
+    </blockquote>
 
     <h2>The Future</h2>
 
@@ -236,6 +239,18 @@ const principles = [
     line-height: var(--lh-prose);
     margin-bottom: var(--space-5);
     color: var(--color-ink);
+  }
+
+  .about-pullquote {
+    border-left: 3px solid var(--color-cobalt);
+    margin: var(--space-8) 0;
+    padding: var(--space-6) var(--space-8);
+    background: var(--color-mist);
+    border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+    font-size: 1.12rem;
+    line-height: var(--lh-prose);
+    color: var(--color-ink);
+    font-style: normal;
   }
 
   .about-body ul {
