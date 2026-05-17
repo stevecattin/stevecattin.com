@@ -155,7 +155,7 @@ const isActive = (href: string) =>
     transform: translateY(-7px) rotate(-45deg);
   }
 
-  /* Mobile menu — hidden by default */
+  /* Mobile menu — hidden by default, only shown on mobile */
   .nav__mobile-menu {
     display: none;
     flex-direction: column;
@@ -195,6 +195,11 @@ const isActive = (href: string) =>
     border-radius: var(--radius-sm);
     text-align: center;
     text-decoration: none;
+  }
+
+  @media (min-width: 641px) {
+    .nav__mobile-menu { display: none !important; }
+    .nav__hamburger { display: none !important; }
   }
 
   @media (max-width: 640px) {

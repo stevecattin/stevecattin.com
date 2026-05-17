@@ -7,8 +7,12 @@ import { getCollection } from 'astro:content';
 const posts = (await getCollection('blog', ({ data }) => !data.draft))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
-const [featured, ...rest] = posts;
-// Derived from posts — new categories appear automatically when used
+// ← Change this slug to pin a different post as the hero
+const FEATURED_SLUG = 'the-ai-marketing-ascendancy-framework';
+
+const featured = posts.find((p) => p.slug === FEATURED_SLUG) ?? posts[0];
+const rest = posts.filter((p) => p.slug !== featured.slug);
+// Derived from posts – new categories appear automatically when used
 const categories = ['Leadership', 'Marketing', 'Founding', 'Personal'].filter(
   (c) => posts.some((p) => p.data.category === c)
 );
@@ -24,9 +28,8 @@ const categories = ['Leadership', 'Marketing', 'Founding', 'Personal'].filter(
       Notes from the work.
     </h1>
     <p class="blog-hero__lede">
-      Essays on leadership, brand, founding, and the quieter seasons in
-      between. Published when I have something honest to say, not on a
-      schedule.
+      Essays on leadership, marketing, and the occasional personal piece.
+      Published when I have something honest to say, not on a schedule.
     </p>
 
     <ul class="blog-hero__tags" id="category-filters">
@@ -57,7 +60,7 @@ const categories = ['Leadership', 'Marketing', 'Founding', 'Personal'].filter(
 
     <div class="blog-grid">
       {rest.map((post, i) => (
-        <div data-post-category={post.data.category}>
+        <div data-post-category={post.data.category} class:list={[{ 'col-span-2': i % 5 === 3 }]}>
           <PostCard
             href={`/blog/${post.slug}/`}
             title={post.data.title}
@@ -161,10 +164,15 @@ const categories = ['Leadership', 'Marketing', 'Founding', 'Personal'].filter(
     gap: var(--space-4);
   }
 
+  .blog-grid .col-span-2 {
+    grid-column: span 2;
+  }
+
   @media (max-width: 960px) {
     .blog-grid { grid-template-columns: repeat(2, 1fr); }
   }
   @media (max-width: 640px) {
     .blog-grid { grid-template-columns: 1fr; }
+    .blog-grid .col-span-2 { grid-column: span 1; }
   }
 </style>

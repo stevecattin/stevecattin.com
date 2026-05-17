@@ -118,7 +118,7 @@ const recentPosts = allPosts
     object-fit: contain;
     object-position: bottom;
     /* Two stacked drop-shadows that follow the silhouette via the PNG's
-       alpha channel — re-creates the "photographed against a wall" cast
+       alpha channel – re-creates the "photographed against a wall" cast
        shadow without bringing the wall rectangle back. Warm-gray tone
        sits more naturally on warm paper than pure black. */
     filter:
@@ -127,7 +127,7 @@ const recentPosts = allPosts
   }
 
   /* Mobile: stack with the portrait above, kept rectangular and modest.
-     No hairline to anchor to up there — portrait just sits at the top. */
+     No hairline to anchor to up there – portrait just sits at the top. */
   @media (max-width: 760px) {
     .hero__lede {
       grid-template-columns: 1fr;
@@ -140,7 +140,7 @@ const recentPosts = allPosts
     }
   }
 
-  /* Reset the hero__cta-row bottom margin — the lede grid handles spacing now. */
+  /* Reset the hero__cta-row bottom margin – the lede grid handles spacing now. */
   .hero__lede .hero__cta-row {
     margin-bottom: 0;
   }
