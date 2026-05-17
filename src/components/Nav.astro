@@ -17,8 +17,34 @@ const isActive = (href: string) =>
       <a href="/blog" class:list={['nav__link', { 'is-active': isActive('/blog') }]}>Writing</a>
       <a href="mailto:hello@stevecattin.com?subject=Intro%20call" class="nav__cta">Reach out</a>
     </nav>
+
+    <button class="nav__hamburger" aria-label="Open menu" aria-expanded="false">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+
+  <div class="nav__mobile-menu" aria-hidden="true">
+    <a href="/practice" class:list={['nav__mobile-link', { 'is-active': isActive('/practice') }]}>Work with me</a>
+    <a href="/about" class:list={['nav__mobile-link', { 'is-active': isActive('/about') }]}>About</a>
+    <a href="/blog" class:list={['nav__mobile-link', { 'is-active': isActive('/blog') }]}>Writing</a>
+    <a href="mailto:hello@stevecattin.com?subject=Intro%20call" class="nav__mobile-cta">Reach out</a>
   </div>
 </header>
+
+<script>
+  const hamburger = document.querySelector('.nav__hamburger') as HTMLButtonElement;
+  const mobileMenu = document.querySelector('.nav__mobile-menu') as HTMLElement;
+
+  hamburger?.addEventListener('click', () => {
+    const isOpen = hamburger.getAttribute('aria-expanded') === 'true';
+    hamburger.setAttribute('aria-expanded', String(!isOpen));
+    mobileMenu.setAttribute('aria-hidden', String(isOpen));
+    mobileMenu.classList.toggle('is-open');
+    hamburger.classList.toggle('is-open');
+  });
+</script>
 
 <style>
   .nav {
@@ -96,11 +122,95 @@ const isActive = (href: string) =>
     color: var(--color-paper);
   }
 
+  /* Hamburger — hidden on desktop */
+  .nav__hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 32px;
+    height: 32px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .nav__hamburger span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: var(--color-ink);
+    border-radius: 2px;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+
+  .nav__hamburger.is-open span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+  .nav__hamburger.is-open span:nth-child(2) {
+    opacity: 0;
+  }
+  .nav__hamburger.is-open span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  /* Mobile menu — hidden by default */
+  .nav__mobile-menu {
+    display: none;
+    flex-direction: column;
+    padding: var(--space-6) var(--space-6) var(--space-8);
+    gap: var(--space-2);
+    border-top: 1px solid var(--color-line);
+    background: var(--color-paper);
+  }
+
+  .nav__mobile-menu.is-open {
+    display: flex;
+  }
+
+  .nav__mobile-link {
+    font-family: var(--font-display);
+    font-size: var(--text-2xl);
+    font-weight: 500;
+    letter-spacing: var(--tracking-tight);
+    color: var(--color-graphite);
+    padding: var(--space-2) 0;
+    text-decoration: none;
+  }
+
+  .nav__mobile-link:hover,
+  .nav__mobile-link.is-active {
+    color: var(--color-ink);
+  }
+
+  .nav__mobile-cta {
+    margin-top: var(--space-4);
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-paper);
+    background: var(--color-ink);
+    padding: 12px 20px;
+    border-radius: var(--radius-sm);
+    text-align: center;
+    text-decoration: none;
+  }
+
   @media (max-width: 640px) {
     .nav__name { display: none; }
-    .nav__links { gap: var(--space-4); }
-    .nav__link:not(.is-active):not(:last-of-type) {
-      display: none;
+    .nav__links { display: none; }
+    .nav__hamburger { display: flex; }
+
+    .nav__inner {
+      justify-content: space-between;
+    }
+
+    /* Center the S. logo */
+    .nav__brand {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
     }
   }
 </style>
