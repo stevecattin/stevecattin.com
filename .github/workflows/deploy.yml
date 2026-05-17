@@ -24,18 +24,6 @@ jobs:
       - name: Build Astro site
         run: npm run build
 
-      - name: Deploy to staging (v2.stevecattin.com)
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          port: 21
-          protocol: ftps
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./dist/
-          server-dir: ./
-          dangerous-clean-slate: false
-
       - name: Deploy to production (stevecattin.com)
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
