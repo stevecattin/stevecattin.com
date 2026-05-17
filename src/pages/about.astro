@@ -134,7 +134,6 @@ const principles = [
   <!-- Timeline -->
   <section class="about-timeline section container">
     <header class="about-timeline__header">
-      <p class="eyebrow">Path</p>
       <h2>Twenty years, compressed.</h2>
     </header>
 
@@ -155,8 +154,7 @@ const principles = [
   <!-- Principles -->
   <section class="about-principles section container">
     <header class="about-principles__header">
-      <p class="eyebrow">What guides me</p>
-      <h2>Four anchors I carry into every room.</h2>
+      <h2>My guiding principles.</h2>
     </header>
 
     <div class="about-principles__grid">
@@ -168,6 +166,8 @@ const principles = [
         </article>
       ))}
     </div>
+
+    <p class="about-principles__link">The <a href="/practice">Work with me</a> page is where principles meet practice.</p>
   </section>
 
   <CTABlock
@@ -356,6 +356,18 @@ const principles = [
     font-size: 0.98rem;
     line-height: var(--lh-normal);
     color: var(--color-graphite);
+  }
+
+  .about-principles__link {
+    margin-top: var(--space-10);
+    font-size: 1.05rem;
+    color: var(--color-graphite);
+  }
+
+  .about-principles__link a {
+    color: var(--color-cobalt);
+    text-decoration: underline;
+    text-underline-offset: 3px;
   }
 
   @media (max-width: 800px) {
