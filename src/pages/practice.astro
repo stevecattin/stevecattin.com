@@ -2,22 +2,26 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import CTABlock from '../components/CTABlock.astro';
 
-const pillars = [
+const audiences = [
   {
-    title: 'A steady hand when everything else is moving.',
-    body: 'Twice I have been the constant while a company around me went through existential change. At Locatee, after losing the largest client, we went from 70+ people to 14 in two waves of downsizing. My job stopped being marketing – it became keeping the remaining team focused, listening, holding things together while the M&A process ran in the background. At Tango, through a leadership rebuild and a CRO seat that cycled three times in two years, I rebuilt the marketing organisation and held GTM on rails. Two very different storms, same disposition. That is not luck.',
+    tag: 'Founder or CEO',
+    body: 'Your team is stuck and you can\'t quite name why. The strategy looks fine on paper, the hires are good, and yet things aren\'t landing. You need someone to sit in the room and ask the obvious question, not another deck.',
   },
   {
-    title: 'EU-to-NA expansion. Execution, not exposure.',
-    body: 'I led Locatee\'s first North American expansion from Europe. Opened the office, hired the first four people, navigated the cultural shift, the hiring differences, the positioning that does not show up in any playbook. Most European fractional executives have NA exposure – a few trips, some remote collaboration. I have done the actual work of building something there from nothing. If your next chapter involves the US, that is directly relevant.',
+    tag: 'European ← → North America',
+    body: 'You\'re a European company starting to take the US seriously (or the other way round). Or you\'re already there and finding it harder than the plan suggested. You want someone who has actually worked on that move, not someone who has watched others try.',
   },
   {
-    title: 'Two exits. On the second, I was at the table.',
-    body: 'Aspediens acquired by CSC/DXC. Locatee acquired by Tango. Two very different exits, both as part of the leadership team. On the second, I worked the M&A process itself – at the table with our co-CEOs, CFO, board, and the acquirer, while also holding the team together on the other side of the wall. Most marketing executives are downstream of M&A. They get the announcement and manage the comms. I was in the room where the deal was being shaped.',
+    tag: 'GTM under pressure',
+    body: 'GTM is holding up on the surface but the engine underneath is straining. Better to address it before it becomes visible. You want a senior operator who can read the signals and help you move before it becomes a crisis.',
   },
   {
-    title: 'A framework for the AI shift on every marketer\'s desk.',
-    body: 'The AI Marketing Ascendancy Framework (AIMA) is my answer to the question every marketing leader is sitting with right now: what does AI actually change, and how do we respond without losing what made us good? Not a tool list – a model for what to automate, what to protect, and how to evolve a marketing organisation as the landscape shifts. I built it from the inside, running a real team in real time.',
+    tag: 'Strategic moment',
+    body: 'Something significant is coming – an exit, a restructuring, a pivot. You want someone in the room who has been through one before and knows what it actually feels like from the inside.',
+  },
+  {
+    tag: 'Board or investor',
+    body: 'Your portfolio company is talented, well-funded, and somehow still slow. You need someone to go in, understand what\'s really happening, and tell you whether the right intervention is an operator, a coach, or an honest conversation with the founder.',
   },
 ];
 
@@ -25,82 +29,105 @@ const modes = [
   {
     title: 'Fractional executive.',
     body: 'One to three days a week, in the seat. I run marketing or GTM alongside you, hire who needs hiring, and have all the other conversations a founder needs to have along the way.',
+    fit: 'Right for you if you need someone who can hold the function and make decisions, not just advise on them.',
   },
   {
     title: 'Advisory.',
-    body: 'A monthly cadence, outside the org chart. Sparring partner for founders and CEOs who already have a team and a plan, and want a senior operator to think with.',
+    body: 'With a regular cadence and outside the org chart. Sparring partner for founders and execs who already have a team and a plan, and want a senior operator to think with.',
+    fit: 'Right for you if the team is in place and what you need is a trusted person to pressure-test the plan.',
   },
   {
-    title: 'Coaching.',
-    body: 'Private 1:1 work for leaders who suspect the hardest problem isn\'t the business. Structured, confidential, and focused on the person behind the role.',
+    title: 'Sparring, privately.',
+    body: 'For leaders who sense the hardest problem they\'re carrying is the one inside themselves. A safe space, an honest sparring partner, and the time to think it through.',
+    fit: 'Right for you if what\'s getting in the way isn\'t the company – it\'s you, and you want someone to think it through with.',
   },
 ];
 
-const audiences = [
+const pillars = [
   {
-    tag: 'Founders & CEOs',
-    body: 'who want a senior operator in their corner – not someone to run campaigns, but someone who can sit in all the rooms.',
+    title: 'A steady hand in constant change.',
+    body: 'I have been the constant while the companies around me went through existential change: downsizing, leadership change and rebuild of teams, GTM reorganization, etc.',
   },
   {
-    tag: 'European → North America',
-    body: 'a European company starting to think seriously about North America, wanting someone who has actually made that transition work.',
+    title: 'A guide between business cultures.',
+    body: 'I have built and run teams on both sides of the Atlantic. I understand how culture varies between the US and Europe, between a startup and a Fortune 500 company, and how to capitalize on the strengths of each.',
   },
   {
-    tag: 'GTM straining quietly',
-    body: 'GTM holding up on the surface but the engine underneath is straining – better to address it before it becomes visible.',
+    title: 'A focus on the destination.',
+    body: 'Whatever the destination is – an exit, a launch, a turnaround, a rebuild – I\'m focused on getting the team there. And if the destination is not clear, I\'ll work on that first.',
   },
   {
-    tag: 'Pre-exit / strategic moment',
-    body: 'approaching an exit or a significant strategic moment, wanting someone in the room who has been through one.',
+    title: 'A vision and framework for what\'s next.',
+    body: 'Transformation is the discipline of knowing what to automate, what to protect, and how to evolve a team as the landscape shifts. For me, it\'s not about chasing the wave, but building the structure that lets the team ride it.',
+  },
+];
+
+const steps = [
+  {
+    num: '01',
+    title: 'A twenty-minute call.',
+    body: 'No deck, no pitch. I ask what\'s actually going on. You ask whatever you need to. We both leave knowing whether this makes sense.',
+  },
+  {
+    num: '02',
+    title: 'A short first scope.',
+    body: 'If it does make sense, I\'ll suggest where to start — usually a contained first engagement before anything long-term. I don\'t do six-month commitments before we\'ve worked together once.',
+  },
+  {
+    num: '03',
+    title: 'Honesty if it doesn\'t fit.',
+    body: 'If the fit isn\'t right — timing, need, chemistry — I\'ll say so. And if I can point you somewhere better, I will.',
   },
 ];
 ---
 
 <BaseLayout
   title="Practice – Stève Cattin"
-  description="What I bring to fractional executive, advisor, and coaching engagements – the pattern, the proof, and the shape of the work."
+  description="What I offer, who it's for, and how to find out if we're a match."
 >
   <!-- Hero -->
   <section class="practice-hero container">
-    <p class="eyebrow">Practice</p>
+    <p class="eyebrow">Work with me</p>
     <h1 class="practice-hero__title">
-      What I bring to <span class="accent">the room.</span>
+      Let's write <span class="accent">your</span> story.
     </h1>
     <p class="practice-hero__lede">
-      Most fractional executives will tell you they think like a founder. I want
-      to give you the honest version. I have never founded a company. But I have
-      been in the room with founders through every version of hard – the
-      downsize, the leadership shake-up, the revolving CRO door, the M&A
-      process, the quiet moments when nobody else in the building knows what
-      to say. That is a different kind of partner.
+      Every company has a story it's trying to tell. Some are stuck on the first
+      chapter or have lost the thread halfway through. Some are rewriting it
+      under pressure, with the clock running. And some are in the best possible
+      problem: growing fast, needing to scale the team and the brand to match.
+      I've been there – through rapid expansion and downsizes, leadership
+      shakeups, M&A processes, and the quiet moments when nobody knows what
+      to say.
     </p>
   </section>
 
-  <!-- What makes this different -->
-  <section class="practice-body container-prose section-tight">
-    <h2>Twenty years operating. Fifteen of them in tech. All in-house.</h2>
+  <!-- Engagement modes -->
+  <section class="practice-modes section container">
+    <header class="practice-modes__header">
 
-    <p>
-      Agency work is excellent – and it keeps you at arm's length from the
-      company by design. I have never had that arm's length. I have been
-      inside the walls when things went wrong, and inside the walls when they
-      went right. That combination of depth and proximity is what I bring.
-    </p>
+      <h2>Three ways to work together.</h2>
+    </header>
 
-    <p>
-      I have worked across PropTech, food-tech, industrial, enterprise IT, and
-      hospitality – startups, Series A, scale-ups, Fortune 500. Not a vertical
-      specialist. A pattern recogniser. Companies in motion – the ones
-      pivoting, expanding, restructuring – tend to benefit from that more
-      than from industry expertise alone.
-    </p>
+    <div class="practice-modes__grid">
+      {modes.map((m, i) => (
+        <article class="practice-modes__card">
+          <span class="practice-modes__num">№ {String(i + 1).padStart(2, '0')}</span>
+          <h3><span>{m.title}</span></h3>
+          <p>{m.body}</p>
+          <p class="practice-modes__fit">{m.fit}</p>
+        </article>
+      ))}
+    </div>
   </section>
+
+  <hr class="rule" />
 
   <!-- Pillars -->
   <section class="practice-pillars section container">
     <header class="practice-pillars__header">
-      <p class="eyebrow">The specifics</p>
-      <h2>Four things, with proof.</h2>
+
+      <h2>What I bring to the room.</h2>
     </header>
 
     <div class="practice-pillars__grid">
@@ -112,44 +139,11 @@ const audiences = [
         </article>
       ))}
     </div>
-  </section>
 
-  <!-- Engagement modes -->
-  <section class="practice-modes section container">
-    <header class="practice-modes__header">
-      <p class="eyebrow">Ways in</p>
-      <h2>Three shapes the work takes.</h2>
-    </header>
-
-    <div class="practice-modes__grid">
-      {modes.map((m, i) => (
-        <article class="practice-modes__card">
-          <span class="practice-modes__num">№ {String(i + 1).padStart(2, '0')}</span>
-          <h3>{m.title}</h3>
-          <p>{m.body}</p>
-        </article>
-      ))}
-    </div>
-  </section>
-
-  <hr class="rule" />
-
-  <!-- Portfolio shape -->
-  <section class="practice-body container-prose section-tight">
-    <h2>Portfolio shape, on purpose.</h2>
-
-    <p>
-      After six years at Locatee and Tango – including a closing chapter as
-      the through-line for GTM through an intense period of change – I am
-      stepping into a new shape of work this summer.
-    </p>
-
-    <p>
-      Fractional and advisory mandates across a small number of companies,
-      plus bandwidth for a longer-term project of my own. I am not looking
-      to fill a dance card. I am looking for two or three companies where
-      the work actually matters and where I can show up as a genuine partner,
-      not a service provider.
+    <p class="practice-pillars__note">
+      Want to understand more about who I am and how I think before reaching out?
+      The <a href="/about">About page</a> has the path, the philosophy, and what
+      twenty years of this work has actually taught me.
     </p>
   </section>
 
@@ -158,8 +152,8 @@ const audiences = [
   <!-- Who this is for -->
   <section class="practice-audiences section container">
     <header class="practice-audiences__header">
-      <p class="eyebrow">Who this is for</p>
-      <h2>If you recognise yourself here.</h2>
+
+      <h2>If you recognise yourself here…</h2>
     </header>
 
     <ol class="practice-audiences__list">
@@ -170,14 +164,16 @@ const audiences = [
         </li>
       ))}
     </ol>
+
+    <a href="mailto:hello@stevecattin.com?subject=Intro%20call" class="practice-audiences__cta">…Get in touch</a>
   </section>
 
   <CTABlock
     id="book"
-    eyebrow="Let's find out"
+    eyebrow="Are we a match?"
     headline="The best way to know is a conversation."
     body="Twenty minutes. No deck, no pitch. I'll ask what's actually going on, and we'll see whether this makes sense for both of us."
-    ctaLabel="Book an intro call"
+    ctaLabel="Reach out"
     ctaHref="mailto:hello@stevecattin.com?subject=Intro%20call"
     secondaryLabel="Read some writing first"
     secondaryHref="/blog"
@@ -213,24 +209,147 @@ const audiences = [
     max-width: 60ch;
   }
 
-  /* -------- Body prose (shared register with About) -------- */
-  .practice-body h2 {
-    font-family: var(--font-display);
-    font-size: var(--text-2xl);
-    letter-spacing: var(--tracking-tight);
-    margin-top: var(--space-12);
-    margin-bottom: var(--space-5);
+  /* -------- Audiences -------- */
+  .practice-audiences__header {
+    margin-bottom: var(--space-10);
+    max-width: 680px;
   }
-  .practice-body h2:first-child { margin-top: 0; }
 
-  .practice-body p {
-    font-size: 1.05rem;
-    line-height: var(--lh-prose);
-    margin-bottom: var(--space-5);
+  .practice-audiences__cta {
+    display: inline-block;
+    margin-top: var(--space-8);
+    font-family: var(--font-accent);
+    font-style: italic;
+    font-weight: 400;
+    font-variation-settings: "opsz" 144;
+    font-size: var(--text-display);
+    color: var(--color-cobalt);
+    text-decoration: none;
+  }
+
+  .practice-audiences__cta:hover {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  .practice-audiences__header h2 {
+    font-family: var(--font-display);
+    font-size: var(--text-display);
+    letter-spacing: var(--tracking-tight);
+    margin-top: var(--space-3);
+  }
+
+  .practice-audiences__list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .practice-audiences__item {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: var(--space-8);
+    padding-block: var(--space-6);
+    border-top: 1px solid var(--color-line);
+    align-items: baseline;
+  }
+  .practice-audiences__item:last-child {
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .practice-audiences__tag {
+    font-family: var(--font-mono);
+    font-size: var(--text-mono-sm);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-cobalt);
+    font-weight: 500;
+  }
+
+  .practice-audiences__note {
+    font-size: 1.02rem;
+    line-height: var(--lh-normal);
+    color: var(--color-ink);
+    max-width: 62ch;
+  }
+
+  /* -------- Modes -------- */
+  .practice-modes__header {
+    margin-bottom: var(--space-10);
+    max-width: 680px;
+  }
+  .practice-modes__header h2 {
+    font-family: var(--font-display);
+    font-size: var(--text-display);
+    letter-spacing: var(--tracking-tight);
+    margin-top: var(--space-3);
+  }
+
+  .practice-modes__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-6);
+  }
+
+  .practice-modes__card {
+    background: var(--color-white);
+    border: 0.5px solid var(--color-line);
+    padding: var(--space-7);
+    border-radius: var(--radius-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .practice-modes__num {
+    font-family: var(--font-mono);
+    font-size: var(--text-mono-sm);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-cobalt);
+    font-weight: 500;
+  }
+
+  .practice-modes__card h3 {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    letter-spacing: var(--tracking-tight);
     color: var(--color-ink);
   }
 
+  .practice-modes__card h3 span {
+    color: var(--color-paper);
+    background-color: var(--color-cobalt);
+    padding: 2px 6px;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+  }
+
+  .practice-modes__card p {
+    font-size: 0.98rem;
+    line-height: var(--lh-normal);
+    color: var(--color-graphite);
+  }
+
+  .practice-modes__fit {
+    margin-top: auto;
+    padding-top: var(--space-4);
+    margin-top: var(--space-10);
+    border-top: 1px solid var(--color-line);
+    font-size: 0.9rem !important;
+    color: var(--color-ink) !important;
+    font-style: italic;
+  }
+
   /* -------- Pillars -------- */
+  .practice-pillars__intro {
+    font-size: 1.05rem;
+    line-height: var(--lh-prose);
+    color: var(--color-graphite);
+    max-width: 62ch;
+    margin-bottom: var(--space-10);
+  }
+
   .practice-pillars__header {
     margin-bottom: var(--space-10);
     max-width: 680px;
@@ -280,106 +399,100 @@ const audiences = [
     color: var(--color-graphite);
   }
 
-  /* -------- Modes (engagement shapes) -------- */
-  .practice-modes__header {
+  /* -------- Process -------- */
+  .practice-process__header {
     margin-bottom: var(--space-10);
     max-width: 680px;
   }
-  .practice-modes__header h2 {
+
+  .practice-process__header h2 {
     font-family: var(--font-display);
     font-size: var(--text-display);
     letter-spacing: var(--tracking-tight);
     margin-top: var(--space-3);
   }
 
-  .practice-modes__grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--space-6);
-  }
-
-  .practice-modes__card {
-    background: var(--color-white);
-    border: 0.5px solid var(--color-line);
-    padding: var(--space-7);
-    border-radius: var(--radius-md);
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-3);
-  }
-
-  .practice-modes__num {
-    font-family: var(--font-mono);
-    font-size: var(--text-mono-sm);
-    letter-spacing: var(--tracking-wide);
-    text-transform: uppercase;
-    color: var(--color-cobalt);
-    font-weight: 500;
-  }
-
-  .practice-modes__card h3 {
-    font-family: var(--font-display);
-    font-size: var(--text-xl);
-    letter-spacing: var(--tracking-tight);
-    color: var(--color-ink);
-  }
-
-  .practice-modes__card p {
-    font-size: 0.98rem;
-    line-height: var(--lh-normal);
-    color: var(--color-graphite);
-  }
-
-  /* -------- Audiences -------- */
-  .practice-audiences__header {
-    margin-bottom: var(--space-10);
-    max-width: 680px;
-  }
-  .practice-audiences__header h2 {
-    font-family: var(--font-display);
-    font-size: var(--text-display);
-    letter-spacing: var(--tracking-tight);
-    margin-top: var(--space-3);
-  }
-
-  .practice-audiences__list {
+  .practice-process__list {
     list-style: none;
     display: flex;
     flex-direction: column;
+    max-width: 760px;
   }
 
-  .practice-audiences__item {
+  .practice-process__item {
     display: grid;
-    grid-template-columns: 260px 1fr;
+    grid-template-columns: 80px 1fr;
     gap: var(--space-8);
     padding-block: var(--space-6);
     border-top: 1px solid var(--color-line);
     align-items: baseline;
   }
-  .practice-audiences__item:last-child {
+  .practice-process__item:last-child {
     border-bottom: 1px solid var(--color-line);
   }
 
-  .practice-audiences__tag {
+  .practice-process__num {
     font-family: var(--font-mono);
-    font-size: var(--text-mono-sm);
-    letter-spacing: var(--tracking-wide);
-    text-transform: uppercase;
+    font-size: var(--text-base);
     color: var(--color-cobalt);
     font-weight: 500;
+    letter-spacing: var(--tracking-mono);
   }
 
-  .practice-audiences__note {
+  .practice-process__content h3 {
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    letter-spacing: var(--tracking-tight);
+    color: var(--color-ink);
+    margin-bottom: var(--space-2);
+  }
+
+  .practice-process__content p {
     font-size: 1.02rem;
     line-height: var(--lh-normal);
-    color: var(--color-ink);
-    max-width: 62ch;
+    color: var(--color-graphite);
+    max-width: 58ch;
   }
 
+  .practice-pillars__note {
+    margin-top: var(--space-10);
+    font-size: 0.95rem;
+    line-height: var(--lh-normal);
+    color: var(--color-graphite);
+  }
+
+  .practice-pillars__note a {
+    color: var(--color-cobalt);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  /* -------- Bridge -------- */
+  .practice-bridge {
+    padding-block: var(--space-10);
+  }
+
+  .practice-bridge p {
+    font-size: 1.05rem;
+    line-height: var(--lh-prose);
+    color: var(--color-graphite);
+  }
+
+  .practice-bridge a {
+    color: var(--color-cobalt);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  /* -------- Responsive -------- */
   @media (max-width: 800px) {
     .practice-pillars__grid { grid-template-columns: 1fr; }
     .practice-modes__grid { grid-template-columns: 1fr; }
     .practice-audiences__item {
+      grid-template-columns: 1fr;
+      gap: var(--space-2);
+    }
+    .practice-process__item {
       grid-template-columns: 1fr;
       gap: var(--space-2);
     }

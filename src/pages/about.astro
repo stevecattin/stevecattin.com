@@ -3,7 +3,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import CTABlock from '../components/CTABlock.astro';
 
 const milestones = [
-  { year: '2026', note: 'Opening a new "fractional" chapter, for more diversity but also with care for each engagement.' },
   { year: '2025', note: 'SVP Marketing at Tango. Came in through the acquisition, took the team over, ended up on the executive leadership team of the company that bought us. PE-backed, US-headquartered. Combining American ambition with European execution.' },
   { year: '2024', note: 'Second exit: Locatee acquired by Tango. We restructured the company and ran a sale process under pressure. I sat at the table with our co-CEOs, CFO, board, and the acquirer – while holding the team together through it.' },
   { year: '2020', note: 'Joined Locatee post Series A as Head of Marketing. Building the organization for scale.' },
@@ -20,16 +19,16 @@ const principles = [
     body: 'I would rather say the obvious thing first and be useful than say the interesting thing first and be impressive. Most founders are drowning in clever. What they need is a person who will tell them the obvious, out loud.',
   },
   {
-    title: 'Story is strategy.',
-    body: 'Every organization runs on a story. When it is clear, all the cogs align and everything compounds. When it fractures, no amount of process can paper over it. That\'s where I work: making the story legible, honest, actionable.',
+    title: 'Curiosity is the work.',
+    body: 'The best solutions don\'t live in any one person\'s head. Curiosity allows me to tap into the collective intelligence, and surface what no single perspective could see alone. It also implies the need for a low ego, that makes it possible to be genuinely open to someone else\'s point of view. It all travels together: when you stay curious, and hold your ideas loosely, you give everyone – including yourself – the best shot at the right answer.',
   },
   {
     title: 'A love for human beings.',
     body: 'I hold the operator and the human at the same time… and the spreadsheet and the late-night conversation. People work with me because business and the people who make the business matter equally. I listen, make it safe and hold space. Oh, and I tell jokes.',
   },
   {
-    title: 'Less is better.',
-    body: 'I want to work with a small number of companies. I will say no when it\'s not essential. The work only compounds when there is room in my week to think about it, and yours, properly.',
+    title: 'Less, but fully.',
+    body: 'Discipline, thoughtfulness and essentialism are some of the words you\'ll hear me use when describing how I work. Most problems don\'t need more – they need less, done better, repeatedly. It means finding the lever that moves everything else, and pulling it with full attention. Constant progress on the right problem beats frantic motion on the wrong ones every time.',
   },
 ];
 ---
@@ -42,10 +41,10 @@ const principles = [
   <section class="about-hero container">
     <p class="eyebrow">About</p>
     <h1 class="about-hero__title">
-      Twenty years building teams, brands, and asking the <span class="accent">(obvious)</span> questions.
+      The obvious question is usually the <span class="accent">right</span> one.
     </h1>
     <p class="about-hero__lede">
-      Hi, I'm Stève. I help founders and senior leaders solve their challenges,
+      I help founders and senior leaders solve their challenges,
       with care, respect and curiosity. Marketer by training with a People &amp;
       Operations track record. Storyteller and advisor wherever I'm allowed.
     </p>
@@ -80,29 +79,22 @@ const principles = [
 
     <blockquote class="about-pullquote">
       I've been lucky enough to do that work from the inside and lived through
-      some very defining experiences: 2 acquisitions, building and scaling
+      some very defining experiences: <strong>2 acquisitions</strong>, building and scaling
       small-team Series A companies and also the difficult task of downsizing
-      them. From VC-funded startups in Switzerland, Fortune 500
-      companies, and all the way to the executive leadership of a
-      US-headquartered, PE-backed company. From Marketing to People, to
-      Operations. From hands-on work with the team – aligning elements on a
-      slide deck – to strategic conversations with my peers and the Board.
-    <br><br>
-    <p>
-      Through it all, one constant: <strong>the better path is one made of curiosity,
-      lack of ego and a genuine love for succeeding collectively rather than
-      individually.</strong>
-    </p>
-
+      them. From <strong>VC-funded startups in Switzerland</strong>, <strong>Fortune 500
+      companies</strong>, and all the way to the executive leadership of a
+      <strong>US-headquartered, PE-backed company</strong>. From <strong>Marketing to People, to
+      Operations</strong>. From hands-on work with the team – aligning elements on a
+      slide deck – to <strong>strategic conversations with my peers and the Board</strong>.
     </blockquote>
 
-    <h2>The Future</h2>
-
     <p>
-      None of what I had the chance to experience was a given. I'm immensely
-      grateful for each day, each person who entered my life, and each learning.
-      Now I want to give back and see others benefit from it.
+      Through it all, one constant: the better path is one made of curiosity,
+      lack of ego and a genuine love for succeeding collectively rather than
+      individually.
     </p>
+
+    <h2>The Future</h2>
 
     <p>
       The obvious next step after a seat at the executive table would be another
@@ -126,21 +118,14 @@ const principles = [
         partner for the founder.
       </li>
       <li>
-        And with operators who sense that the hardest problem they're carrying
-        is the one inside themselves, and need a sparring partner who's creating
-        the safe space for them to share and work through it.
+        And with leaders who sense that the hardest problem they're carrying
+        is the one inside themselves, and want a sparring partner — privately —
+        to create the space to share and work through it.
       </li>
     </ul>
 
     <p>
       Fewer companies than I could take. More depth with each.
-    </p>
-
-    <p>
-      In a world where everything accelerates, I want to take the time to read
-      what I'm given carefully – the doc, the deck, the org chart, the body
-      language, the things people say after the meeting. I want to ask before I
-      prescribe. Thorough and thoughtful by nature.
     </p>
 
     <p>If any of that resonates, reach out!</p>
@@ -152,6 +137,8 @@ const principles = [
       <p class="eyebrow">Path</p>
       <h2>Twenty years, compressed.</h2>
     </header>
+
+    <p class="about-timeline__linkedin">Want the full detail? It's all on my <a href="https://linkedin.com/in/stevecattin" target="_blank" rel="noopener noreferrer">LinkedIn profile</a>.</p>
 
     <ol class="about-timeline__list">
       {milestones.map((m) => (
@@ -168,8 +155,8 @@ const principles = [
   <!-- Principles -->
   <section class="about-principles section container">
     <header class="about-principles__header">
-      <p class="eyebrow">How I work</p>
-      <h2>Four things I try not to forget.</h2>
+      <p class="eyebrow">What guides me</p>
+      <h2>Four anchors I carry into every room.</h2>
     </header>
 
     <div class="about-principles__grid">
@@ -185,10 +172,10 @@ const principles = [
 
   <CTABlock
     id="book"
-    eyebrow="If this resonates"
+    eyebrow="Are we a match?"
     headline="Let's have the conversation before anything else."
     body="A twenty-minute intro call. No deck, no pre-work. I'll ask what's actually going on. If the fit is real, we'll both know by the end."
-    ctaLabel="Book an intro call"
+    ctaLabel="Reach out"
     ctaHref="mailto:hello@stevecattin.com?subject=Intro%20call"
     secondaryLabel="Read some writing first"
     secondaryHref="/blog"
@@ -253,6 +240,11 @@ const principles = [
     font-style: normal;
   }
 
+  .about-pullquote strong {
+    color: var(--color-cobalt);
+    font-weight: 500;
+  }
+
   .about-body ul {
     margin-bottom: var(--space-5);
     padding-left: var(--space-6);
@@ -278,6 +270,18 @@ const principles = [
     font-size: var(--text-display);
     letter-spacing: var(--tracking-tight);
     margin-top: var(--space-3);
+  }
+
+  .about-timeline__linkedin {
+    font-size: var(--text-sm);
+    color: var(--color-graphite);
+    margin-bottom: var(--space-8);
+  }
+
+  .about-timeline__linkedin a {
+    color: var(--color-cobalt);
+    text-decoration: underline;
+    text-underline-offset: 3px;
   }
 
   .about-timeline__list {
