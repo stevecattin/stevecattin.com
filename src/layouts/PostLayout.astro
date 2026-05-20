@@ -53,7 +53,7 @@ const dateLabel = new Date(pubDate).toLocaleDateString('en-US', {
       <hr class="rule" />
       <p class="post__sig">
         Written by Stève Cattin.
-        <a href="mailto:hello@stevecattin.com?subject=Intro%20call">Reach out</a> or
+        <button class="post__reach-out" data-contact-trigger>Reach out</button> or
         <a href="/blog">read more writing</a>.
       </p>
     </footer>
@@ -232,6 +232,20 @@ const dateLabel = new Date(pubDate).toLocaleDateString('en-US', {
   .post__footer {
     margin-top: var(--space-16);
   }
+
+  /* "Reach out" button — looks like a link, triggers modal */
+  .post__reach-out {
+    display: inline;
+    font: inherit;
+    color: var(--color-cobalt);
+    text-decoration: none;
+    cursor: pointer;
+    padding: 0;
+    background: none;
+    border: none;
+    transition: color var(--dur-fast) var(--ease-out);
+  }
+  .post__reach-out:hover { color: var(--color-cobalt-deep); }
 
   .post__sig {
     margin-top: var(--space-6);

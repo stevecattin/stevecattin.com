@@ -1,0 +1,433 @@
+---
+// ContactModal — included once in BaseLayout, triggered by [data-contact-trigger] anywhere in the DOM
+---
+
+<div
+  id="contact-modal"
+  class="modal"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="modal-title"
+  aria-hidden="true"
+>
+  <div class="modal__backdrop"></div>
+
+  <div class="modal__panel">
+    <div class="modal__header">
+      <h2 class="modal__title" id="modal-title">Let's talk</h2>
+      <button class="modal__close" aria-label="Close">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+          <path d="M1 1L13 13M13 1L1 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="modal__body">
+      <form id="contact-form" class="contact-form" novalidate>
+        <div class="form-field">
+          <label for="cf-name" class="form-label">Name</label>
+          <input
+            type="text"
+            id="cf-name"
+            name="name"
+            class="form-input"
+            required
+            autocomplete="name"
+            placeholder="Your name"
+          />
+        </div>
+
+        <div class="form-field">
+          <label for="cf-email" class="form-label">Email</label>
+          <input
+            type="email"
+            id="cf-email"
+            name="email"
+            class="form-input"
+            required
+            autocomplete="email"
+            placeholder="you@example.com"
+          />
+        </div>
+
+        <div class="form-field">
+          <label for="cf-message" class="form-label">What's going on?</label>
+          <textarea
+            id="cf-message"
+            name="message"
+            class="form-textarea"
+            required
+            rows="4"
+            placeholder="Tell me what you're working on, what's stuck, or what you're exploring — no need to pitch, just context."
+          ></textarea>
+        </div>
+
+        <button type="submit" class="form-submit">Send message</button>
+
+        <p class="form-fallback">
+          Prefer to email directly?
+          <a href="mailto:hello@stevecattin.com">hello@stevecattin.com</a>
+        </p>
+      </form>
+
+      <div id="contact-success" class="contact-success" hidden>
+        <div class="success-check" aria-hidden="true">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M4 12L9.5 17.5L20 7" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3 class="success-headline">Got it.</h3>
+        <p class="success-body">I'll be back within 48 hours.</p>
+        <button class="success-close">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const modal    = document.getElementById('contact-modal') as HTMLElement;
+  const backdrop = modal.querySelector('.modal__backdrop') as HTMLElement;
+  const closeBtn = modal.querySelector('.modal__close') as HTMLButtonElement;
+  const form     = document.getElementById('contact-form') as HTMLFormElement;
+  const successEl = document.getElementById('contact-success') as HTMLElement;
+  const submitBtn = form.querySelector('.form-submit') as HTMLButtonElement;
+  const successCloseBtn = modal.querySelector('.success-close') as HTMLButtonElement;
+
+  // Focusable elements for focus trap
+  const focusableSelectors = 'button, [href], input, textarea, [tabindex]:not([tabindex="-1"])';
+
+  function openModal() {
+    modal.removeAttribute('aria-hidden');
+    modal.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+    // Focus first input after transition starts
+    setTimeout(() => {
+      const first = modal.querySelector<HTMLElement>('input, textarea');
+      first?.focus();
+    }, 60);
+  }
+
+  function closeModal() {
+    modal.setAttribute('aria-hidden', 'true');
+    modal.classList.remove('is-open');
+    document.body.style.overflow = '';
+  }
+
+  function resetModal() {
+    form.reset();
+    form.hidden = false;
+    successEl.hidden = true;
+    submitBtn.textContent = 'Send message';
+    submitBtn.disabled = false;
+  }
+
+  // Any element with data-contact-trigger opens the modal
+  document.querySelectorAll<HTMLElement>('[data-contact-trigger]').forEach((el) => {
+    el.addEventListener('click', (e) => {
+      e.preventDefault();
+      openModal();
+    });
+  });
+
+  // Close via backdrop click or close button
+  backdrop.addEventListener('click', closeModal);
+  closeBtn.addEventListener('click', closeModal);
+
+  // Close via success button, then reset after transition
+  successCloseBtn.addEventListener('click', () => {
+    closeModal();
+    setTimeout(resetModal, 300);
+  });
+
+  // ESC key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.classList.contains('is-open')) closeModal();
+  });
+
+  // Focus trap
+  modal.addEventListener('keydown', (e) => {
+    if (e.key !== 'Tab') return;
+    const focusable = Array.from(modal.querySelectorAll<HTMLElement>(focusableSelectors));
+    const first = focusable[0];
+    const last  = focusable[focusable.length - 1];
+    if (e.shiftKey) {
+      if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+    } else {
+      if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  });
+
+  // Form submission
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    submitBtn.textContent = 'Sending…';
+    submitBtn.disabled = true;
+
+    try {
+      const res = await fetch('https://formspree.io/f/mlgvgvle', {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { Accept: 'application/json' },
+      });
+
+      if (res.ok) {
+        form.hidden = true;
+        successEl.hidden = false;
+        successCloseBtn.focus();
+      } else {
+        submitBtn.textContent = 'Something went wrong — try again';
+        submitBtn.disabled = false;
+      }
+    } catch {
+      submitBtn.textContent = 'Something went wrong — try again';
+      submitBtn.disabled = false;
+    }
+  });
+</script>
+
+<style>
+  /* ── Overlay ──────────────────────────────────────────────────── */
+  .modal {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-6);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--dur-med) var(--ease-out);
+  }
+
+  .modal.is-open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .modal__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+  }
+
+  /* ── Panel ────────────────────────────────────────────────────── */
+  .modal__panel {
+    position: relative;
+    z-index: 1;
+    background: var(--color-paper);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-line);
+    width: 100%;
+    max-width: 480px;
+    padding: var(--space-8);
+    transform: translateY(14px);
+    transition: transform var(--dur-med) var(--ease-out);
+    max-height: calc(100dvh - var(--space-12));
+    overflow-y: auto;
+  }
+
+  .modal.is-open .modal__panel {
+    transform: translateY(0);
+  }
+
+  /* Mobile: bottom sheet */
+  @media (max-width: 640px) {
+    .modal {
+      align-items: flex-end;
+      padding: 0;
+    }
+
+    .modal__panel {
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+      max-width: 100%;
+      padding: var(--space-6) var(--space-6) var(--space-10);
+      transform: translateY(32px);
+      max-height: 92dvh;
+    }
+  }
+
+  /* ── Header ───────────────────────────────────────────────────── */
+  .modal__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-6);
+  }
+
+  .modal__title {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    font-weight: 500;
+    letter-spacing: var(--tracking-tight);
+    color: var(--color-ink);
+  }
+
+  .modal__close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-md);
+    color: var(--color-ash);
+    transition: background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+    flex-shrink: 0;
+  }
+
+  .modal__close:hover {
+    background: var(--color-mist);
+    color: var(--color-ink);
+  }
+
+  /* ── Form ─────────────────────────────────────────────────────── */
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+  }
+
+  .form-field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .form-label {
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--color-ink);
+  }
+
+  .form-input,
+  .form-textarea {
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    color: var(--color-ink);
+    background: var(--color-white);
+    border: 1px solid var(--color-mist);
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    width: 100%;
+    transition: border-color var(--dur-fast) var(--ease-out);
+    -webkit-appearance: none;
+  }
+
+  .form-input:focus,
+  .form-textarea:focus {
+    outline: none;
+    border-color: var(--color-cobalt);
+    box-shadow: 0 0 0 3px var(--color-cobalt-tint);
+  }
+
+  .form-input::placeholder,
+  .form-textarea::placeholder {
+    color: var(--color-ash);
+  }
+
+  .form-textarea {
+    resize: vertical;
+    min-height: 100px;
+    line-height: var(--lh-normal);
+  }
+
+  .form-submit {
+    align-self: flex-start;
+    background: var(--color-cobalt);
+    color: var(--color-paper);
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    padding: 11px 22px;
+    border-radius: var(--radius-sm);
+    transition: background var(--dur-fast) var(--ease-out);
+    cursor: pointer;
+  }
+
+  .form-submit:hover:not(:disabled) {
+    background: var(--color-cobalt-deep);
+  }
+
+  .form-submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  @media (max-width: 640px) {
+    .form-submit {
+      align-self: stretch;
+      text-align: center;
+      padding: 14px 22px;
+    }
+  }
+
+  .form-fallback {
+    font-size: var(--text-sm);
+    color: var(--color-ash);
+    line-height: var(--lh-normal);
+  }
+
+  .form-fallback a {
+    color: var(--color-graphite);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  /* ── Success state ────────────────────────────────────────────── */
+  .contact-success {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: var(--space-8) var(--space-6);
+    gap: var(--space-3);
+  }
+
+  .success-check {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--color-cobalt-tint);
+    color: var(--color-cobalt);
+    margin-bottom: var(--space-2);
+  }
+
+  .success-headline {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    font-weight: 500;
+    letter-spacing: var(--tracking-tight);
+    color: var(--color-ink);
+  }
+
+  .success-body {
+    font-size: var(--text-base);
+    color: var(--color-graphite);
+  }
+
+  .success-close {
+    margin-top: var(--space-3);
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--color-graphite);
+    padding: 9px 20px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-line);
+    background: transparent;
+    transition: background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+    cursor: pointer;
+  }
+
+  .success-close:hover {
+    background: var(--color-mist);
+    color: var(--color-ink);
+  }
+</style>

@@ -4,7 +4,8 @@ export interface Props {
   headline: string;
   body?: string;
   ctaLabel: string;
-  ctaHref: string;
+  ctaHref?: string;
+  ctaModal?: boolean;
   secondaryLabel?: string;
   secondaryHref?: string;
   id?: string;
@@ -16,6 +17,7 @@ const {
   body,
   ctaLabel,
   ctaHref,
+  ctaModal = false,
   secondaryLabel,
   secondaryHref,
   id,
@@ -29,7 +31,10 @@ const {
     {body && <p class="cta__body">{body}</p>}
 
     <div class="cta__actions">
-      <a href={ctaHref} class="cta__btn cta__btn--primary">{ctaLabel}</a>
+      {ctaModal
+        ? <button class="cta__btn cta__btn--primary" data-contact-trigger>{ctaLabel}</button>
+        : <a href={ctaHref} class="cta__btn cta__btn--primary">{ctaLabel}</a>
+      }
       {secondaryLabel && secondaryHref && (
         <a href={secondaryHref} class="cta__btn cta__btn--secondary">{secondaryLabel}</a>
       )}

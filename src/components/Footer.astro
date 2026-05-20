@@ -23,7 +23,7 @@ const year = new Date().getFullYear();
         <li><a href="/practice">Work with me</a></li>
         <li><a href="/about">About</a></li>
         <li><a href="/blog">Writing</a></li>
-        <li><a href="mailto:hello@stevecattin.com?subject=Intro%20call">Reach out</a></li>
+        <li><button class="footer__reach-out" data-contact-trigger>Reach out</button></li>
       </ul>
     </div>
   </div>
@@ -75,6 +75,18 @@ const year = new Date().getFullYear();
   }
 
   .footer__links a:hover { color: var(--color-cobalt); }
+
+  .footer__reach-out {
+    font: inherit;
+    font-size: 0.95rem;
+    color: var(--color-graphite);
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: color var(--dur-fast) var(--ease-out);
+  }
+  .footer__reach-out:hover { color: var(--color-cobalt); }
 
   .footer__base {
     display: flex;

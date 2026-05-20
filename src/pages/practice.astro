@@ -165,7 +165,7 @@ const steps = [
       ))}
     </ol>
 
-    <a href="mailto:hello@stevecattin.com?subject=Intro%20call" class="practice-audiences__cta">…Get in touch</a>
+    <button class="practice-audiences__cta" data-contact-trigger>…Get in touch</button>
   </section>
 
   <CTABlock
@@ -174,7 +174,7 @@ const steps = [
     headline="The best way to know is a conversation."
     body="Twenty minutes. No deck, no pitch. I'll ask what's actually going on, and we'll see whether this makes sense for both of us."
     ctaLabel="Reach out"
-    ctaHref="mailto:hello@stevecattin.com?subject=Intro%20call"
+    ctaModal={true}
     secondaryLabel="Read some writing first"
     secondaryHref="/blog"
   />
