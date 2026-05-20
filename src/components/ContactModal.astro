@@ -158,30 +158,22 @@
   });
 
   // Form submission
-  form.addEventListener('submit', async (e) => {
+  form.addEventListener('submit', (e) => {
     e.preventDefault();
-    submitBtn.textContent = 'Sending…';
-    submitBtn.disabled = true;
 
-    try {
-      const res = await fetch('https://formspree.io/f/mlgvgvle', {
-        method: 'POST',
-        body: new FormData(form),
-        headers: { Accept: 'application/json' },
-      });
+    // Show success immediately
+    form.hidden = true;
+    successEl.hidden = false;
+    successCloseBtn.focus();
 
-      if (res.ok) {
-        form.hidden = true;
-        successEl.hidden = false;
-        successCloseBtn.focus();
-      } else {
-        submitBtn.textContent = 'Something went wrong — try again';
-        submitBtn.disabled = false;
-      }
-    } catch {
-      submitBtn.textContent = 'Something went wrong — try again';
-      submitBtn.disabled = false;
-    }
+    // Submit in the background
+    fetch('https://formspree.io/f/mlgvgvle', {
+      method: 'POST',
+      body: new FormData(form),
+      headers: { Accept: 'application/json' },
+    }).catch(() => {
+      // Silently fail — user already saw success
+    });
   });
 </script>
 
