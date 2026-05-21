@@ -126,17 +126,32 @@ const recentPosts = allPosts
       drop-shadow(8px 16px 36px rgba(40, 35, 30, 0.14));
   }
 
-  /* Mobile: stack with the portrait above, kept rectangular and modest.
-     No hairline to anchor to up there – portrait just sits at the top. */
+  /* Mobile: copy stacks on top, portrait below it, grounded on the .recent
+     hairline – same visual logic as desktop, just collapsed into one column.
+     Centered (rather than right-aligned) because there's no asymmetric grid
+     to justify against once we're single-column. */
   @media (max-width: 760px) {
     .hero__lede {
       grid-template-columns: 1fr;
       gap: var(--space-8);
-      margin-bottom: var(--space-10);
+      min-height: 0;     /* let content set the height; no desktop min */
+      margin-bottom: 0;  /* portrait sits flush on the .recent hairline */
     }
 
     .hero__portrait {
-      display: none;
+      justify-self: center;
+      align-self: end;
+      max-width: 280px;
+    }
+
+    /* CTAs stack vertically and stretch full-width on mobile – easier tap
+       targets and a cleaner rhythm above the portrait. */
+    .hero__cta-row {
+      flex-direction: column;
+    }
+
+    .hero__cta {
+      justify-content: center;
     }
   }
 
