@@ -123,6 +123,27 @@ const steps = [
 
   <hr class="rule" />
 
+  <!-- Who this is for -->
+  <section class="practice-audiences section container">
+    <header class="practice-audiences__header">
+
+      <h2>If you recognize yourself here…</h2>
+    </header>
+
+    <ol class="practice-audiences__list">
+      {audiences.map((a) => (
+        <li class="practice-audiences__item">
+          <span class="practice-audiences__tag">{a.tag}</span>
+          <p class="practice-audiences__note">{a.body}</p>
+        </li>
+      ))}
+    </ol>
+
+    <button class="practice-audiences__cta" data-contact-trigger>Get in touch</button>
+  </section>
+
+  <hr class="rule" />
+
   <!-- Pillars -->
   <section class="practice-pillars section container">
     <header class="practice-pillars__header">
@@ -145,27 +166,6 @@ const steps = [
       The <a href="/about">About page</a> has the path, the philosophy, and what
       twenty years of this work has actually taught me.
     </p>
-  </section>
-
-  <hr class="rule" />
-
-  <!-- Who this is for -->
-  <section class="practice-audiences section container">
-    <header class="practice-audiences__header">
-
-      <h2>If you recognize yourself here…</h2>
-    </header>
-
-    <ol class="practice-audiences__list">
-      {audiences.map((a) => (
-        <li class="practice-audiences__item">
-          <span class="practice-audiences__tag">{a.tag}</span>
-          <p class="practice-audiences__note">{a.body}</p>
-        </li>
-      ))}
-    </ol>
-
-    <button class="practice-audiences__cta" data-contact-trigger>…Get in touch</button>
   </section>
 
   <CTABlock
@@ -216,20 +216,23 @@ const steps = [
   }
 
   .practice-audiences__cta {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
     margin-top: var(--space-8);
-    font-family: var(--font-accent);
-    font-style: italic;
-    font-weight: 400;
-    font-variation-settings: "opsz" 144;
-    font-size: var(--text-display);
-    color: var(--color-cobalt);
-    text-decoration: none;
+    padding: 13px 22px;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    background: var(--color-cobalt);
+    color: var(--color-paper);
+    border: none;
+    cursor: pointer;
+    transition: background var(--dur-fast) var(--ease-out);
   }
 
   .practice-audiences__cta:hover {
-    text-decoration: underline;
-    text-underline-offset: 4px;
+    background: var(--color-ink);
   }
 
   .practice-audiences__header h2 {
