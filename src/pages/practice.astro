@@ -59,6 +59,8 @@ const pillars = [
   {
     title: 'A vision and framework for what\'s next.',
     body: 'Transformation is the discipline of knowing what to automate, what to protect, and how to evolve a team when the rules underneath are changing.',
+    link: '/blog/the-ai-marketing-ascendancy-framework',
+    linkText: 'I built a framework for working through this.',
   },
 ];
 
@@ -157,6 +159,9 @@ const steps = [
           <span class="practice-pillars__num">№ {String(i + 1).padStart(2, '0')}</span>
           <h3>{p.title}</h3>
           <p>{p.body}</p>
+          {p.link && (
+            <a href={p.link} class="practice-pillars__card-link">{p.linkText}</a>
+          )}
         </article>
       ))}
     </div>
@@ -316,6 +321,7 @@ const steps = [
   .practice-modes__card h3 {
     font-family: var(--font-display);
     font-size: var(--text-xl);
+    line-height: 1.4;
     letter-spacing: var(--tracking-tight);
     color: var(--color-ink);
   }
@@ -399,6 +405,14 @@ const steps = [
     font-size: 0.98rem;
     line-height: var(--lh-normal);
     color: var(--color-graphite);
+  }
+
+  .practice-pillars__card-link {
+    font-size: 0.9rem;
+    color: var(--color-cobalt);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    margin-top: auto;
   }
 
   /* -------- Process -------- */

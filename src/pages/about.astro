@@ -2,15 +2,23 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import CTABlock from '../components/CTABlock.astro';
 
+const tango    = `<a href="https://tangoanalytics.com" target="_blank" rel="noopener noreferrer">Tango</a>`;
+const locatee  = `<a href="https://www.venturelab.swiss/Locatee-acquired-by-Tango-creating-industrys-first-holistic-workplace-analytics-solution" target="_blank" rel="noopener noreferrer">Locatee</a>`;
+const felfel   = `<a href="https://felfel.ch/en" target="_blank" rel="noopener noreferrer">FELFEL</a>`;
+const aspediens= `<a href="https://www.consultancy.uk/news/12313/csc-acquires-european-cloud-services-firm-aspediens" target="_blank" rel="noopener noreferrer">Aspediens</a>`;
+const dxc      = `<a href="https://dxc.com" target="_blank" rel="noopener noreferrer">DXC Technology</a>`;
+const parker   = `<a href="https://www.parker.com/us/en/home.html" target="_blank" rel="noopener noreferrer">Parker Hannifin</a>`;
+const ehl      = `<a href="https://www.ehl.edu" target="_blank" rel="noopener noreferrer">École hôtelière de Lausanne</a>`;
+
 const milestones = [
-  { year: '2025', note: 'SVP Marketing at Tango. Came in through the acquisition, took the team over, ended up on the executive leadership team of the company that bought us. PE-backed, US-headquartered. Combining American ambition with European execution.' },
-  { year: '2024', note: 'Second exit: Locatee acquired by Tango. We restructured the company and ran a sale process under pressure. I sat at the table with our co-CEOs, CFO, board, and the acquirer – while holding the team together through it.' },
-  { year: '2020', note: 'Joined Locatee post Series A as Head of Marketing. Building the organization for scale.' },
-  { year: '2017', note: 'Bringing Good Food at Work to more employees, as Growth Lead at FELFEL. A passion for a physical product, designed and shipped into real offices.' },
-  { year: '2016', note: 'First exit. Aspediens acquired by CSC/DXC Technology. Suddenly colleagues on every continent and a Fortune 500 brand to integrate. The work shifted to building bridges – between teams, countries, and two very different ways of doing business.' },
-  { year: '2013', note: 'Joined Aspediens as Head of Marketing. 30 people on day one. 100+ the day we were acquired.' },
-  { year: '2012', note: 'Coordinating digital marketing across 25 countries at Parker Hannifin. First taste of how a Fortune 500 actually moves – and where the gap sits between HQ and the field.' },
-  { year: '2005', note: 'First job. École hôtelière de Lausanne – seven years, intern to manager. The world\'s leading hospitality school doesn\'t just teach you to love detail. It trains you to read a room: who feels welcome, who doesn\'t, what the energy needs. Years later, colleagues would call this out as something they noticed about working with me. The origin is here.' },
+  { year: '2025', note: `SVP Marketing at ${tango}. Came in through the acquisition, took the team over, ended up on the executive leadership team of the company that bought us. PE-backed, US-headquartered. Combining American ambition with European execution.` },
+  { year: '2024', note: `Second exit: ${locatee} acquired by ${tango}. We restructured the company and ran a sale process under pressure. I sat at the table with our co-CEOs, CFO, board, and the acquirer – while holding the team together through it.` },
+  { year: '2020', note: `Joined ${locatee} post Series A as Head of Marketing. Building the organization for scale.` },
+  { year: '2017', note: `Bringing Good Food at Work to more employees, as Growth Lead at ${felfel}. A passion for a physical product, designed and shipped into real offices.` },
+  { year: '2016', note: `First exit. ${aspediens} acquired by CSC/${dxc}. Suddenly colleagues on every continent and a Fortune 500 brand to integrate. The work shifted to building bridges – between teams, countries, and two very different ways of doing business.` },
+  { year: '2013', note: `Joined ${aspediens} as Head of Marketing. 30 people on day one. 100+ the day we were acquired.` },
+  { year: '2012', note: `Coordinating digital marketing across 25 countries at ${parker}. First taste of how a Fortune 500 actually moves – and where the gap sits between HQ and the field.` },
+  { year: '2005', note: `First job. ${ehl} – seven years, intern to manager. The world's leading hospitality school doesn't just teach you to love detail. It trains you to read a room: who feels welcome, who doesn't, what the energy needs. Years later, colleagues would call this out as something they noticed about working with me. The origin is here.` },
 ];
 
 const principles = [
@@ -61,14 +69,12 @@ const principles = [
       smart people produce the wrong results anyway.
     </p>
 
-    <p>
-      I've spent most of my career working in those in-between spaces. Between
-      the people building features and the customers paying for benefits – which
-      is often the most expensive translation no one budgets for. Between
-      American ambition and European execution. Between the strategy that makes
-      sense on paper, the team that has to believe it enough to deliver it, and
-      the operating system that makes the work progress.
-    </p>
+    <p><strong>I've spent most of my career working in those in-between spaces.</strong></p>
+    <ul class="about-betweens">
+      <li>Between the people building features and the customers paying for benefits – which is often the most expensive translation no one budgets for.</li>
+      <li>Between American ambition and European execution.</li>
+      <li>Between the strategy that makes sense on paper, the team that has to believe it enough to deliver it, and the operating system that makes the work progress.</li>
+    </ul>
 
     <p>
       I'm drawn to people who are translating between worlds – a technical
@@ -128,7 +134,7 @@ const principles = [
       Fewer companies than I could take. More depth with each.
     </p>
 
-    <p>If any of that resonates, reach out!</p>
+    <p>If any of that resonates, <button class="about-inline-trigger" data-contact-trigger>reach out</button>!</p>
   </section>
 
   <!-- Timeline -->
@@ -143,7 +149,7 @@ const principles = [
       {milestones.map((m) => (
         <li class="about-timeline__item">
           <span class="about-timeline__year">{m.year}</span>
-          <p class="about-timeline__note">{m.note}</p>
+          <p class="about-timeline__note" set:html={m.note} />
         </li>
       ))}
     </ol>
@@ -259,6 +265,44 @@ const principles = [
     color: var(--color-ink);
   }
 
+  .about-betweens {
+    list-style: none;
+    padding-left: 0;
+    counter-reset: betweens;
+  }
+
+  .about-betweens li {
+    counter-increment: betweens;
+    display: flex;
+    gap: var(--space-5);
+  }
+
+  .about-betweens li::before {
+    content: counter(betweens, decimal-leading-zero);
+    font-family: var(--font-mono);
+    font-size: var(--text-mono-sm);
+    font-weight: 500;
+    letter-spacing: var(--tracking-wide);
+    color: var(--color-cobalt);
+    flex-shrink: 0;
+    padding-top: 0.25em;
+  }
+
+  .about-inline-trigger {
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    color: var(--color-cobalt);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+  }
+
+  .about-inline-trigger:hover {
+    color: var(--color-ink);
+  }
+
   /* -------- Timeline -------- */
   .about-timeline__header {
     margin-bottom: var(--space-10);
@@ -278,10 +322,15 @@ const principles = [
     margin-bottom: var(--space-8);
   }
 
-  .about-timeline__linkedin a {
+  .about-timeline__linkedin a,
+  .about-timeline__note a {
     color: var(--color-cobalt);
     text-decoration: underline;
     text-underline-offset: 3px;
+  }
+
+  .about-timeline__note a:hover {
+    color: var(--color-ink);
   }
 
   .about-timeline__list {
