@@ -73,6 +73,22 @@ const recentPosts = allPosts
       </section>
     </div>
   </section>
+
+  <section class="framework" aria-labelledby="framework-title">
+    <div class="container-wide framework__inner">
+      <p class="framework__eyebrow">The framework I built</p>
+      <h2 id="framework-title" class="framework__title">
+        The AI Marketing Ascendancy Framework.
+      </h2>
+      <p class="framework__lede">
+        My framework for moving marketing teams from AI-curious to
+        AI-confident – across people, processes, and technology.
+      </p>
+      <a href="/blog/the-ai-marketing-ascendancy-framework/" class="framework__cta">
+        Read the framework <span class="arrow" aria-hidden="true">→</span>
+      </a>
+    </div>
+  </section>
 </BaseLayout>
 
 <style>
@@ -271,5 +287,80 @@ const recentPosts = allPosts
 
   @media (max-width: 960px) {
     .feed-preview { grid-template-columns: 1fr; }
+  }
+
+  /* -------- Framework section (mist, editorial) -------- */
+  /* Full-bleed mist block, hairline above. Echoes the About pullquote's
+     editorial weight – this is "durable IP," not a feed item. No card
+     chrome: the surface itself carries the section break, type does the
+     rest. Container-wide centers the inner column. */
+  .framework {
+    background: var(--color-mist);
+    border-top: 0.5px solid var(--color-line);
+    padding-block: var(--space-20);
+  }
+
+  .framework__inner {
+    max-width: 920px;
+  }
+
+  .framework__eyebrow {
+    font-family: var(--font-mono);
+    font-size: var(--text-mono-sm);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+    color: var(--color-cobalt);
+    font-weight: 500;
+    margin: 0 0 var(--space-5);
+  }
+
+  .framework__title {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: var(--text-3xl);
+    line-height: var(--lh-tight);
+    letter-spacing: var(--tracking-tight);
+    color: var(--color-ink);
+    margin: 0 0 var(--space-5);
+    max-width: 22ch;
+  }
+
+  .framework__lede {
+    font-size: var(--text-lg);
+    line-height: var(--lh-normal);
+    color: var(--color-graphite);
+    max-width: 56ch;
+    margin: 0 0 var(--space-8);
+  }
+
+  .framework__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-family: var(--font-mono);
+    font-size: var(--text-mono-sm);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+    color: var(--color-cobalt);
+    font-weight: 500;
+    text-decoration: none;
+    transition: color var(--dur-fast) var(--ease-out);
+  }
+
+  .framework__cta:hover {
+    color: var(--color-cobalt-deep);
+  }
+
+  .framework__cta:hover .arrow {
+    transform: translateX(4px);
+  }
+
+  .framework__cta .arrow {
+    display: inline-block;
+    transition: transform var(--dur-fast) var(--ease-out);
+  }
+
+  @media (max-width: 640px) {
+    .framework { padding-block: var(--space-16); }
   }
 </style>
