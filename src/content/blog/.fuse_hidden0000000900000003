@@ -1,0 +1,65 @@
+---
+title: "The most important KPI for marketers, six years later"
+description: "I wrote about the CAC-to-CLV ratio in 2020. Six years and one AI revolution later, here's what actually changed – and what didn't."
+pubDate: 2026-04-28
+category: "Marketing"
+readingTime: "7 min read"
+---
+
+Six years ago, I published a short post arguing that if a marketer had to pick one KPI to be heard at the board's table, it was the CAC-to-CLV ratio. Cost to acquire a customer, divided into the value they generate over their lifetime. Simple. Connected to the business. Unforgiving.
+
+I went back and [re-read it](/blog/most-important-kpi-marketers/) last week. I expected to wince. I didn't.
+
+The world has changed enormously since 2020. A pandemic. An AI revolution. A privacy reckoning. The slow death of the third-party cookie. The rise of platforms whose internal optimization is now too opaque for most marketers to audit. The toolbox is unrecognizable. The vocabulary is unrecognizable. And somehow the answer to "what KPI matters most?" is still the same.
+
+Let me explain why – and where AI did, and didn't, change the picture.
+
+## What AI actually changed
+
+**The cost of producing things collapsed.** Copy, creative, landing pages, audience segments, attribution models, even media plans – all of it can now be drafted, tested, iterated faster than any marketing team in 2020 could have imagined. In CAC terms: the marginal cost of trying something new is closer to zero.
+
+**Black-box buying went mainstream.** Meta, Google, and TikTok are not really platforms you operate anymore – they are platforms you feed. You hand the algorithm a budget and a creative library, and it decides who sees what, when, in what combination. The optimization is real. The visibility into it is not.
+
+**Discovery moved.** Some of your future customers are no longer Googling. They are asking ChatGPT, Perplexity, or Claude. The click that used to land on your site is being replaced by an answer that mentions you – or doesn't.
+
+**Predictive CLV got useful.** What used to take twelve months of cohort tracking, AI can now estimate from a few weeks of behavioral signal. You can act on lifetime value before it has fully unfolded. That is a genuine shift.
+
+## What didn't change
+
+The math.
+
+The CAC-to-CLV ratio still tells you whether you are running a business or running a treadmill. It still earns the marketer a seat at the table when they can speak it fluently. It is still easy to misread. And – this part is more important than ever – it is still about balance, not maximization.
+
+A 30:1 ratio in 2026 means the same thing it meant in 2020: you are probably under-investing, your customers are probably not as defended as you think, and someone with a smaller ratio and a bigger budget is about to outspend you.
+
+The ground truth of marketing didn't move. The noise around it did.
+
+## Where the differentiation actually went
+
+Here's the part I didn't see coming in 2020.
+
+When the executional layer of marketing becomes commoditized – and it has – the moat moves up. Anyone can produce ten variants of a landing page in an afternoon. Few can decide which problem the page should solve, for whom, with what story, in service of what brand. AI compressed the gap between a mediocre operator and a great one *on execution*. It did not compress the gap on judgment.
+
+Which means the marketer who keeps a board-level seat in 2026 is not the one with the most sophisticated attribution model. It is the one who can hold three things in their head at once:
+
+The CAC-to-CLV ratio, by channel, this week.
+
+The fact that the ratio is now influenced by an AI nobody at your company controls – the platform's bidding model, the LLM that summarizes you, the recommendation engine on the other side.
+
+And a clear, unflinching answer to the question your CEO will eventually ask: *if our acquisition costs double next quarter because the platforms shifted, do we have a brand strong enough to hold our customers? Or did we rent them?*
+
+That last question is what brand actually buys you. It's why brand spend, which used to feel like the soft cousin of performance, is becoming the hardest line item to defend AND the most important one to fund.
+
+## What I'd add to the 2020 post
+
+If I were rewriting it today, I'd keep almost everything. The KPI is the KPI. But I'd add three things.
+
+First: track CAC and CLV by *source of intent*, not just by channel. Paid social, organic, AI assistants, referral – these are no longer comparable on the same axis.
+
+Second: assume your attribution model is wrong by 20%. Make decisions anyway. Perfect attribution is not coming back.
+
+Third: the cheapest customer to acquire is the one your existing customers refer. AI didn't change that. It made it more obvious.
+
+Six years on, the answer is still: know what you spend, know what it returns, watch the ratio, mind the balance. The tools changed. The discipline didn't.
+
+–S.
