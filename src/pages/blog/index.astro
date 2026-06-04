@@ -7,10 +7,7 @@ import { getCollection } from 'astro:content';
 const posts = (await getCollection('blog', ({ data }) => !data.draft))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
-// ← Change this slug to pin a different post as the hero
-const FEATURED_SLUG = 'the-ai-marketing-ascendancy-framework';
-
-const featured = posts.find((p) => p.slug === FEATURED_SLUG) ?? posts[0];
+const featured = posts[0];
 const rest = posts.filter((p) => p.slug !== featured.slug);
 // Derived from posts – new categories appear automatically when used
 const categories = ['Leadership', 'Marketing', 'Founding', 'Personal'].filter(
