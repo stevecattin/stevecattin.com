@@ -1,0 +1,72 @@
+---
+title: "Rebuilding the 5-15 with Claude and Slack"
+description: "Yvon Chouinard's fifty-year-old management ritual, rewired for the AI era. How I cut 45 minutes of Monday plumbing to a glance, and gave the team something it didn't have before – visibility into each other's AI experiments."
+pubDate: 2026-06-04
+category: "Leadership"
+readingTime: "6 min read"
+---
+
+Yvon Chouinard, Patagonia's founder, used to ask his team for a weekly note – fifteen minutes to write, five to read. He called it the 5-15.
+
+I use it with my team and it's the closest thing to a small management spell. Not because it solves anything by itself, but because it forces something to happen every week: each person stops, looks back, and decides what they want their leader to know.
+
+What you get back is rarely what you'd ask for in a 1:1. People surface things they wouldn't bring up live. Wins they didn't think were worth mentioning. A frustration they were quietly carrying. A tool they tried that didn't work. The 5-15 builds a slow weekly archive of what your team is actually living.
+
+For me, it's also the most reliable signal I have. Monday morning, six 5-15s in front of me tell me more about the state of the team than any dashboard.
+
+A few months ago I added a new section to the template: *AI Insight of the Week*. Two or three lines. One thing you tried with AI, what worked or didn't, and the gain – time saved, a piece of work you couldn't have done before, a sharper output. Failures explicitly welcome.
+
+The forcing function is the point. When the template asks for an AI insight every week, everyone on the team has to look at their week through that lens. Where could I have used Claude here? Where did I try and it didn't work? You don't get AI adoption by mandating tools. You get it by giving people a weekly reason to notice where AI fits in what they're already doing.
+
+But the system itself was creaky.
+
+Until a few weeks ago, here's how the 5-15 actually worked for me and my team:
+
+- I'd send a manual reminder on Friday.
+- The team would send their docs by email, each in their own format.
+- I'd save each one to a OneDrive folder synced locally, so Claude could read them.
+- Monday morning, I'd open Claude, point it at the folder, and ask for a summary.
+- The AI insights, the part I cared most about, stayed buried inside each doc. Invisible to anyone but me.
+
+Forty-five minutes of plumbing every Monday on my side. Twenty minutes per teammate to fill the form and send it. And the most valuable part of the exercise, cross-pollination of what people were learning with AI, didn't exist. The team's AI experimentation was happening in seven parallel silos.
+
+So I rebuilt it.
+
+It now runs like this:
+
+- Every Friday at 9am, Claude creates a fresh Slack canvas for each teammate, pre-populated with the 5-15 structure, and DMs it to them with a nudge.
+- By end of Friday, everyone fills theirs in. No email, no save-the-file, no folder.
+- Every Monday at 8am, Claude searches Slack for the week's canvases, reads them, and DMs me an executive summary: themes, per-person digest, and who didn't fill theirs in.
+- Then it does the part I'm most excited about. It pulls every AI Insight from the canvases and adds them to a shared *AI Experiments Gallery* – a small internal page where everyone can see what their teammates tried that week, what worked, what didn't, and what tool they used.
+- A weekly note in our #marketing-hq channel tells the team the gallery has been updated and invites them to take a look.
+
+<figure class="post__figure">
+  <img src="/images/blog/5-15-weekly-cycle.png" alt="Diagram of the 5-15 weekly cycle: Claude sends canvases Friday at 9am, the team fills them in by end of Friday, and Claude reads, synthesizes and distributes the outputs Monday at 8am – producing an exec summary DM, an AI Experiments Gallery, and a Slack channel post." />
+  <figcaption>The weekly cycle. Canvases go out Friday, the summary and gallery land Monday. Everything runs in Slack, on a fixed cadence.</figcaption>
+</figure>
+
+The mechanics are simple. The effect is not.
+
+My weekly effort dropped from forty-five minutes of friction to reading one DM and glancing at the gallery. The team's effort dropped from twenty minutes to about fifteen, in the tool they already use all day. And something new appeared that didn't exist before: visibility.
+
+Maya can see that Tom tried ChatGPT's agent mode for competitive intelligence. Hannah can see how Sofia used Claude and ChatGPT in tandem on the demand-gen calendar. Mia can see Clara's GEO measurement experiments. The team borrows from itself. And when something didn't work, when a tool let someone down, that's surfaced too. We stop repeating the same failures in seven different corners.
+
+<figure class="post__figure">
+  <img src="/images/blog/ai-experiments-gallery.png" alt="Screenshot of the AI Experiments Gallery, an internal page titled 'How the team is putting AI to work', showing 19 experiments logged across 6 contributors with highlight cards and a filterable grid of experiments." />
+  <figcaption>The AI Experiments Gallery. Every AI Insight of the Week becomes a browsable card – wins, time saved, and the one that didn't work.</figcaption>
+</figure>
+
+A few things I'd take from this if you're building something similar:
+
+1. **Rituals matter more than tools.** The 5-15 worked before AI was in the picture. The tool didn't create the value. It removed the friction around something that already had value.
+2. **Forcing functions are how culture changes.** I didn't ask the team to "use AI more." I added two lines to a form they already fill in. The behavior followed.
+3. **The most interesting AI use case for a leader might be operations, not output.** Everyone is rushing to use AI for the work itself – the deck, the email, the campaign. The bigger unlock for me was using it to compress the team rituals that keep us aligned, so I get more time for the work that only I can do.
+4. **Visibility compounds.** The exec summary saves me time. The gallery saves the team from re-learning what someone already figured out. Both came from the same source data. Designing for both at once cost almost nothing extra.
+
+The 5-15 is fifty years old. Patagonia didn't need Claude or Slack to make it work. But I think Yvon would be quietly amused that the same idea, with two small additions – an AI section and a bit of automation – now runs itself.
+
+–S.
+
+---
+
+*All examples are real – names have been changed.*
