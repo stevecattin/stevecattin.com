@@ -1,0 +1,260 @@
+---
+// Reusable "In their words" testimonials section.
+// Source of truth for testimonial copy lives here; pages select which quotes
+// to show via `featuredId` (large lead quote) and `rowIds` (quieter pair/row).
+interface Props {
+  eyebrow?: string;
+  title?: string;
+  featuredId?: string;
+  rowIds?: string[];
+}
+
+const TESTIMONIALS: Record<
+  string,
+  { quote: string; name: string; role: string; img: string }
+> = {
+  'karen-clarke': {
+    quote:
+      "Stève doesn't just deliver results – he builds high-performing teams. He energizes people, fosters creativity, and creates a real sense of ownership and alignment, paired with a structured approach that drives focus and performance.",
+    name: 'Karen Clarke',
+    role: 'Board Member, Advisor & CRO · Upstack, AMCS Group, Berkshire Partners',
+    img: '/images/testimonials/karen-clarke.webp',
+  },
+  'christina-nahal': {
+    quote:
+      "I don't think there is anything that Stève can't do. His creativity and strategic guidance strengthened our brand across new markets, and his understanding of brand storytelling makes him an asset to any organization.",
+    name: 'Christina Nahal',
+    role: 'Marketing & Brand Advisor · former SVP of Marketing, Thirdera',
+    img: '/images/testimonials/christina-nahal.webp',
+  },
+  'berin-sadikovic': {
+    quote:
+      'Stève was the ideal manager – leadership came naturally to him. He checked in on how the team was feeling, kept morale high, and gave us the space to own our work. His mentorship made me better, both professionally and personally.',
+    name: 'Berin Sadikovic',
+    role: 'IS Business Analyst, ABB',
+    img: '/images/testimonials/berin-sadikovic.webp',
+  },
+};
+
+const {
+  eyebrow = 'In their words',
+  title = "What it's like to work with me.",
+  featuredId,
+  rowIds = [],
+} = Astro.props;
+
+const featured = featuredId ? TESTIMONIALS[featuredId] : null;
+const rows = rowIds.map((id) => TESTIMONIALS[id]).filter(Boolean);
+---
+
+<section class="voices" aria-labelledby="voices-title">
+  <div class="container-wide">
+    <header class="voices__head">
+      <p class="voices__eyebrow">{eyebrow}</p>
+      <h2 id="voices-title" class="voices__title">{title}</h2>
+    </header>
+
+    {featured && (
+      <figure class="voices__featured">
+        <span class="voices__mark" aria-hidden="true">&#8220;</span>
+        <blockquote class="voices__lead">{featured.quote}</blockquote>
+        <figcaption class="voices__by">
+          <img
+            class="voices__avatar"
+            src={featured.img}
+            alt={featured.name}
+            width="112"
+            height="112"
+            loading="lazy"
+            decoding="async"
+          />
+          <span class="voices__byline">
+            <span class="voices__name">{featured.name}</span>
+            <span class="voices__role">{featured.role}</span>
+          </span>
+        </figcaption>
+      </figure>
+    )}
+
+    {rows.length > 0 && (
+      <div class:list={['voices__row', { 'voices__row--lead': !featured }]}>
+        {rows.map((t) => (
+          <figure class="voices__item">
+            <blockquote class="voices__quote">{t.quote}</blockquote>
+            <figcaption class="voices__by">
+              <img
+                class="voices__avatar"
+                src={t.img}
+                alt={t.name}
+                width="96"
+                height="96"
+                loading="lazy"
+                decoding="async"
+              />
+              <span class="voices__byline">
+                <span class="voices__name">{t.name}</span>
+                <span class="voices__role">{t.role}</span>
+              </span>
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+    )}
+  </div>
+</section>
+
+<style>
+  /* -------- Testimonials ("In their words") -------- */
+  /* Editorial, chrome-less – same philosophy as the timeline and the About
+     pullquote: type and hairlines carry it, no boxes. A featured quote leads
+     (large, anchored by an oversized Fraunces cobalt quote mark that echoes
+     the hero's "stories" accent); quieter quotes follow in a
+     hairline-separated row. */
+  .voices {
+    background: var(--color-paper);
+    border-top: 0.5px solid var(--color-line);
+    padding-block: var(--space-20);
+  }
+
+  .voices__head {
+    margin-bottom: var(--space-12);
+    max-width: 680px;
+  }
+
+  .voices__eyebrow {
+    font-family: var(--font-mono);
+    font-size: var(--text-mono-sm);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+    color: var(--color-cobalt);
+    font-weight: 500;
+    margin: 0 0 var(--space-3);
+  }
+
+  .voices__title {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: var(--text-display);
+    line-height: var(--lh-tight);
+    letter-spacing: var(--tracking-tight);
+    color: var(--color-ink);
+    margin: 0;
+    max-width: 18ch;
+  }
+
+  /* Featured quote – the lead. Big Fraunces glyph hangs above the quote,
+     pulled left into the margin so the text aligns clean. */
+  .voices__featured {
+    margin: 0 0 var(--space-16);
+    max-width: 60ch;
+    position: relative;
+  }
+
+  .voices__mark {
+    display: block;
+    font-family: var(--font-accent);
+    font-style: italic;
+    font-weight: 400;
+    font-size: 140px;
+    line-height: 0.5;
+    height: 64px;
+    color: var(--color-cobalt);
+    margin-bottom: var(--space-2);
+    margin-left: -0.06em;
+  }
+
+  .voices__lead {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: var(--text-xl);
+    line-height: 1.45;
+    letter-spacing: var(--tracking-tight);
+    color: var(--color-ink);
+    margin: 0 0 var(--space-6);
+  }
+
+  /* Supporting pair – quieter, hairline above marks the shift in weight. */
+  .voices__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-12);
+    padding-top: var(--space-10);
+    border-top: 0.5px solid var(--color-line);
+  }
+
+  /* When the row is the lead (no featured quote above), drop the divider so
+     it sits clean under the header. */
+  .voices__row--lead {
+    padding-top: 0;
+    border-top: 0;
+  }
+
+  .voices__item {
+    margin: 0;
+  }
+
+  .voices__quote {
+    font-size: var(--text-base);
+    line-height: var(--lh-prose);
+    color: var(--color-graphite);
+    margin: 0 0 var(--space-5);
+  }
+
+  /* Attribution – avatar + (name in display, role in mono).
+     Shared by featured + items. */
+  .voices__by {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .voices__avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+    background: var(--color-mist);
+  }
+
+  .voices__featured .voices__avatar {
+    width: 56px;
+    height: 56px;
+  }
+
+  .voices__byline {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    min-width: 0;
+  }
+
+  .voices__name {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: var(--text-base);
+    color: var(--color-ink);
+    letter-spacing: -0.01em;
+  }
+
+  .voices__role {
+    font-family: var(--font-mono);
+    font-size: var(--text-mono-xs);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-mono);
+    color: var(--color-ash);
+    line-height: 1.5;
+  }
+
+  @media (max-width: 760px) {
+    .voices__row {
+      grid-template-columns: 1fr;
+      gap: var(--space-10);
+    }
+    .voices__mark { font-size: 110px; height: 50px; }
+  }
+
+  @media (max-width: 640px) {
+    .voices { padding-block: var(--space-16); }
+  }
+</style>

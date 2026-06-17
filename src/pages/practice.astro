@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import CTABlock from '../components/CTABlock.astro';
+import Testimonials from '../components/Testimonials.astro';
 
 const audiences = [
   {
@@ -172,6 +173,8 @@ const steps = [
       twenty years of this work has actually taught me.
     </p>
   </section>
+
+  <Testimonials rowIds={["karen-clarke", "christina-nahal"]} />
 
   <CTABlock
     id="book"
