@@ -107,8 +107,8 @@ const rows = rowIds.map((id) => TESTIMONIALS[id]).filter(Boolean);
   /* -------- Testimonials ("In their words") -------- */
   /* Editorial, chrome-less – same philosophy as the timeline and the About
      pullquote: type and hairlines carry it, no boxes. A featured quote leads
-     (large, anchored by an oversized Fraunces cobalt quote mark that echoes
-     the hero's "stories" accent); quieter quotes follow in a
+     (large, anchored by an oversized Cabinet Grotesk bold cobalt quote mark
+     that echoes the hero's "stories" accent); quieter quotes follow in a
      hairline-separated row. */
   .voices {
     background: var(--color-paper);
@@ -142,7 +142,7 @@ const rows = rowIds.map((id) => TESTIMONIALS[id]).filter(Boolean);
     max-width: 18ch;
   }
 
-  /* Featured quote – the lead. Big Fraunces glyph hangs above the quote,
+  /* Featured quote – the lead. Big Cabinet Grotesk bold glyph hangs above the quote,
      pulled left into the margin so the text aligns clean. */
   .voices__featured {
     margin: 0 0 var(--space-16);
@@ -152,9 +152,8 @@ const rows = rowIds.map((id) => TESTIMONIALS[id]).filter(Boolean);
 
   .voices__mark {
     display: block;
-    font-family: var(--font-accent);
-    font-style: italic;
-    font-weight: 400;
+    font-family: var(--font-display);
+    font-weight: 700;
     font-size: 140px;
     line-height: 0.5;
     height: 64px;
@@ -164,11 +163,11 @@ const rows = rowIds.map((id) => TESTIMONIALS[id]).filter(Boolean);
   }
 
   .voices__lead {
-    font-family: var(--font-display);
+    font-family: var(--font-body);
     font-weight: 400;
     font-size: var(--text-xl);
-    line-height: 1.45;
-    letter-spacing: var(--tracking-tight);
+    line-height: 1.5;
+    letter-spacing: normal;
     color: var(--color-ink);
     margin: 0 0 var(--space-6);
   }

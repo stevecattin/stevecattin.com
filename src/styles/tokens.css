@@ -20,10 +20,10 @@
   --color-white:    #FFFFFF;  /* post card surface */
 
   /* ---------- Typography ---------- */
-  --font-display: "Inter Tight", "Inter", system-ui, -apple-system, sans-serif;
-  --font-body:    "Inter", system-ui, -apple-system, sans-serif;
+  --font-display: "Cabinet Grotesk", system-ui, -apple-system, sans-serif;
+  --font-body:    "General Sans", system-ui, -apple-system, sans-serif;
   --font-mono:    "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
-  --font-accent:  "Fraunces", Georgia, serif;
+  --font-accent:  "Switzer", system-ui, -apple-system, sans-serif;
 
   /* Type scale (px — predictable) */
   --text-mono-xs: 10px;

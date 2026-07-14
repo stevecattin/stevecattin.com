@@ -1,6 +1,43 @@
 @import "./tokens.css";
 
 /* ============================================================
+   Self-hosted fonts (Fontshare, variable woff2 — see public/fonts/)
+   Display: Cabinet Grotesk · Body: General Sans · Accent: Switzer italic
+   ============================================================ */
+
+@font-face {
+  font-family: "Cabinet Grotesk";
+  src: url("/fonts/CabinetGrotesk-Variable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "General Sans";
+  src: url("/fonts/GeneralSans-Variable.woff2") format("woff2");
+  font-weight: 200 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "General Sans";
+  src: url("/fonts/GeneralSans-VariableItalic.woff2") format("woff2");
+  font-weight: 200 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Switzer";
+  src: url("/fonts/Switzer-VariableItalic.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* ============================================================
    Reset — minimal, opinionated
    ============================================================ */
 
@@ -25,7 +62,6 @@ body {
   font-family: var(--font-body);
   font-size: var(--text-base);
   line-height: var(--lh-normal);
-  font-feature-settings: "ss01", "cv11";
   min-height: 100vh;
 }
 
@@ -80,12 +116,13 @@ p {
 strong { color: var(--color-ink); font-weight: 600; }
 em { font-style: italic; }
 
-/* Accent serif italic — used on the word "stories" and similar */
+/* Accent word — Cabinet Grotesk bold in cobalt; used on "stories" and similar */
 .accent {
-  font-family: var(--font-accent);
-  font-style: italic;
-  font-weight: 400;
-  letter-spacing: -0.01em;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-style: normal;
+  color: var(--color-cobalt);
+  letter-spacing: var(--tracking-tight);
 }
 
 /* Mono metadata label — eyebrow, post category, dates */

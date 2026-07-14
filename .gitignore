@@ -25,3 +25,6 @@ pnpm-debug.log*
 
 # astro
 .astro/
+
+# Private working docs (strategy, recommendation map) — never deploy/publish
+/docs/
