@@ -10,9 +10,12 @@ export interface Props {
     category: string;
     readingTime?: string;
   };
+  /* Per-post social card, generated at build time by scripts/og/generate.mjs.
+     Falls through to the site default when a post has no card yet. */
+  ogImage?: string;
 }
 
-const { frontmatter } = Astro.props;
+const { frontmatter, ogImage } = Astro.props;
 const { title, description, pubDate, updatedDate, category, readingTime } = frontmatter;
 
 const dateLabel = new Date(pubDate).toLocaleDateString('en-US', {
@@ -22,7 +25,13 @@ const dateLabel = new Date(pubDate).toLocaleDateString('en-US', {
 });
 ---
 
-<BaseLayout title={title} description={description}>
+<BaseLayout
+  title={title}
+  description={description}
+  ogImage={ogImage}
+  ogImageAlt={`${title} – an essay by Stève Cattin`}
+  ogType="article"
+>
   <article class="post">
     <header class="post__header container">
       <p class="post__meta">

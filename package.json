@@ -8,6 +8,8 @@
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro build",
+    "prebuild": "node scripts/og/generate.mjs",
+    "og": "node scripts/og/generate.mjs",
     "preview": "astro preview",
     "astro": "astro"
   },
@@ -18,6 +20,10 @@
     "astro": "^5.0.0"
   },
   "devDependencies": {
-    "@types/node": "^22.9.0"
+    "@resvg/resvg-js": "^2.6.2",
+    "@types/node": "^22.9.0",
+    "gray-matter": "^4.0.3",
+    "satori": "^0.29.0",
+    "sharp": "^0.34.5"
   }
 }

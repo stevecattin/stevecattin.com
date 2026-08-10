@@ -1,4 +1,5 @@
 ---
+import { existsSync } from 'node:fs';
 import { getCollection, type CollectionEntry } from 'astro:content';
 import PostLayout from '../../layouts/PostLayout.astro';
 
@@ -16,8 +17,16 @@ interface Props {
 
 const { post } = Astro.props;
 const { Content } = await post.render();
+
+/* Cards are written to public/og/<slug>.png by the prebuild step. Checking
+   for the file keeps a post from advertising an image that isn't there –
+   it quietly falls back to the site default instead. */
+const cardPath = `/og/${post.slug}.png`;
+const ogImage = existsSync(new URL(`../../../public${cardPath}`, import.meta.url))
+  ? cardPath
+  : undefined;
 ---
 
-<PostLayout frontmatter={post.data}>
+<PostLayout frontmatter={post.data} ogImage={ogImage}>
   <Content />
 </PostLayout>
