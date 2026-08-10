@@ -28,3 +28,9 @@ pnpm-debug.log*
 
 # Private working docs (strategy, recommendation map) — never deploy/publish
 /docs/
+
+# large source assets (originals for optimized web images)
+/assets-source/
+
+# claude worktrees
+.claude/worktrees/
