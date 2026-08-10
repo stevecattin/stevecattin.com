@@ -43,10 +43,10 @@ const recentPosts = allPosts
 
         <figure class="hero__portrait">
           <img
-            src="/portrait.webp"
-            alt="Portrait of Stève Cattin"
-            width="1600"
-            height="2135"
+            src="/portrait-street.webp"
+            alt="Portrait of Stève Cattin on a New York City street"
+            width="920"
+            height="1227"
             loading="eager"
             decoding="async"
           />
@@ -131,21 +131,22 @@ const recentPosts = allPosts
     justify-self: center;
     align-self: end;
     width: 100%;
+    overflow: hidden;
+    border-radius: var(--radius-xs);
+    border: 1px solid var(--color-line);
+    /* Simple ink-toned card shadow – replaces the silhouette drop-shadow
+       now that the image is a framed photograph, not a cutout. */
+    box-shadow:
+      0 2px 6px rgba(16, 17, 20, 0.06),
+      6px 14px 32px rgba(16, 17, 20, 0.10);
   }
 
   .hero__portrait img {
     display: block;
     width: 100%;
     height: 100%;
-    object-fit: contain;
-    object-position: bottom;
-    /* Two stacked drop-shadows that follow the silhouette via the PNG's
-       alpha channel – re-creates the "photographed against a wall" cast
-       shadow without bringing the wall rectangle back. Warm-gray tone
-       sits more naturally on warm paper than pure black. */
-    filter:
-      drop-shadow(0 3px 8px rgba(40, 35, 30, 0.10))
-      drop-shadow(8px 16px 36px rgba(40, 35, 30, 0.14));
+    object-fit: cover;
+    object-position: center top;
   }
 
   /* Mobile: copy stacks on top, portrait below it, grounded on the .recent
