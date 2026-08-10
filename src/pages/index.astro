@@ -106,10 +106,10 @@ const recentPosts = allPosts
   }
 
   /* Asymmetric two-column lede: copy on the left, portrait on the right.
-     Portrait is anchored to the hairline below; text floats centered in
-     the row so it sits balanced between nav and hairline, with breathing
-     room above the eyebrow and below the CTA. The min-height guarantees
-     enough vertical space for that breathing room at any container width. */
+     Portrait is bottom-aligned; text floats centered in the row so it sits
+     balanced between nav and the writings section, with breathing room
+     above the eyebrow and below the CTA. The min-height guarantees enough
+     vertical space for that breathing room at any container width. */
   .hero__lede {
     display: grid;
     grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
@@ -132,13 +132,10 @@ const recentPosts = allPosts
     align-self: end;
     width: 100%;
     overflow: hidden;
-    border-radius: var(--radius-xs);
-    border: 1px solid var(--color-line);
-    /* Simple ink-toned card shadow – replaces the silhouette drop-shadow
-       now that the image is a framed photograph, not a cutout. */
-    box-shadow:
-      0 2px 6px rgba(16, 17, 20, 0.06),
-      6px 14px 32px rgba(16, 17, 20, 0.10);
+    /* No frame, no shadow – the photograph sits directly on the paper and
+       carries its own edges. Radius steps up from the button scale: at this
+       size a 2px corner reads as an accident rather than a decision. */
+    border-radius: var(--radius-md);
   }
 
   .hero__portrait img {
@@ -149,16 +146,16 @@ const recentPosts = allPosts
     object-position: center top;
   }
 
-  /* Mobile: copy stacks on top, portrait below it, grounded on the .recent
-     hairline – same visual logic as desktop, just collapsed into one column.
-     Centered (rather than right-aligned) because there's no asymmetric grid
-     to justify against once we're single-column. */
+  /* Mobile: copy stacks on top, portrait below it – same visual logic as
+     desktop, just collapsed into one column. Centered (rather than
+     right-aligned) because there's no asymmetric grid to justify against
+     once we're single-column. */
   @media (max-width: 760px) {
     .hero__lede {
       grid-template-columns: 1fr;
       gap: var(--space-8);
       min-height: 0;     /* let content set the height; no desktop min */
-      margin-bottom: 0;  /* portrait sits flush on the .recent hairline */
+      margin-bottom: 0;
     }
 
     .hero__portrait {
@@ -256,10 +253,8 @@ const recentPosts = allPosts
 
   /* -------- Recent writings section -------- */
   .recent {
-    /* Hairline lives here now: divides the hero from the writings section.
-       Portrait grounds on this line above. */
-    border-top: 0.5px solid var(--color-line);
-    padding-top: clamp(40px, 4vw, 64px);
+    /* No hairline – white space alone carries the break from the hero. */
+    padding-top: var(--space-24);
   }
 
   .recent__head {
