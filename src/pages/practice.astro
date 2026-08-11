@@ -86,7 +86,7 @@ const steps = [
 
 <BaseLayout
   title="Practice – Stève Cattin"
-  description="What I offer, who it's for, and how to find out if we're a match."
+  description="Who I work with, what I offer, and how to find out if we're a match."
 >
   <!-- Hero -->
   <section class="practice-hero container">
@@ -105,6 +105,27 @@ const steps = [
     </p>
   </section>
 
+  <!-- Who this is for -->
+  <section id="who-i-work-with" class="practice-audiences section container">
+    <header class="practice-audiences__header">
+
+      <h2>If you recognize yourself here…</h2>
+    </header>
+
+    <ol class="practice-audiences__list">
+      {audiences.map((a) => (
+        <li class="practice-audiences__item">
+          <span class="practice-audiences__tag">{a.tag}</span>
+          <p class="practice-audiences__note">{a.body}</p>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <!-- No rule after this one – the quote is itself the break between the
+       recognition list and the offer. -->
+  <Testimonials featuredId="karen-clarke" eyebrow="" title="" width="content" />
+
   <!-- Engagement modes -->
   <section class="practice-modes section container">
     <header class="practice-modes__header">
@@ -122,27 +143,8 @@ const steps = [
         </article>
       ))}
     </div>
-  </section>
 
-  <hr class="rule" />
-
-  <!-- Who this is for -->
-  <section class="practice-audiences section container">
-    <header class="practice-audiences__header">
-
-      <h2>If you recognize yourself here…</h2>
-    </header>
-
-    <ol class="practice-audiences__list">
-      {audiences.map((a) => (
-        <li class="practice-audiences__item">
-          <span class="practice-audiences__tag">{a.tag}</span>
-          <p class="practice-audiences__note">{a.body}</p>
-        </li>
-      ))}
-    </ol>
-
-    <button class="practice-audiences__cta" data-contact-trigger>Get in touch</button>
+    <button class="practice-modes__cta" data-contact-trigger>Get in touch</button>
   </section>
 
   <hr class="rule" />
@@ -174,7 +176,7 @@ const steps = [
     </p>
   </section>
 
-  <Testimonials rowIds={["karen-clarke", "christina-nahal"]} />
+  <Testimonials rowIds={["christina-nahal", "berin-sadikovic"]} />
 
   <CTABlock
     id="book"
@@ -190,9 +192,13 @@ const steps = [
 
 <style>
   /* -------- Hero -------- */
+  /* No max-width here – the container sets the frame so the left edge lines up
+     with every section below. Reading measure is capped per element instead. */
+  /* Top padding only. The section below brings its own 96px top padding, so
+     giving the hero a bottom padding too just stacks two gaps into one. */
   .practice-hero {
-    padding-block: clamp(4rem, 4vw + 3rem, 7rem);
-    max-width: 900px;
+    padding-top: clamp(4rem, 4vw + 3rem, 7rem);
+    padding-bottom: 0;
   }
 
   .practice-hero .eyebrow {
@@ -205,6 +211,7 @@ const steps = [
     line-height: 0.98;
     letter-spacing: -0.035em;
     margin-bottom: var(--space-6);
+    max-width: 14ch;
   }
   .practice-hero__title .accent {
     color: var(--color-cobalt);
@@ -223,10 +230,12 @@ const steps = [
     max-width: 680px;
   }
 
-  .practice-audiences__cta {
-    display: inline-flex;
+  .practice-modes__cta {
+    display: flex;
     align-items: center;
-    margin-top: var(--space-8);
+    width: fit-content;
+    margin-top: var(--space-12);
+    margin-inline: auto;
     padding: 13px 22px;
     border-radius: var(--radius-sm);
     font-size: 14px;
@@ -239,7 +248,7 @@ const steps = [
     transition: background var(--dur-fast) var(--ease-out);
   }
 
-  .practice-audiences__cta:hover {
+  .practice-modes__cta:hover {
     background: var(--color-ink);
   }
 

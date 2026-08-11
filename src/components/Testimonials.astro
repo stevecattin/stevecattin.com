@@ -7,6 +7,9 @@ interface Props {
   title?: string;
   featuredId?: string;
   rowIds?: string[];
+  /** 'wide' (1340) for standalone sections, 'content' (1180) to sit flush
+   *  with a page whose sections use .container. */
+  width?: 'wide' | 'content';
 }
 
 const TESTIMONIALS: Record<
@@ -41,18 +44,29 @@ const {
   title = "What it's like to work with me.",
   featuredId,
   rowIds = [],
+  width = 'wide',
 } = Astro.props;
 
 const featured = featuredId ? TESTIMONIALS[featuredId] : null;
 const rows = rowIds.map((id) => TESTIMONIALS[id]).filter(Boolean);
+
+// Pass eyebrow="" and title="" to render a bare pull-quote with no heading –
+// used when the section sits inside another section's argument.
+const showHead = Boolean(eyebrow || title);
 ---
 
-<section class="voices" aria-labelledby="voices-title">
-  <div class="container-wide">
-    <header class="voices__head">
-      <p class="voices__eyebrow">{eyebrow}</p>
-      <h2 id="voices-title" class="voices__title">{title}</h2>
-    </header>
+<section
+  class:list={['voices', { 'voices--bare': !showHead }]}
+  aria-labelledby={showHead ? 'voices-title' : undefined}
+  aria-label={showHead ? undefined : 'In their words'}
+>
+  <div class={width === 'content' ? 'container' : 'container-wide'}>
+    {showHead && (
+      <header class="voices__head">
+        {eyebrow && <p class="voices__eyebrow">{eyebrow}</p>}
+        <h2 id="voices-title" class="voices__title">{title}</h2>
+      </header>
+    )}
 
     {featured && (
       <figure class="voices__featured">
@@ -114,6 +128,32 @@ const rows = rowIds.map((id) => TESTIMONIALS[id]).filter(Boolean);
     background: var(--color-paper);
     border-top: 0.5px solid var(--color-line);
     padding-block: var(--space-20);
+  }
+
+  /* Bare pull-quote variant – no heading, no top rule, sits inside a page's
+     existing rhythm rather than announcing itself as a new section. */
+  .voices--bare {
+    border-top: none;
+    padding-block: var(--space-12);
+  }
+
+  /* In the bare variant the quote is the whole point – let it run the full
+     container and scale up. The oversized quote glyph is dropped: at this size
+     the words carry themselves and the mark only eats vertical space. */
+  .voices--bare .voices__featured {
+    max-width: none;
+    margin-bottom: 0;
+  }
+
+  .voices--bare .voices__mark {
+    display: none;
+  }
+
+  .voices--bare .voices__lead {
+    font-family: var(--font-display);
+    font-size: clamp(24px, 2.6vw, 34px);
+    line-height: 1.35;
+    letter-spacing: var(--tracking-tight);
   }
 
   .voices__head {
