@@ -14,7 +14,7 @@ const milestones = [
   { year: '2025', note: `SVP Marketing at ${tango}. Came in through the acquisition, took the team over, ended up on the executive leadership team of the company that bought us. PE-backed, US-headquartered.` },
   { year: '2024', note: `Second exit: ${locatee} acquired by ${tango}. We restructured the company and ran a sale process under pressure. I sat at the table with our co-CEOs, CFO, board, and the acquirer – while holding the team together through it. Then carried Operations across the border: VP of Operations for ${tango}'s international business, leading the integration of the Locatee teams.` },
   { year: '2022', note: `At ${locatee}, my role widened past Marketing. First Head of People, then VP of Operations – the company needed someone to hold the team and the operating model together, not just tell the story.` },
-  { year: '2020', note: `Joined ${locatee} post Series A as Head of Marketing. Building the organization for scale.` },
+  { year: '2020', note: `Joined ${locatee} post Series A as Head of Marketing – building the marketing function a scaling company hadn't built yet. From the inside, not from a deck.` },
   { year: '2017', note: `Bringing Good Food at Work to more employees, as Growth Lead at ${felfel}. A passion for a physical product, designed and shipped into real offices.` },
   { year: '2016', note: `First exit. ${aspediens} acquired by CSC/${dxc}. Suddenly colleagues on every continent and a Fortune 500 brand to integrate. The work shifted to building bridges – between teams, countries, and two very different ways of doing business.` },
   { year: '2013', note: `Joined ${aspediens} as Head of Marketing. 30 people on day one. 100+ the day we were acquired.` },
@@ -60,7 +60,7 @@ const principles = [
   </section>
 
   <!-- The Learning(s) -->
-  <section class="about-body container-prose section-tight">
+  <section class="about-body container section-tight">
     <h2>The Learning(s)</h2>
 
     <p>
@@ -119,6 +119,12 @@ const principles = [
         are good, and yet things aren't landing.
       </li>
       <li>
+        Or with founders whose companies have outgrown the way they're run. It
+        usually shows up first as marketing that stopped working and a budget
+        going nowhere, but the real work is the operating model underneath, and
+        what the business needs to become.
+      </li>
+      <li>
         Or with board members and investors whose portfolio companies are
         talented, well-funded, and somehow still slow. Sometimes the right
         intervention is a fractional operator. Sometimes it's an honest sparring
@@ -143,6 +149,8 @@ const principles = [
     <header class="about-timeline__header">
       <h2>Twenty years, compressed.</h2>
     </header>
+
+    <p class="about-timeline__pattern">A pattern you'll notice below: I come in for one thing and end up in the room for all of it. Marketing, then People, then Operations, then the executive table.</p>
 
     <p class="about-timeline__linkedin">Want the full detail? It's all on my <a href="https://linkedin.com/in/stevecattin" target="_blank" rel="noopener noreferrer">LinkedIn profile</a>.</p>
 
@@ -191,9 +199,11 @@ const principles = [
 
 <style>
   /* -------- Hero -------- */
+  /* No max-width and no bottom padding – the container sets the frame and the
+     section below brings its own top padding. See docs/layout-width-rule.md. */
   .about-hero {
-    padding-block: clamp(4rem, 4vw + 3rem, 7rem);
-    max-width: 900px;
+    padding-top: clamp(4rem, 4vw + 3rem, 7rem);
+    padding-bottom: 0;
   }
 
   .about-hero .eyebrow {
@@ -206,6 +216,7 @@ const principles = [
     line-height: 0.98;
     letter-spacing: -0.035em;
     margin-bottom: var(--space-6);
+    max-width: 18ch;
   }
   .about-hero__title .accent {
     color: var(--color-cobalt);
@@ -219,6 +230,13 @@ const principles = [
   }
 
   /* -------- Body -------- */
+  /* The section runs at container width so its left edge lines up with the
+     hero and the timeline. Measure is capped on the children instead, which
+     keeps the prose readable without moving the spine. */
+  .about-body > * {
+    max-width: var(--max-w-prose);
+  }
+
   .about-body h2 {
     font-family: var(--font-display);
     font-size: var(--text-2xl);
@@ -315,6 +333,14 @@ const principles = [
     font-size: var(--text-display);
     letter-spacing: var(--tracking-tight);
     margin-top: var(--space-3);
+  }
+
+  .about-timeline__pattern {
+    font-size: 1.05rem;
+    line-height: var(--lh-prose);
+    color: var(--color-ink);
+    max-width: 60ch;
+    margin-bottom: var(--space-5);
   }
 
   .about-timeline__linkedin {

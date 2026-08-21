@@ -2,12 +2,22 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PostCard from '../components/PostCard.astro';
 import Testimonials from '../components/Testimonials.astro';
-import { getCollection } from 'astro:content';
+import { getCollection, type CollectionEntry } from 'astro:content';
 
 const allPosts = await getCollection('blog', ({ data }) => !data.draft);
-const recentPosts = allPosts
-  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
-  .slice(0, 3);
+
+// Hand-picked for the homepage, in this order: the offer, how I run teams,
+// the personal one. Change the slugs here to re-curate. A slug that is missing
+// or set to draft simply drops out, so keep these three published.
+const featuredSlugs = [
+  'you-dont-need-an-agency-yet',
+  'rebuilding-the-5-15',
+  'a-long-table-in-the-south',
+];
+const bySlug = new Map(allPosts.map((post) => [post.slug, post]));
+const featuredPosts = featuredSlugs
+  .map((slug) => bySlug.get(slug))
+  .filter((post): post is CollectionEntry<'blog'> => post !== undefined);
 ---
 
 <BaseLayout
@@ -28,7 +38,7 @@ const recentPosts = allPosts
           </h1>
 
           <p class="hero__sub">
-            Hi, I'm Stève! I work with founders, execs and their teams when things get complicated. Twenty years across GTM, Ops and People – fifteen of them in B2B Tech, two acquisitions in – here's what I've learned: when something isn't working, it's rarely just the plan or just the team. It's usually the space, and the stories, between them.
+            Hi, I'm Stève! <strong>I work with founders, execs and their teams when things get complicated.</strong> Twenty years across GTM, Ops and People – fifteen of them in B2B Tech, two acquisitions in – here's what I've learned: when something isn't working, it's rarely just the plan or just the team. It's usually the space, and the stories, between them.
           </p>
 
           <div class="hero__cta-row">
@@ -55,13 +65,13 @@ const recentPosts = allPosts
 
       <section class="recent" aria-labelledby="recent-title">
         <header class="recent__head">
-          <h2 id="recent-title" class="recent__title">Recent thinking</h2>
+          <h2 id="recent-title" class="recent__title">Selected writing</h2>
 
           <p class="recent__sub">Essays, frameworks, and the occasional strong opinion.</p>
         </header>
 
         <div class="feed-preview">
-          {recentPosts.map((post) => (
+          {featuredPosts.map((post) => (
             <PostCard
               href={`/blog/${post.slug}/`}
               title={post.data.title}
@@ -72,6 +82,23 @@ const recentPosts = allPosts
           ))}
         </div>
       </section>
+    </div>
+  </section>
+
+  <section class="problem" aria-labelledby="problem-title">
+    <div class="container-wide problem__inner">
+      <p class="problem__eyebrow">The pattern I keep seeing</p>
+      <h2 id="problem-title" class="problem__title">
+        Companies scale faster than the way they're <em class="problem__accent">run.</em>
+      </h2>
+      <p class="problem__lede">
+        Marketing is usually where it shows first – the spend grows, the
+        structure doesn't, and money leaves faster than results come back. But
+        it's rarely only marketing. It's the operating model catching up with
+        the growth. I've built these functions from the inside, and sat at the
+        table above them – so we start where it's concrete, and work toward the
+        bigger question underneath.
+      </p>
     </div>
   </section>
 
@@ -288,6 +315,60 @@ const recentPosts = allPosts
 
   @media (max-width: 960px) {
     .feed-preview { grid-template-columns: 1fr; }
+  }
+
+  /* -------- Problem band (paper, editorial) -------- */
+  /* Sits between the hero (with its writings feed) and the mist framework block.
+     Paper surface with a hairline top so it reads as its own beat, not a tail
+     of the feed above it. */
+  .problem {
+    background: var(--color-paper);
+    border-top: 0.5px solid var(--color-line);
+    padding-block: var(--space-20);
+  }
+
+  .problem__inner {
+    max-width: 920px;
+  }
+
+  .problem__eyebrow {
+    font-family: var(--font-mono);
+    font-size: var(--text-mono-sm);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+    color: var(--color-cobalt);
+    font-weight: 500;
+    margin: 0 0 var(--space-5);
+  }
+
+  .problem__title {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: var(--text-3xl);
+    line-height: var(--lh-tight);
+    letter-spacing: var(--tracking-tight);
+    color: var(--color-ink);
+    margin: 0 0 var(--space-5);
+    max-width: 20ch;
+  }
+
+  .problem__accent {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-style: normal;
+    color: var(--color-cobalt);
+  }
+
+  .problem__lede {
+    font-size: var(--text-lg);
+    line-height: var(--lh-normal);
+    color: var(--color-graphite);
+    max-width: 60ch;
+    margin: 0;
+  }
+
+  @media (max-width: 640px) {
+    .problem { padding-block: var(--space-16); }
   }
 
   /* -------- Framework section (mist, editorial) -------- */
