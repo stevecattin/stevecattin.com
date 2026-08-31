@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import CTABlock from '../components/CTABlock.astro';
+import Facets from '../components/Facets.astro';
 
 const tango    = `<a href="https://tangoanalytics.com" target="_blank" rel="noopener noreferrer">Tango</a>`;
 const locatee  = `<a href="https://www.venturelab.swiss/Locatee-acquired-by-Tango-creating-industrys-first-holistic-workplace-analytics-solution" target="_blank" rel="noopener noreferrer">Locatee</a>`;
@@ -32,10 +33,6 @@ const principles = [
     body: 'The best solutions don\'t live in any one person\'s head. Curiosity allows me to tap into the collective intelligence, and surface what no single perspective could see alone. It also implies the need for a low ego, that makes it possible to be genuinely open to someone else\'s point of view. It all travels together: when you stay curious, and hold your ideas loosely, you give everyone – including yourself – the best shot at the right answer.',
   },
   {
-    title: 'A love for human beings.',
-    body: 'I hold the operator and the human at the same time… and the spreadsheet and the late-night conversation. People work with me because business and the people who make the business matter equally. I listen, make it safe and hold space. Oh, and I tell jokes.',
-  },
-  {
     title: 'Less, but fully.',
     body: 'Discipline, thoughtfulness and essentialism are some of the words you\'ll hear me use when describing how I work. Most problems don\'t need more – they need less, done better, repeatedly. It means finding the lever that moves everything else, and pulling it with full attention. Constant progress on the right problem beats frantic motion on the wrong ones every time.',
   },
@@ -53,11 +50,17 @@ const principles = [
       The obvious question is usually the <span class="accent">right</span> one.
     </h1>
     <p class="about-hero__lede">
-      I help founders and senior leaders solve their challenges,
-      with care, respect and curiosity. Marketer by training with a People &amp;
-      Operations track record. Storyteller and advisor wherever I'm allowed.
+      I help founders and senior leaders solve their challenges, with care,
+      respect and curiosity. Marketer by training with a People &amp; Operations
+      track record. Storyteller and advisor wherever I'm allowed. <strong>Tap any point
+      on the ring below to learn more about my different facets.</strong>
     </p>
   </section>
+
+  <!-- Who is Stève — the six facets -->
+  <Facets />
+
+  <hr class="rule" />
 
   <!-- The Learning(s) -->
   <section class="about-body container section-tight">
@@ -144,6 +147,8 @@ const principles = [
     <p>If any of that resonates, <button class="about-inline-trigger" data-contact-trigger>reach out</button>!</p>
   </section>
 
+  <hr class="rule" />
+
   <!-- Timeline -->
   <section class="about-timeline section container">
     <header class="about-timeline__header">
@@ -169,7 +174,7 @@ const principles = [
   <!-- Principles -->
   <section class="about-principles section container">
     <header class="about-principles__header">
-      <h2>My guiding principles.</h2>
+      <h2>How I work.</h2>
     </header>
 
     <div class="about-principles__grid">
@@ -239,10 +244,11 @@ const principles = [
 
   .about-body h2 {
     font-family: var(--font-display);
-    font-size: var(--text-2xl);
+    font-size: var(--text-display);
+    line-height: var(--lh-tight);
     letter-spacing: var(--tracking-tight);
-    margin-top: var(--space-12);
-    margin-bottom: var(--space-5);
+    margin-top: var(--space-16);
+    margin-bottom: var(--space-6);
   }
   .about-body h2:first-child { margin-top: 0; }
 
@@ -408,7 +414,7 @@ const principles = [
 
   .about-principles__grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: var(--space-6);
   }
 
