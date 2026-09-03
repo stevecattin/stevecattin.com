@@ -42,6 +42,15 @@ const categories = ['Leadership', 'Marketing', 'Founding', 'Personal'].filter(
   </section>
 
   <section class="container blog-list section-tight">
+    <a href="/aima" class="framework-feature">
+      <div class="framework-feature__text">
+        <span class="framework-feature__eyebrow">Framework · v2.0</span>
+        <h2 class="framework-feature__title">The AI Marketing Ascendancy Framework</h2>
+        <p class="framework-feature__desc">The framework I built for moving marketing teams from AI-curious to AI-confident – the challenges, a use-case library, a maturity model, and the economics. A living page now, not a post.</p>
+      </div>
+      <span class="framework-feature__cta">Open the framework →</span>
+    </a>
+
     {featured && (
       <div data-post-category={featured.data.category}>
         <FeaturedPostCard
@@ -148,6 +157,52 @@ const categories = ['Leadership', 'Marketing', 'Founding', 'Personal'].filter(
     border-color: var(--color-cobalt);
     color: var(--color-cobalt);
     background: var(--color-cobalt-tint);
+  }
+
+  .framework-feature {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-6);
+    padding: var(--space-7) var(--space-8);
+    margin-bottom: var(--space-6);
+    background: var(--color-cobalt-tint);
+    border: 1px solid color-mix(in srgb, var(--color-cobalt) 30%, transparent);
+    border-radius: var(--radius-md);
+    transition: border-color var(--dur-fast) var(--ease-out);
+  }
+  .framework-feature:hover { border-color: var(--color-cobalt); }
+  .framework-feature__eyebrow {
+    font-family: var(--font-mono);
+    font-size: var(--text-mono-sm);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-cobalt);
+  }
+  .framework-feature__title {
+    font-family: var(--font-display);
+    font-size: var(--text-2xl);
+    letter-spacing: var(--tracking-tight);
+    color: var(--color-ink);
+    margin: var(--space-2) 0 var(--space-2);
+    line-height: var(--lh-snug);
+  }
+  .framework-feature__desc {
+    font-size: var(--text-base);
+    line-height: var(--lh-normal);
+    color: var(--color-graphite);
+    max-width: 60ch;
+  }
+  .framework-feature__cta {
+    flex: none;
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-cobalt);
+    white-space: nowrap;
+  }
+  @media (max-width: 640px) {
+    .framework-feature { flex-direction: column; align-items: flex-start; gap: var(--space-4); }
   }
 
   .blog-list {

@@ -1,0 +1,1109 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CTABlock from '../components/CTABlock.astro';
+
+/* ---------------------------------------------------------------
+   The AI Marketing Ascendancy Framework — flagship page (FRAST-10)
+   Framing prose rewritten in Stève's voice (FRAST-73). Tables and
+   maturity/growth content kept structural; four interactive modules
+   replace the long linear tables. Palette: Paper/Ink/Cobalt/Mist only.
+   --------------------------------------------------------------- */
+
+const howToUse = [
+  { title: `Start with the challenges.`, body: `The internal and external sections lay out what AI is actually changing – inside your team, and in the market around it.` },
+  { title: `Take the use cases that fit.`, body: `The library shows where AI can help across strategy, planning, execution, and optimization. Keep what maps to your team and campaigns; ignore the rest.` },
+  { title: `Place your team on the maturity model.`, body: `People, Processes, and Technology – so you can see where you stand and what the next step is.` },
+  { title: `Use the growth framework for role clarity.`, body: `What AI fluency should look like from junior to lead.` },
+  { title: `Let it start the strategic conversations.`, body: `Ethics, tooling, governance, creative standards. That's where the real alignment gets done.` },
+];
+
+const challengesInternal = [
+  { name: `Skill disparity`, desc: `Not everyone is equally comfortable with AI tools, so adoption is uneven.`, impact: `Rethink how you hire, onboard, and keep training people.` },
+  { name: `Quality risks`, desc: `GenAI generates fast, but not always well. Poor output erodes credibility.`, impact: `Define quality standards and reintroduce human curation as a checkpoint.` },
+  { name: `Ethical concerns`, desc: `Using GenAI without understanding its provenance can backfire.`, impact: `Educate teams on responsible use; know where human sensitivity still matters.` },
+  { name: `Tool chaos`, desc: `A growing stack fragments the work and creates decision fatigue.`, impact: `Centralize guidance, approve standard tools, embed them in workflows.` },
+  { name: `Fear of irrelevance`, desc: `For some, AI feels like a threat to their creative identity or role.`, impact: `Create safety to experiment; frame AI as an enhancer, not a replacement.` },
+  { name: `Lack of governance`, desc: `Without guidelines, AI use spirals into inconsistency and reputational risk.`, impact: `Document rules of engagement, approval flows, and content policies.` },
+  { name: `Autonomy vs standardization`, desc: `As more people generate content, tone and brand coherence get harder.`, impact: `Provide toolkits and brand playbooks that protect brand integrity.` },
+];
+
+const challengesExternal = [
+  { name: `Discovery disruption`, desc: `AI agents answer directly, so users stop clicking through to your site.`, impact: `Rethink how you shape understanding when you don't own the platform.` },
+  { name: `Brand invisibility`, desc: `Your content may inform AI outputs without being mentioned or credited.`, impact: `Design assets that survive summarization and still signal your brand DNA.` },
+  { name: `Lead-gen uncertainty`, desc: `Traditional funnels break when customers don't engage on your platforms.`, impact: `Shift to outcome-based measurement and new ways to capture intent.` },
+  { name: `Search behavior shifts`, desc: `Keyword SEO fades as users rely on conversational queries.`, impact: `Focus on structured data and being the source of truth AI relies on.` },
+  { name: `Signal dilution`, desc: `AI summarizing and remixing can homogenize your differentiated messaging.`, impact: `Sharpen brand voice and positioning so your point of view stays recognizable.` },
+  { name: `Mistrust of AI content`, desc: `Some audiences are skeptical of content not clearly authored by a human.`, impact: `Disclose and humanize; know when human storytelling is non-negotiable.` },
+];
+
+const useCases = [
+  { name: `Strategy & Insights`, chips: [`Persona research`, `Competitive analysis`, `Audience prediction`, `A/B recommendations`, `Trend ID`, `Segmentation`], worksWell: `Spotting early trends and summarizing large research – social listening, persona inputs.`, caution: `Can reinforce bias or oversimplify segments when the data is incomplete or skewed.` },
+  { name: `Campaign Planning`, chips: [`Journey mapping`, `Channel mix`, `Timelines`, `Workback plans`, `Forecasting`], worksWell: `Optimizing channel mix and suggesting schedules from historical patterns.`, caution: `May ignore brand timing, internal dependencies, or key market moments.` },
+  { name: `Sales & Enablement`, chips: [`Battlecards`, `Deck co-creation`, `Objection scripts`, `Training`, `Enablement`], worksWell: `Drafting battlecards and objection handlers from call transcripts or FAQs.`, caution: `Tone and context get lost in high-stakes, nuanced conversations.` },
+  { name: `Analytics & Optimization`, chips: [`Report summaries`, `Insight narratives`, `Ad-spend`, `Anomaly detection`], worksWell: `Summarizing performance data into plain-language insights.`, caution: `Anomalies flagged too late or misread without human validation.` },
+  { name: `Content & Creative`, chips: [`Copy drafting`, `Visual generation`, `Video editing`, `Repurposing`, `SEO`, `Tone`], worksWell: `Speeding up copy ideation and generating visual prototypes.`, caution: `Off-brand or generic output without proper curation.` },
+  { name: `CRM & Personalization`, chips: [`Subject-line tests`, `Personalized messages`, `Lead scoring`, `Journey tailoring`], worksWell: `Testing subject lines and generating personalized variants.`, caution: `Over-personalization can feel invasive and erode trust.` },
+  { name: `Personal Productivity`, chips: [`Meeting summaries`, `To-do generation`, `Brief writers`, `Prompt libraries`, `Time management`], worksWell: `Summarizing long meetings and turning action points into to-dos.`, caution: `Summaries drop emotional cues or strategic subtext.` },
+];
+
+const pillars = [
+  {
+    key: `people`,
+    label: `People`,
+    intro: `AI runs on people, not just platforms. This pillar is about whether the team has the skills, the literacy, and the judgment to use it well – and the ethical compass to go with it.`,
+    subdomains: [
+      { name: `Skills Mapping & Training`, activity: `Inventory AI skill levels; plan upskilling paths.`, indicator: `A clear skill taxonomy (e.g. prompt design, tool fluency).`, metrics: `% of team assessed, % trained to target, AI fluency benchmarks.` },
+      { name: `Hiring Standards`, activity: `Define AI expectations in job descriptions, like languages or software.`, indicator: `JD templates include AI proficiency levels per role.`, metrics: `% of new hires at target AI level.` },
+      { name: `Ethical Awareness`, activity: `Literacy around AI, IP, inclusivity, and brand integrity.`, indicator: `Team-wide alignment on ethical content use.`, metrics: `% of team completing the AI ethics module.` },
+      { name: `Creative Judgment`, activity: `When to value human creation, curation, or augmentation.`, indicator: `Case-based training on quality thresholds and context.`, metrics: `Internal audit: % of content hitting quality standards.` },
+      { name: `Employee Governance`, activity: `Clear do's and don'ts for GenAI, in and outside Marketing.`, indicator: `Internal policy and training on creative responsibility.`, metrics: `# of reported violations; engagement in guidelines training.` },
+    ],
+    stages: [
+      { name: `Aware`, desc: `Teams hear about AI tools but don't engage. No skills mapping or training.` },
+      { name: `Experimenting`, desc: `A few individuals use tools ad hoc, with mixed outcomes. Skepticism persists.` },
+      { name: `Equipped`, desc: `Skills baseline established. Training and policies introduced. Roles updated.` },
+      { name: `Operational`, desc: `Team-wide fluency. AI responsibilities part of onboarding and performance goals.` },
+      { name: `Strategic`, desc: `AI expertise is a competitive advantage. Clear mastery per role; built into recruitment and succession.` },
+    ],
+  },
+  {
+    key: `processes`,
+    label: `Processes`,
+    intro: `AI changes how the work gets done, not just what gets produced. It runs through planning, workflows, reviews, and governance. Put it into those processes on purpose, instead of letting it seep in wherever someone happens to try it.`,
+    subdomains: [
+      { name: `Content Lifecycle`, activity: `Define when GenAI helps: ideation, drafting, polishing.`, indicator: `An AI decision tree built into the briefing/workflow.`, metrics: `% of content using GenAI appropriately; feedback scores.` },
+      { name: `Quality Control`, activity: `Align internal vs external quality standards.`, indicator: `A quality review stage defined by content tier.`, metrics: `Rework ratio; external error rate.` },
+      { name: `Review & Curation`, activity: `Human checkpoints for brand, tone, facts, and legal.`, indicator: `A human checkpoint for curation and approval.`, metrics: `% of content human-reviewed; average approval cycle time.` },
+      { name: `AI Use Governance`, activity: `Policies for usage, disclaimers, citations, reuse.`, indicator: `An AI policy handbook rolled out.`, metrics: `Employee understanding score in a pulse survey.` },
+      { name: `Feedback Loops`, activity: `Learn from wins and mistakes; refine playbooks.`, indicator: `Monthly AI retros or creative post-mortems.`, metrics: `# of insights actioned per quarter.` },
+      { name: `Applied Learning`, activity: `"The Test Bench" – share use cases, demos, lessons openly.`, indicator: `Experimentation is normalized; failures shared openly.`, metrics: `# of contributions per quarter; % participation; # of pilots shipped.` },
+    ],
+    stages: [
+      { name: `Aware`, desc: `Aware AI could affect processes, but no changes made yet.` },
+      { name: `Experimenting`, desc: `Small, isolated tests in specific workflows. No documentation.` },
+      { name: `Equipped`, desc: `AI points of use defined in workflows. Quality checks and review steps added.` },
+      { name: `Operational`, desc: `AI embedded in content, review, and governance workflows. Feedback loops active.` },
+      { name: `Strategic`, desc: `Workflows continuously refined from AI learnings. Creative and ethical standards enforced.` },
+    ],
+  },
+  {
+    key: `technology`,
+    label: `Technology`,
+    intro: `Tools should make the work faster, not messier. This pillar is about having the right ones, connected properly and safely, and being able to show they're actually paying off.`,
+    subdomains: [
+      { name: `Tool Stack`, activity: `Right tool for the job – text, image, video.`, indicator: `A documented tool-to-task guide, reviewed regularly.`, metrics: `Tool adoption rate; tool-specific usage.` },
+      { name: `Integration`, activity: `Embed tools in core marketing workflows.`, indicator: `Templates, briefs, CMS, or DAM integrate AI.`, metrics: `% of briefs using AI templates.` },
+      { name: `Access Control`, activity: `Right access to the right people at the right time.`, indicator: `Admin roles and usage logs in place.`, metrics: `# of access misuses or unauthorized uploads.` },
+      { name: `Security & IP`, activity: `Understand what goes into models; protect brand IP.`, indicator: `Vendor audits, legal review, NDA workflows.`, metrics: `% of tools reviewed and approved by legal/security.` },
+      { name: `Performance Tracking`, activity: `Measure output gains: speed, quality, engagement.`, indicator: `Side-by-side tests: with AI vs. without.`, metrics: `Time-to-publish, CTR uplift, engagement delta.` },
+    ],
+    stages: [
+      { name: `Aware`, desc: `Aware of GenAI tools but don't use them meaningfully. No official stack.` },
+      { name: `Experimenting`, desc: `Individuals bring tools in without oversight. Security risks emerge.` },
+      { name: `Equipped`, desc: `Tool selection begins. Approved vendors. Access managed. First guidelines.` },
+      { name: `Operational`, desc: `Tools embedded in core systems (CMS, DAM, CRM). Usage monitored.` },
+      { name: `Strategic`, desc: `Stack optimized for ROI and adoption. Integrated across the stack; secure by design.` },
+    ],
+  },
+];
+
+const growthDims = [
+  { key: `build`, name: `build`, def: `high-quality work, rooted in customer empathy` },
+  { key: `deliver`, name: `deliver`, def: `quality projects, on time, communicated well` },
+  { key: `connect`, name: `connect`, def: `culture, community, sharing knowledge` },
+  { key: `lead`, name: `lead`, def: `helping others succeed; a safe environment` },
+];
+
+const growthRoles = [
+  {
+    key: `junior`, label: `Junior`,
+    lines: {
+      build: {
+        base: `You have a solid grasp of foundational marketing concepts and are actively expanding your knowledge and skills. You're familiar with your team's tools and workflows, and beginning to understand marketing best practices and productivity techniques. You're curious about topics such as automation, analytics, lead generation, event planning, content and thought leadership, ABM, advertising, PR, and CRM.`,
+        ai: `You are starting to explore generative AI tools (e.g. ChatGPT, Canva AI) to support content ideation, research, or drafting, and have a basic understanding of prompt formulation.`,
+      },
+      deliver: {
+        base: `You are capable of taking on small, well-scoped components of larger projects. With guidance from more senior team members, you complete these tasks within reasonable timeframes while maintaining a sustainable pace. You're comfortable asking for support when needed, and when facing obstacles you work alongside teammates with persistence and a positive mindset.`,
+        ai: `You begin to use AI tools to structure or draft simple campaign elements, developing confidence in applying them to basic marketing tasks.`,
+      },
+      connect: {
+        base: `You are developing your communication skills across a variety of settings – team stand-ups, client meetings, retrospectives, and planning sessions. You're learning to give constructive feedback to peers and managers, and you contribute to a collaborative environment by supporting new team members and sharing knowledge openly. You reflect on company values and culture and look for ways to positively contribute.`,
+        ai: `You are beginning to explore how AI can support collaboration – for example, by generating meeting notes, drafting internal updates, or organizing shared information.`,
+      },
+      lead: {
+        base: `You respect and actively participate in team processes, offering constructive feedback to help improve how the company operates. You begin to recognize the strengths and development areas of your teammates and use available tools and rituals to support a healthy, inclusive work environment. You help identify blockers, and you're developing the emotional intelligence to navigate team dynamics with empathy and kindness.`,
+        ai: `You follow team guidance on ethical AI use and ensure your work aligns with brand standards and content quality expectations.`,
+      },
+    },
+  },
+  {
+    key: `intermediate`, label: `Intermediate`,
+    lines: {
+      build: {
+        base: `You have a solid understanding of core marketing concepts and are focused on deepening your expertise. You actively contribute to improving team tools, processes, and productivity, and bring hands-on experience across disciplines such as automation, analytics, lead generation, SEO, product marketing, social media, events, content and thought leadership, ABM, advertising, PR, and CRM.`,
+        ai: `You confidently use generative AI tools to enhance your efficiency – copywriting, image generation, content summarization – and apply prompt best practices to ensure relevance and quality.`,
+      },
+      deliver: {
+        base: `You independently deliver high-quality marketing activities and know when to seek support to stay efficient and effective. You communicate clearly across the team, take initiative to improve workflows and processes, and approach challenges with resilience, viewing obstacles as learning opportunities.`,
+        ai: `You integrate AI into campaign planning and execution – using it to streamline asset creation timelines, increase speed, and support iteration without compromising quality.`,
+      },
+      connect: {
+        base: `You mentor junior team members by guiding them toward insights rather than offering ready-made answers. You actively participate in the hiring process, helping the team make thoughtful, inclusive decisions, and you foster a sense of belonging through tangible actions that contribute to an inclusive team culture.`,
+        ai: `You share effective AI prompts, tools, and workflows with peers, encouraging experimentation and knowledge exchange across the team.`,
+      },
+      lead: {
+        base: `You actively support and advocate for junior team members, helping them navigate project challenges and build confidence. You identify opportunities to improve team processes and suggest thoughtful changes, and you support others with empathy, kindness, and professionalism – especially during moments of stress or challenge.`,
+        ai: `You advocate for responsible AI use in team discussions, raising awareness of ethical considerations and reinforcing brand standards in how AI is applied.`,
+      },
+    },
+  },
+  {
+    key: `senior`, label: `Senior`,
+    lines: {
+      build: {
+        base: `You confidently manage large-scale campaigns and budgets, with a strong grasp of KPIs and performance targets. You understand your audience's pain points and craft messaging that lands. You can define multi-tactic strategies, allocate budget effectively, and incorporate best practices and emerging trends – and you proactively form your own point of view to guide decision-making.`,
+        ai: `You select the most appropriate AI tools for the task at hand, and tailor AI-generated outputs to align with brand tone, campaign objectives, and audience expectations.`,
+      },
+      deliver: {
+        base: `You lead and contribute to the successful delivery of complex projects alongside your team. You proactively share information, seek and give feedback, and ensure clear communication across multiple stakeholders. You help others deliver high-quality work, set the tone and pace for execution, and model a resilient, solution-oriented mindset for junior team members.`,
+        ai: `You lead projects that strategically apply AI to accelerate execution, enhance personalization, or enable faster iteration – keeping outcomes aligned with brand and business goals.`,
+      },
+      connect: {
+        base: `You actively share your expertise with other marketers and contribute to the company's internal knowledge base. You work to enhance the organization's reputation externally – attracting talent and positioning the company as a thought leader – and you foster a culture of openness, curiosity, and continuous learning.`,
+        ai: `You help integrate AI tools into cross-functional workflows and act as a bridge – demystifying AI for non-experts and enabling more confident, effective adoption across teams.`,
+      },
+      lead: {
+        base: `You inspire and support a small group of teammates, encouraging them to grow beyond their comfort zones. You create repeatable processes and tools for ongoing challenges, actively promote psychological safety and open conversations about well-being, and help managers navigate performance challenges with courageous, constructive conversations. You consistently role-model empathy, compassion, and emotional intelligence.`,
+        ai: `You coach others on how to use AI responsibly – prompt design, ethical boundaries, real-world use cases – and help shape team norms around AI adoption, raising awareness of where human judgment and creative oversight are essential.`,
+      },
+    },
+  },
+  {
+    key: `lead`, label: `Lead`,
+    lines: {
+      build: {
+        base: `You bring deep marketing expertise and stay ahead of evolving trends and strategies. You proactively research new approaches, propose innovative ideas to leadership, and help shape strategic decisions. You serve as a marketing-savvy partner in cross-functional teams – asking the right questions, challenging assumptions – and you play a key role in building and scaling a marketing team that meets the company's growing needs.`,
+        ai: `You guide others in the responsible use of AI and lead the development of AI-integrated workflows across the marketing stack, ensuring ethical standards are upheld and team adoption is well-supported.`,
+      },
+      deliver: {
+        base: `You effectively lead and deliver complex projects involving multiple stakeholders and high organizational impact. You communicate complex ideas with clarity, align diverse teams, and champion high-quality outcomes. You identify and address systemic challenges and drive change with confidence, helping others see obstacles as opportunities.`,
+        ai: `You define clear success metrics for AI-assisted marketing execution and mentor teams on when and how to apply AI responsibly, balancing speed and scale with creative and strategic integrity.`,
+      },
+      connect: {
+        base: `You foster a culture of mentorship by enabling knowledge-sharing across the team. You actively position the company as an innovative, values-driven workplace, internally and externally, and play a leading role in hiring – from sourcing and interviewing to inclusive, strategic talent decisions. You recognize strengths in others and help them share their expertise.`,
+        ai: `You champion AI literacy across the organization, setting cultural norms around transparency, ethics, and confident experimentation. You frame AI not just as a tool, but as a mindset shift that requires openness, shared learning, and thoughtful integration.`,
+      },
+      lead: {
+        base: `You manage complex interactions across teams and functions, promoting best practices and modeling a high standard of leadership. You identify systemic issues and underlying dynamics that affect organizational health and take proactive steps to address them. You advocate for team and individual needs, mediate escalated situations with care, and support others in navigating emotional dynamics with compassion.`,
+        ai: `You shape policy and norms for AI use across the marketing organization – defining maturity expectations by role, mentoring others in prompt design and ethical boundaries, and representing Marketing's perspective in broader AI strategy. You champion AI literacy, promote transparency, and advance responsible adoption across the company.`,
+      },
+    },
+  },
+];
+
+const crossCutting = [
+  { name: `Ethics & Sensitivity`, body: `Built into training, tools, and workflows – e.g. flagging AI images that mimic artists without consent.` },
+  { name: `Content Quality Matrix`, body: `What's OK at each stage: a rough GenAI sketch for internal alignment is fine; a public post isn't, unless curated.` },
+  { name: `Creative Role Taxonomy`, body: `When to use human-only, AI-assisted, or AI-only creation, based on purpose and audience.` },
+  { name: `Governance`, body: `Clear policies for internal and external content use, accountability models, and documentation.` },
+];
+
+---
+
+<BaseLayout
+  title="The AI Marketing Ascendancy Framework"
+  description="A practical framework for moving marketing teams from AI-curious to AI-confident: the challenges, a use-case library, and a maturity model across people, processes, and technology."
+>
+  <div class="aima-body">
+    <aside class="aima-toc" aria-label="On this page">
+      <span class="aima-toc__label">On this page</span>
+      <nav>
+        <a href="#intro" class="aima-toc__link">Intro</a>
+        <a href="#challenges" class="aima-toc__link">Why it's hard</a>
+        <a href="#how-to-use" class="aima-toc__link">How to use it</a>
+        <a href="#what-changes" class="aima-toc__link">The challenges</a>
+        <a href="#use-cases" class="aima-toc__link">Use cases</a>
+        <a href="#economics" class="aima-toc__link">The economics</a>
+        <a href="#maturity" class="aima-toc__link">Maturity model</a>
+        <a href="#growth" class="aima-toc__link">Growth framework</a>
+        <a href="#cross-cutting" class="aima-toc__link">Cross-cutting</a>
+      </nav>
+    </aside>
+    <div class="aima-main">
+
+  <!-- Hero -->
+  <section class="aima-hero" id="intro">
+    <div class="aima-eyebrow-row">
+      <span class="eyebrow">Framework</span>
+      <span class="aima-version">v2.0</span>
+    </div>
+    <h1 class="aima-hero__title">The AI Marketing Ascendancy Framework</h1>
+    <p class="aima-hero__lede">
+      I built this framework because I couldn't find one that met my needs – so I made what I
+      wished existed. It's here to help you and your team move from AI-curious to AI-confident.
+      It walks through the challenges (inside the team and outside it), maps practical use cases
+      across the marketing value chain, and lays out a maturity model across People, Processes,
+      and Technology. There's also a role-based growth framework – what AI fluency should look
+      like as a marketer moves from junior to lead.
+    </p>
+    <p class="aima-disclosure">
+      This framework was built with AI – the first version with ChatGPT, this one with Claude.
+      The switch reflects my own path with AI, where choosing the right tool, and knowing when
+      to change it, is part of the work. The structure, direction, and thinking are mine, drawn
+      from hands-on work with marketing teams; AI supported drafting and refinement under human
+      guidance.
+    </p>
+  </section>
+
+  <!-- Why it isn't plug-and-play -->
+  <section class="aima-section" id="challenges">
+    <header class="aima-section__head">
+      <p class="eyebrow">The challenge</p>
+      <h2>Why AI adoption isn't a plug-and-play move</h2>
+    </header>
+    <div class="aima-prose">
+      <p>
+        AI changes what marketing actually is – not just how we do it. That's a bigger claim
+        than it sounds, and most teams feel it before they can name it.
+      </p>
+      <p>
+        Content is suddenly cheap to produce, so producing more of it stops being an edge.
+        Anyone can generate a decent-looking campaign in an afternoon, which means a
+        decent-looking campaign is worth less than it used to be. The hard part moves – away
+        from making things, and toward judgment, taste, and knowing what's worth saying in the
+        first place.
+      </p>
+      <p>
+        That asks something real of a team: new skills, new ways of working, and a clear line on
+        where the ethics sit. And it lands at the same time as a shift we don't control – how
+        people discover, trust, and engage with brands in an AI-mediated world.
+      </p>
+      <blockquote class="aima-pull">
+        Those who adapt will amplify their impact. Those who don't risk becoming invisible.
+      </blockquote>
+    </div>
+  </section>
+
+  <!-- How to use -->
+  <section class="aima-section" id="how-to-use">
+    <header class="aima-section__head">
+      <p class="eyebrow">How to use this</p>
+      <h2>Five ways in</h2>
+    </header>
+    <ol class="aima-steps">
+      {howToUse.map((s, i) => (
+        <li class="aima-steps__item">
+          <span class="aima-steps__num">№ {String(i + 1).padStart(2, '0')}</span>
+          <div>
+            <h3>{s.title}</h3>
+            <p>{s.body}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <hr class="rule" />
+
+  <!-- Challenges: interactive internal/external toggle -->
+  <section class="aima-section" id="what-changes">
+    <header class="aima-section__head">
+      <p class="eyebrow">The challenges, up close</p>
+      <h2>What AI is actually changing</h2>
+      <p class="aima-section__sub">The same pressures show up in two places – inside the team, and out in the market. Switch between them.</p>
+    </header>
+
+    <div class="aima-switch" data-switch>
+      <div class="aima-seg" role="tablist" aria-label="Challenge scope">
+        <button class="aima-seg__btn" data-switch-btn="internal" aria-pressed="true">Internal <span class="aima-seg__count">7</span></button>
+        <button class="aima-seg__btn" data-switch-btn="external" aria-pressed="false">External <span class="aima-seg__count">6</span></button>
+      </div>
+
+      <div class="aima-cardgrid" data-switch-panel="internal">
+        {challengesInternal.map((c) => (
+          <article class="aima-chal">
+            <h3 class="aima-chal__name">{c.name}</h3>
+            <p class="aima-chal__desc">{c.desc}</p>
+            <div class="aima-chal__impact">
+              <span class="aima-chal__label">Forces you to</span>
+              <p>{c.impact}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <div class="aima-cardgrid" data-switch-panel="external" hidden>
+        {challengesExternal.map((c) => (
+          <article class="aima-chal">
+            <h3 class="aima-chal__name">{c.name}</h3>
+            <p class="aima-chal__desc">{c.desc}</p>
+            <div class="aima-chal__impact">
+              <span class="aima-chal__label">Forces you to</span>
+              <p>{c.impact}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <hr class="rule" />
+
+  <!-- Use cases: expandable cards -->
+  <section class="aima-section" id="use-cases">
+    <header class="aima-section__head">
+      <p class="eyebrow">Use-case library</p>
+      <h2>Where AI actually helps</h2>
+      <div class="aima-section__sub">
+        <p>
+          A working list of where AI actually helps, grouped by function. It's not exhaustive –
+          it's here to spark ideas about what's possible, and just as often to flag where a human
+          still has to make the call.
+        </p>
+        <p>
+          One thing to keep in mind: models aren't interchangeable. Picking the right one for the
+          task – research, drafting, optimization – matters as much as the decision to use AI at all.
+        </p>
+      </div>
+    </header>
+
+    <div class="aima-uc__grid">
+      {useCases.map((u, i) => (
+        <details class="aima-uc" open={i === 0}>
+          <summary class="aima-uc__summary">
+            <span class="aima-uc__name">{u.name}</span>
+            <span class="aima-uc__meta">{u.chips.length} use cases<span class="aima-uc__sign" aria-hidden="true"></span></span>
+          </summary>
+          <div class="aima-uc__body">
+            <div class="aima-uc__chips">
+              {u.chips.map((ch) => <span class="aima-uc__chip">{ch}</span>)}
+            </div>
+            <div class="aima-note aima-note--good">
+              <span class="aima-note__label">AI works well for</span>
+              <p>{u.worksWell}</p>
+            </div>
+            <div class="aima-note aima-note--caution">
+              <span class="aima-note__label">Use with caution</span>
+              <p>{u.caution}</p>
+            </div>
+          </div>
+        </details>
+      ))}
+    </div>
+  </section>
+
+  <hr class="rule" />
+
+  <!-- The economics of AI -->
+  <section class="aima-section" id="economics">
+    <header class="aima-section__head">
+      <p class="eyebrow">The economics</p>
+      <h2>AI feels free. It isn't.</h2>
+    </header>
+    <div class="aima-prose">
+      <p>
+        Cheap and fast is the first impression, and it's misleading. Every token costs something.
+        Per prompt it's small enough that nobody notices – until a workflow runs ten thousand times
+        a month, or someone points the most expensive model at a job the cheapest one could have done.
+      </p>
+      <p>
+        Replacing a person with AI isn't automatically cheaper, either. Quality aside, a human doing
+        a task well once can beat a model doing it badly three times – plus the review, plus the
+        rework. So there's a discipline forming that most teams don't have yet: knowing which model
+        to use for which job, and what each one costs. The frontier model for the thinking that needs
+        it; a small, cheap one for routine volume. Matching the tool to the task isn't only a quality
+        question anymore. It's a budget one.
+      </p>
+    </div>
+    <div class="aima-cardgrid" style="margin-top: var(--space-10);">
+      <article class="aima-chal">
+        <h3 class="aima-chal__name">A token isn't free</h3>
+        <p class="aima-chal__desc">The per-use cost hides at small scale and shows up hard at volume. Know the unit cost before you automate something that runs thousands of times a month.</p>
+      </article>
+      <article class="aima-chal">
+        <h3 class="aima-chal__name">Cheaper than a person? Do the math</h3>
+        <p class="aima-chal__desc">Sometimes AI wins on cost, sometimes a person does it right the first time. It's a calculation, not an assumption – and it changes per task.</p>
+      </article>
+      <article class="aima-chal">
+        <h3 class="aima-chal__name">The budget is moving</h3>
+        <p class="aima-chal__desc">AI is shifting from a central experimentation budget to each function's P&amp;L. When it lands on your line, the cost is yours to own – so understand it now.</p>
+      </article>
+    </div>
+  </section>
+
+  <hr class="rule" />
+
+  <!-- Maturity model: tabbed pillars + stepper -->
+  <section class="aima-section" id="maturity">
+    <header class="aima-section__head">
+      <p class="eyebrow">Maturity model</p>
+      <h2>Where your team stands</h2>
+      <p class="aima-section__sub">Three pillars, five stages each. Move from AI-curious to AI-fluent while keeping ethics, quality, and creativity. Pick a pillar, then walk the stages.</p>
+    </header>
+
+    <div class="aima-switch aima-maturity" data-switch>
+      <div class="aima-tabs" role="tablist" aria-label="Maturity pillar">
+        {pillars.map((p, i) => (
+          <button class="aima-tab" data-switch-btn={p.key} aria-pressed={i === 0 ? 'true' : 'false'}>{p.label}</button>
+        ))}
+      </div>
+
+      {pillars.map((p, i) => (
+        <div class="aima-pillar" data-switch-panel={p.key} hidden={i !== 0}>
+          <p class="aima-pillar__intro">{p.intro}</p>
+
+          <div class="aima-subgrid">
+            {p.subdomains.map((sd) => (
+              <div class="aima-sub">
+                <div class="aima-sub__name">{sd.name}</div>
+                <div class="aima-sub__act">{sd.activity}</div>
+                <dl class="aima-sub__meta">
+                  <div class="aima-sub__row">
+                    <dt>Maturity indicator</dt>
+                    <dd>{sd.indicator}</dd>
+                  </div>
+                  <div class="aima-sub__row">
+                    <dt>Metrics to consider</dt>
+                    <dd>{sd.metrics}</dd>
+                  </div>
+                </dl>
+              </div>
+            ))}
+          </div>
+
+          <div class="aima-stepper" data-switch>
+            <span class="aima-stepper__label">Stage progression — click to walk it</span>
+            <div class="aima-steps-row" role="tablist" aria-label={`${p.label} stages`}>
+              {p.stages.map((st, j) => (
+                <button class="aima-step" data-switch-btn={`s${j}`} aria-pressed={j === 0 ? 'true' : 'false'}>
+                  <span class="aima-step__n">{j + 1}</span>
+                  <span class="aima-step__name">{st.name}</span>
+                </button>
+              ))}
+            </div>
+            {p.stages.map((st, j) => (
+              <div class="aima-stage" data-switch-panel={`s${j}`} hidden={j !== 0}>
+                <div class="aima-stage__head">
+                  <span class="aima-stage__num">Stage {j + 1}</span>
+                  <span class="aima-stage__name">{st.name}</span>
+                </div>
+                <p>{st.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Make the progress visible (FRAST-73 addition; ties to the 5-15) -->
+    <aside class="aima-callout">
+      <span class="aima-callout__label">One thing worth making explicit</span>
+      <p>
+        Make the progress visible. The teams that get good at this treat their AI use like
+        show-and-tell – what someone tried this week, what worked, what flopped. I'd run it
+        through the same channel as everything else that matters: the
+        <a href="/blog/rebuilding-the-5-15">5-15</a>. A line in a weekly 5-15 about an experiment
+        that saved an afternoon (or wasted one) does more for adoption than any policy doc.
+      </p>
+    </aside>
+  </section>
+
+  <hr class="rule" />
+
+  <!-- Growth framework: role selector -->
+  <section class="aima-section" id="growth">
+    <header class="aima-section__head">
+      <p class="eyebrow">Marketer growth framework</p>
+      <h2>What AI fluency looks like at your level</h2>
+      <p class="aima-section__sub">
+        Pick a level and see how the four dimensions shift. Adapted from the Developer Growth
+        Framework by Tamara Buckland (@LadyGalaxyNZ), updated for AI.
+      </p>
+    </header>
+
+    <div class="aima-switch" data-switch>
+      <div class="aima-tabs" role="tablist" aria-label="Seniority level">
+        {growthRoles.map((r, i) => (
+          <button class="aima-tab" data-switch-btn={r.key} aria-pressed={r.key === 'senior' ? 'true' : 'false'}>{r.label}</button>
+        ))}
+      </div>
+
+      {growthRoles.map((r) => (
+        <div class="aima-dimgrid" data-switch-panel={r.key} hidden={r.key !== 'senior'}>
+          {growthDims.map((d) => (
+            <article class="aima-dim">
+              <div class="aima-dim__head">
+                <span class="aima-dim__name">{d.name}</span>
+                <span class="aima-dim__def">{d.def}</span>
+              </div>
+              <div class="aima-dim__body">
+                <p class="aima-dim__p">{r.lines[d.key].base}</p>
+                <div class="aima-dim__ai">
+                  <span class="aima-dim__ai-label">+ AI skills</span>
+                  <p>{r.lines[d.key].ai}</p>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <hr class="rule" />
+
+  <!-- Cross-cutting -->
+  <section class="aima-section" id="cross-cutting">
+    <header class="aima-section__head">
+      <p class="eyebrow">Cross-cutting</p>
+      <h2>What runs across every pillar</h2>
+      <p class="aima-section__sub">A few things don't sit inside a single pillar – they run across all of them.</p>
+    </header>
+    <div class="aima-cardgrid">
+      {crossCutting.map((c) => (
+        <article class="aima-chal">
+          <h3 class="aima-chal__name">{c.name}</h3>
+          <p class="aima-chal__desc">{c.body}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+    </div>
+  </div>
+
+  <CTABlock
+    eyebrow="Doing this with your team?"
+    headline="The framework is the map. The hard part is the walk."
+    body="If you're moving a marketing team from AI-curious to AI-confident and want a senior operator in the room for it, that's the kind of work I do."
+    ctaLabel="Reach out"
+    ctaModal={true}
+    secondaryLabel="Read some writing first"
+    secondaryHref="/blog"
+  />
+</BaseLayout>
+
+<style>
+  /* ---------- Hero ---------- */
+  .aima-hero {
+    padding-top: 0;
+    padding-bottom: var(--space-12);
+  }
+  .aima-hero .eyebrow { margin-bottom: var(--space-6); }
+  .aima-eyebrow-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-6);
+  }
+  .aima-eyebrow-row .eyebrow { margin-bottom: 0; }
+  .aima-version {
+    font-family: var(--font-mono);
+    font-size: var(--text-mono-sm);
+    letter-spacing: var(--tracking-mono);
+    color: var(--color-cobalt);
+    background: var(--color-cobalt-tint);
+    padding: 2px 8px;
+    border-radius: var(--radius-sm);
+  }
+  .aima-hero__title {
+    font-family: var(--font-display);
+    font-size: var(--text-display);
+    line-height: var(--lh-tight);
+    letter-spacing: var(--tracking-tight);
+    margin-bottom: var(--space-6);
+    max-width: 20ch;
+  }
+  .aima-hero__lede {
+    font-size: var(--text-lg);
+    line-height: var(--lh-normal);
+    color: var(--color-graphite);
+    max-width: 64ch;
+    margin-bottom: var(--space-8);
+  }
+  .aima-disclosure {
+    font-family: var(--font-accent);
+    font-style: italic;
+    font-size: var(--text-base);
+    line-height: var(--lh-normal);
+    color: var(--color-graphite);
+    max-width: 64ch;
+    border-left: 2px solid var(--color-line);
+    padding-left: var(--space-5);
+  }
+
+  /* Switch panels: a plain [hidden] loses to the grid display rules below,
+     so hide with force. This is what makes the toggles actually toggle. */
+  [hidden] { display: none !important; }
+
+  /* ---------- Two-column body with sticky index ---------- */
+  .aima-body {
+    max-width: var(--max-w-wide);
+    margin-inline: auto;
+    padding-inline: var(--space-6);
+    padding-top: var(--space-14);
+    display: grid;
+    grid-template-columns: 190px minmax(0, 1fr);
+    gap: var(--space-12);
+    align-items: start;
+  }
+  .aima-main { min-width: 0; }
+  .aima-toc {
+    position: sticky;
+    top: var(--space-20);
+    align-self: start;
+  }
+  .aima-toc__label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: var(--text-mono-xs);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-ash);
+    margin-bottom: var(--space-3);
+  }
+  .aima-toc nav { display: flex; flex-direction: column; border-left: 1px solid var(--color-line); }
+  .aima-toc__link {
+    font-size: 0.9rem;
+    line-height: var(--lh-snug);
+    color: var(--color-graphite);
+    text-decoration: none;
+    padding: 7px var(--space-4);
+    margin-left: -1px;
+    border-left: 2px solid transparent;
+    transition: color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
+  }
+  .aima-toc__link:hover { color: var(--color-ink); }
+  .aima-toc__link.is-active {
+    color: var(--color-cobalt);
+    border-left-color: var(--color-cobalt);
+    font-weight: 500;
+  }
+
+  .aima-hero, .aima-section, .aima-section-tight { scroll-margin-top: var(--space-20); }
+
+  /* ---------- Section scaffolding ---------- */
+  .aima-section { padding-block: var(--space-20); }
+  .aima-section-tight { padding-block: var(--space-14); }
+  .aima-section__head { margin-bottom: var(--space-10); max-width: 680px; }
+  .aima-section__head .eyebrow { margin-bottom: var(--space-3); }
+  .aima-section__head h2 {
+    font-family: var(--font-display);
+    font-size: var(--text-display);
+    letter-spacing: var(--tracking-tight);
+    line-height: var(--lh-snug);
+  }
+  .aima-section__sub {
+    margin-top: var(--space-4);
+    font-size: var(--text-base);
+    line-height: var(--lh-normal);
+    color: var(--color-graphite);
+  }
+  .aima-section__sub p { margin-bottom: var(--space-3); }
+  .aima-section__sub p:last-child { margin-bottom: 0; }
+
+  /* ---------- Prose + pull quote ---------- */
+  .aima-prose { max-width: 64ch; }
+  .aima-prose p {
+    font-size: 1.05rem;
+    line-height: var(--lh-prose);
+    color: var(--color-ink);
+    margin-bottom: var(--space-5);
+  }
+  .aima-pull {
+    font-family: var(--font-accent);
+    font-style: italic;
+    font-size: var(--text-xl);
+    line-height: var(--lh-snug);
+    color: var(--color-ink);
+    border-left: 3px solid var(--color-cobalt);
+    padding: var(--space-2) 0 var(--space-2) var(--space-5);
+    margin: var(--space-8) 0 0;
+  }
+
+  /* ---------- How-to steps ---------- */
+  .aima-steps { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; max-width: 820px; }
+  .aima-steps__item {
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    gap: var(--space-6);
+    padding-block: var(--space-6);
+    border-top: 1px solid var(--color-line);
+    align-items: baseline;
+  }
+  .aima-steps__item:last-child { border-bottom: 1px solid var(--color-line); }
+  .aima-steps__num {
+    font-family: var(--font-mono);
+    font-size: var(--text-mono-sm);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-cobalt);
+    font-weight: 500;
+  }
+  .aima-steps__item h3 {
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    letter-spacing: var(--tracking-tight);
+    color: var(--color-ink);
+    margin-bottom: var(--space-1);
+  }
+  .aima-steps__item p { font-size: 1rem; line-height: var(--lh-normal); color: var(--color-graphite); max-width: 60ch; }
+
+  /* ---------- Segmented control (challenges) ---------- */
+  .aima-seg {
+    display: inline-flex;
+    gap: 2px;
+    background: var(--color-mist);
+    padding: 3px;
+    border-radius: var(--radius-md);
+    margin-bottom: var(--space-8);
+  }
+  .aima-seg__btn {
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    padding: 9px 18px;
+    border: none;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--color-graphite);
+    cursor: pointer;
+    transition: background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+  }
+  .aima-seg__btn[aria-pressed="true"] { background: var(--color-white); color: var(--color-ink); box-shadow: 0 1px 3px rgba(0,0,0,0.10); }
+  .aima-seg__count { color: var(--color-ash); margin-left: var(--space-1); }
+
+  /* ---------- Card grid (challenges, cross-cutting) ---------- */
+  .aima-cardgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-5); }
+  .aima-chal {
+    background: var(--color-white);
+    border: 0.5px solid var(--color-line);
+    border-radius: var(--radius-md);
+    padding: var(--space-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+  .aima-chal__name {
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    letter-spacing: var(--tracking-tight);
+    color: var(--color-ink);
+  }
+  .aima-chal__desc { font-size: 0.95rem; line-height: var(--lh-normal); color: var(--color-graphite); }
+  .aima-chal__impact { margin-top: auto; padding-top: var(--space-3); border-top: 1px solid var(--color-line); }
+  .aima-chal__label {
+    font-family: var(--font-mono);
+    font-size: var(--text-mono-xs);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-cobalt);
+    font-weight: 500;
+  }
+  .aima-chal__impact p { font-size: 0.95rem; line-height: var(--lh-normal); color: var(--color-ink); margin-top: var(--space-1); }
+
+  /* ---------- Use-case expandable cards ---------- */
+  .aima-uc__grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-5); align-items: start; }
+  .aima-uc {
+    background: var(--color-white);
+    border: 0.5px solid var(--color-line);
+    border-radius: var(--radius-md);
+    padding: var(--space-5) var(--space-6);
+  }
+  .aima-uc[open] { box-shadow: 0 2px 14px rgba(0,0,0,0.05); }
+  .aima-uc__summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    list-style: none;
+    gap: var(--space-4);
+  }
+  .aima-uc__summary::-webkit-details-marker { display: none; }
+  .aima-uc__name {
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    letter-spacing: var(--tracking-tight);
+    color: var(--color-ink);
+  }
+  .aima-uc__meta {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+    font-size: 0.85rem;
+    color: var(--color-ash);
+    white-space: nowrap;
+  }
+  .aima-uc__sign { position: relative; width: 12px; height: 12px; flex: none; }
+  .aima-uc__sign::before,
+  .aima-uc__sign::after {
+    content: "";
+    position: absolute;
+    background: var(--color-cobalt);
+    transition: opacity var(--dur-fast) var(--ease-out);
+  }
+  .aima-uc__sign::before { top: 5px; left: 0; width: 12px; height: 2px; }
+  .aima-uc__sign::after { top: 0; left: 5px; width: 2px; height: 12px; }
+  .aima-uc[open] .aima-uc__sign::after { opacity: 0; }
+  .aima-uc__body { margin-top: var(--space-5); display: flex; flex-direction: column; gap: var(--space-4); }
+  .aima-uc__chips { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+  .aima-uc__chip {
+    font-family: var(--font-mono);
+    font-size: var(--text-mono-sm);
+    color: var(--color-graphite);
+    background: var(--color-mist);
+    padding: 4px 8px;
+    border-radius: var(--radius-sm);
+  }
+  .aima-note { border-radius: var(--radius-sm); padding: var(--space-3) var(--space-4); }
+  .aima-note p { font-size: 0.95rem; line-height: var(--lh-snug); color: var(--color-ink); margin-top: var(--space-1); }
+  .aima-note__label {
+    font-family: var(--font-mono);
+    font-size: var(--text-mono-xs);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  .aima-note--good { background: var(--color-cobalt-tint); border-left: 3px solid var(--color-cobalt); }
+  .aima-note--good .aima-note__label { color: var(--color-cobalt-deep); }
+  .aima-note--caution { background: var(--color-mist); border-left: 3px solid var(--color-ink); }
+  .aima-note--caution .aima-note__label { color: var(--color-graphite); }
+
+  /* ---------- Maturity: tabs + stepper ---------- */
+  .aima-tabs { display: flex; gap: var(--space-2); flex-wrap: wrap; margin-bottom: var(--space-7); }
+  .aima-tab {
+    font-family: var(--font-display);
+    font-size: var(--text-base);
+    font-weight: 500;
+    padding: 9px 18px;
+    border-radius: var(--radius-sm);
+    background: var(--color-white);
+    color: var(--color-graphite);
+    border: 1px solid var(--color-line);
+    cursor: pointer;
+    transition: all var(--dur-fast) var(--ease-out);
+  }
+  .aima-tab[aria-pressed="true"] { background: var(--color-cobalt); color: var(--color-paper); border-color: var(--color-cobalt); }
+  .aima-pillar__intro {
+    font-size: 1.05rem;
+    line-height: var(--lh-normal);
+    color: var(--color-ink);
+    max-width: 68ch;
+    margin-bottom: var(--space-6);
+  }
+  .aima-subgrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--color-line);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    margin-bottom: var(--space-8);
+  }
+  .aima-sub { background: var(--color-white); padding: var(--space-4) var(--space-5); }
+  .aima-sub__name { font-family: var(--font-display); font-size: var(--text-base); font-weight: 500; color: var(--color-ink); margin-bottom: 2px; }
+  .aima-sub__act { font-size: 0.9rem; line-height: var(--lh-snug); color: var(--color-graphite); }
+  .aima-sub__meta { margin: var(--space-3) 0 0; display: flex; flex-direction: column; gap: var(--space-2); }
+  .aima-sub__row { display: flex; flex-direction: column; gap: 1px; }
+  .aima-sub__row dt {
+    font-family: var(--font-mono);
+    font-size: var(--text-mono-xs);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-cobalt);
+  }
+  .aima-sub__row dd {
+    margin: 0;
+    font-size: 0.85rem;
+    line-height: var(--lh-snug);
+    color: var(--color-graphite);
+  }
+
+  .aima-stepper { border-top: 1px solid var(--color-line); padding-top: var(--space-6); }
+  .aima-stepper__label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: var(--text-mono-sm);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-ash);
+    margin-bottom: var(--space-4);
+  }
+  .aima-steps-row { display: flex; gap: var(--space-2); margin-bottom: var(--space-5); }
+  .aima-step {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: var(--space-3) var(--space-1);
+    border-radius: var(--radius-sm);
+    background: var(--color-white);
+    border: 1px solid var(--color-line);
+    color: var(--color-ash);
+    cursor: pointer;
+    transition: all var(--dur-fast) var(--ease-out);
+  }
+  .aima-step__n { font-family: var(--font-mono); font-size: var(--text-base); font-weight: 500; }
+  .aima-step__name { font-size: 0.75rem; font-weight: 500; text-align: center; }
+  .aima-step[aria-pressed="true"] { background: var(--color-cobalt); color: var(--color-paper); border-color: var(--color-cobalt); }
+  .aima-stage {
+    background: var(--color-white);
+    border: 0.5px solid var(--color-line);
+    border-left: 3px solid var(--color-cobalt);
+    border-radius: var(--radius-md);
+    padding: var(--space-5) var(--space-6);
+  }
+  .aima-stage__head { display: flex; align-items: baseline; gap: var(--space-3); margin-bottom: var(--space-2); }
+  .aima-stage__num { font-family: var(--font-mono); font-size: var(--text-mono-sm); letter-spacing: var(--tracking-wide); text-transform: uppercase; color: var(--color-cobalt); }
+  .aima-stage__name { font-family: var(--font-display); font-size: var(--text-lg); font-weight: 500; color: var(--color-ink); }
+  .aima-stage p { font-size: 1rem; line-height: var(--lh-normal); color: var(--color-ink); }
+
+  /* ---------- Make progress visible callout ---------- */
+  .aima-callout {
+    margin-top: var(--space-10);
+    background: var(--color-mist);
+    border-radius: var(--radius-md);
+    padding: var(--space-6) var(--space-7);
+    max-width: 820px;
+  }
+  .aima-callout__label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: var(--text-mono-sm);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-cobalt);
+    margin-bottom: var(--space-2);
+  }
+  .aima-callout p { font-size: 1.02rem; line-height: var(--lh-normal); color: var(--color-ink); }
+  .aima-callout a { color: var(--color-cobalt); text-decoration: underline; text-underline-offset: 3px; }
+
+  /* ---------- Growth dimension grid ---------- */
+  .aima-dimgrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-5); }
+  .aima-dim {
+    background: var(--color-white);
+    border: 0.5px solid var(--color-line);
+    border-radius: var(--radius-md);
+    padding: var(--space-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+  .aima-dim__head { display: flex; align-items: baseline; gap: var(--space-3); flex-wrap: wrap; }
+  .aima-dim__name { font-family: var(--font-display); font-size: var(--text-lg); font-weight: 600; color: var(--color-ink); }
+  .aima-dim__def { font-size: 0.85rem; color: var(--color-ash); }
+  .aima-dim__body { display: flex; flex-direction: column; gap: var(--space-4); }
+  .aima-dim__p { margin: 0; font-size: 0.95rem; line-height: var(--lh-normal); color: var(--color-graphite); }
+  .aima-dim__ai {
+    background: var(--color-cobalt-tint);
+    border-left: 3px solid var(--color-cobalt);
+    border-radius: var(--radius-sm);
+    padding: var(--space-3) var(--space-4);
+  }
+  .aima-dim__ai-label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: var(--text-mono-xs);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-cobalt);
+    margin-bottom: 3px;
+  }
+  .aima-dim__ai p { margin: 0; font-size: 0.95rem; line-height: var(--lh-snug); color: var(--color-ink); }
+
+  /* ---------- Ideas ---------- */
+  .aima-ideas {
+    columns: 2;
+    column-gap: var(--space-10);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-width: 820px;
+  }
+  .aima-ideas li {
+    break-inside: avoid;
+    padding: var(--space-3) 0;
+    border-top: 1px solid var(--color-line);
+    font-size: 0.98rem;
+    color: var(--color-graphite);
+  }
+  .aima-sig {
+    font-family: var(--font-accent);
+    font-style: italic;
+    font-size: var(--text-lg);
+    color: var(--color-ash);
+    margin-top: var(--space-10);
+  }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 1040px) {
+    .aima-body { grid-template-columns: 1fr; }
+    .aima-toc { display: none; }
+  }
+  @media (max-width: 860px) {
+    .aima-cardgrid { grid-template-columns: 1fr; }
+    .aima-uc__grid { grid-template-columns: 1fr; }
+    .aima-dimgrid { grid-template-columns: 1fr; }
+    .aima-subgrid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 620px) {
+    .aima-steps__item { grid-template-columns: 1fr; gap: var(--space-2); }
+    .aima-ideas { columns: 1; }
+    .aima-step__name { font-size: 0.68rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .aima-tab, .aima-step, .aima-seg__btn, .aima-uc__sign::before, .aima-uc__sign::after { transition: none; }
+  }
+</style>
+
+<script>
+  /* Generic scoped switcher: buttons [data-switch-btn=KEY] toggle panels
+     [data-switch-panel=KEY] within the nearest [data-switch]. Handles nesting
+     (pillar tabs contain their own stage stepper) by matching on closest(). */
+  document.addEventListener('click', (e) => {
+    const target = e.target as HTMLElement;
+    const btn = target.closest('[data-switch-btn]') as HTMLElement | null;
+    if (!btn) return;
+    const scope = btn.closest('[data-switch]') as HTMLElement | null;
+    if (!scope) return;
+    const key = btn.getAttribute('data-switch-btn');
+
+    scope.querySelectorAll('[data-switch-btn]').forEach((b) => {
+      if (b.closest('[data-switch]') === scope) {
+        b.setAttribute('aria-pressed', b === btn ? 'true' : 'false');
+      }
+    });
+    scope.querySelectorAll('[data-switch-panel]').forEach((p) => {
+      if (p.closest('[data-switch]') === scope) {
+        (p as HTMLElement).hidden = p.getAttribute('data-switch-panel') !== key;
+      }
+    });
+  });
+
+  /* Sticky index scroll-spy: highlight the section nearest the viewport middle. */
+  const tocLinks = Array.from(document.querySelectorAll('.aima-toc__link')) as HTMLAnchorElement[];
+  const linkFor = new Map<Element, HTMLAnchorElement>();
+  tocLinks.forEach((link) => {
+    const href = link.getAttribute('href');
+    if (!href) return;
+    const section = document.getElementById(href.slice(1));
+    if (section) linkFor.set(section, link);
+  });
+  if (linkFor.size) {
+    const spy = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const active = linkFor.get(entry.target);
+          if (!active) return;
+          tocLinks.forEach((l) => l.classList.remove('is-active'));
+          active.classList.add('is-active');
+        });
+      },
+      { rootMargin: '-40% 0px -55% 0px', threshold: 0 }
+    );
+    linkFor.forEach((_, section) => spy.observe(section));
+  }
+</script>
