@@ -1,0 +1,107 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Page not found"
+  description="This page isn't here. The rest is."
+  noIndex={true}
+>
+  <section class="notfound">
+    <div class="notfound__inner">
+      <span class="eyebrow-pill"><span class="dot-mark"></span>Error 404</span>
+
+      <h1 class="notfound__title">
+        This page isn't here.<br />
+        <span class="accent">The rest is.</span>
+      </h1>
+
+      <p class="notfound__lead">
+        A dead link, an old URL, or a small typo. No harm done – the rest of
+        the site is very much here.
+      </p>
+
+      <div class="notfound__actions">
+        <a href="/" class="notfound__link notfound__link--primary">Back to home</a>
+        <a href="/blog" class="notfound__link">Read the writing</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .notfound {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 200px);
+    padding: var(--space-24) var(--space-6);
+  }
+
+  .notfound__inner {
+    max-width: 640px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-6);
+  }
+
+  .notfound__title {
+    font-family: var(--font-display);
+    font-size: var(--text-display);
+    font-weight: 500;
+    line-height: var(--lh-tight);
+    letter-spacing: var(--tracking-tight);
+    color: var(--color-ink);
+    margin-top: var(--space-2);
+  }
+
+  .notfound__lead {
+    font-size: var(--text-lg);
+    line-height: var(--lh-normal);
+    color: var(--color-graphite);
+    max-width: 48ch;
+  }
+
+  .notfound__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-6);
+    margin-top: var(--space-2);
+  }
+
+  .notfound__link {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    letter-spacing: var(--tracking-mono);
+    color: var(--color-cobalt);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    text-decoration-thickness: 1px;
+  }
+
+  .notfound__link:hover {
+    color: var(--color-cobalt-deep);
+  }
+
+  .notfound__link--primary {
+    background: var(--color-cobalt);
+    color: var(--color-paper);
+    text-decoration: none;
+    padding: 10px 18px;
+    border-radius: var(--radius-sm);
+    transition: background var(--dur-fast) var(--ease-out);
+  }
+
+  .notfound__link--primary:hover {
+    background: var(--color-cobalt-deep);
+    color: var(--color-paper);
+  }
+
+  @media (max-width: 600px) {
+    .notfound__title {
+      font-size: var(--text-3xl);
+    }
+  }
+</style>

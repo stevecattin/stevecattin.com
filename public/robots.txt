@@ -1,0 +1,5 @@
+# stevecattin.com
+User-agent: *
+Allow: /
+
+Sitemap: https://stevecattin.com/sitemap-index.xml
