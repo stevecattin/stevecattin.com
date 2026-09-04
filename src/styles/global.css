@@ -2,7 +2,7 @@
 
 /* ============================================================
    Self-hosted fonts (Fontshare, variable woff2 — see public/fonts/)
-   Display: Cabinet Grotesk · Body: General Sans · Accent: Switzer italic
+   Display: Cabinet Grotesk · Body: General Sans · Accent: Switzer italic · Mono: JetBrains Mono
    ============================================================ */
 
 @font-face {
@@ -34,6 +34,14 @@
   src: url("/fonts/Switzer-VariableItalic.woff2") format("woff2");
   font-weight: 100 900;
   font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("/fonts/JetBrainsMono-Variable.woff2") format("woff2");
+  font-weight: 100 800;
+  font-style: normal;
   font-display: swap;
 }
 
