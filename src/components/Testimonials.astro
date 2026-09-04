@@ -37,6 +37,13 @@ const TESTIMONIALS: Record<
     role: 'IS Business Analyst, ABB',
     img: '/images/testimonials/berin-sadikovic.webp',
   },
+  'kristin-johnsen': {
+    quote:
+      'Stève demonstrated great problem-solving skills as we worked to turn around the Tango GTM approach. He dug in to uncover root causes, laid out well-structured fixes that enabled strong cross-functional collaboration, and implemented measurement mechanisms so we could see what did or did not work.',
+    name: 'Kristin Johnsen',
+    role: 'Advisory Director · Berkshire Partners',
+    img: '/images/testimonials/kristin-johnsen.webp',
+  },
 };
 
 const {
@@ -91,7 +98,7 @@ const showHead = Boolean(eyebrow || title);
     )}
 
     {rows.length > 0 && (
-      <div class:list={['voices__row', { 'voices__row--lead': !featured }]}>
+      <div class:list={['voices__row', { 'voices__row--lead': !featured, 'voices__row--three': rows.length === 3 }]}>
         {rows.map((t) => (
           <figure class="voices__item">
             <blockquote class="voices__quote">{t.quote}</blockquote>
@@ -226,6 +233,18 @@ const showHead = Boolean(eyebrow || title);
   .voices__row--lead {
     padding-top: 0;
     border-top: 0;
+  }
+
+  /* Three quotes in a row (no featured lead) – even thirds on desktop,
+     stepping to two-up then one-up as width tightens. */
+  .voices__row--three {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (max-width: 980px) {
+    .voices__row--three {
+      grid-template-columns: 1fr 1fr;
+    }
   }
 
   .voices__item {
