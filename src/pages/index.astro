@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PostCard from '../components/PostCard.astro';
 import Testimonials from '../components/Testimonials.astro';
+import CTABlock from '../components/CTABlock.astro';
 import { getCollection, type CollectionEntry } from 'astro:content';
 
 const allPosts = await getCollection('blog', ({ data }) => !data.draft);
@@ -65,31 +66,11 @@ const featuredPosts = featuredSlugs
           />
         </figure>
       </div>
-
-      <section class="recent" aria-labelledby="recent-title">
-        <header class="recent__head">
-          <h2 id="recent-title" class="recent__title">Selected writing</h2>
-
-          <p class="recent__sub">Essays, frameworks, and the occasional strong opinion.</p>
-        </header>
-
-        <div class="feed-preview">
-          {featuredPosts.map((post) => (
-            <PostCard
-              href={`/blog/${post.slug}/`}
-              title={post.data.title}
-              category={post.data.category}
-              pubDate={post.data.pubDate}
-              readingTime={post.data.readingTime}
-            />
-          ))}
-        </div>
-      </section>
     </div>
   </section>
 
   <section class="problem" aria-labelledby="problem-title">
-    <div class="container-wide problem__inner">
+    <div class="container-wide">
       <p class="problem__eyebrow">The pattern I keep seeing</p>
       <h2 id="problem-title" class="problem__title">
         Companies scale faster than the way they're <em class="problem__accent">run.</em>
@@ -105,8 +86,13 @@ const featuredPosts = featuredSlugs
     </div>
   </section>
 
+  <Testimonials
+    featuredId="karen-clarke"
+    rowIds={["kristin-johnsen", "christina-nahal", "berin-sadikovic"]}
+  />
+
   <section class="framework" aria-labelledby="framework-title">
-    <div class="container-wide framework__inner">
+    <div class="container-wide">
       <p class="framework__eyebrow">The framework I built</p>
       <h2 id="framework-title" class="framework__title">
         The AI Marketing Ascendancy Framework.
@@ -121,18 +107,43 @@ const featuredPosts = featuredSlugs
     </div>
   </section>
 
-  <Testimonials
-    featuredId="karen-clarke"
-    rowIds={["kristin-johnsen", "christina-nahal", "berin-sadikovic"]}
+  <section class="writing" aria-labelledby="writing-title">
+    <div class="container-wide">
+      <p class="section__eyebrow">Selected writing</p>
+      <h2 id="writing-title" class="section__title">
+        Essays, frameworks, and the occasional strong opinion.
+      </h2>
+
+      <div class="feed-preview">
+        {featuredPosts.map((post) => (
+          <PostCard
+            href={`/blog/${post.slug}/`}
+            title={post.data.title}
+            category={post.data.category}
+            pubDate={post.data.pubDate}
+            readingTime={post.data.readingTime}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CTABlock
+    wide
+    eyebrow="Where we start"
+    headline="Something stuck? Start with the story."
+    body="Tell me what's happening. We'll figure out together where to begin."
+    ctaLabel="Tell me your story →"
+    ctaModal
   />
 </BaseLayout>
 
 <style>
-  /* -------- Hero (the entire homepage in Direction 06) -------- */
+  /* -------- Hero -------- */
   .hero {
     background: var(--color-paper);
     padding-top: clamp(48px, 5vw, 96px);
-    padding-bottom: clamp(80px, 8vw, 144px);
+    padding-bottom: var(--space-20);
   }
 
   /* Asymmetric two-column lede: copy on the left, portrait on the right.
@@ -289,34 +300,6 @@ const featuredPosts = featuredSlugs
     color: var(--color-paper);
   }
 
-  /* -------- Recent writings section -------- */
-  .recent {
-    /* No hairline – white space alone carries the break from the hero. */
-    padding-top: var(--space-24);
-  }
-
-  .recent__head {
-    margin-bottom: var(--space-8);
-    max-width: 720px;
-  }
-
-  .recent__title {
-    font-family: var(--font-display);
-    font-weight: 500;
-    font-size: var(--text-2xl);
-    line-height: var(--lh-snug);
-    letter-spacing: var(--tracking-tight);
-    color: var(--color-ink);
-    margin: 0 0 var(--space-2);
-  }
-
-  .recent__sub {
-    font-size: var(--text-base);
-    line-height: var(--lh-normal);
-    color: var(--color-graphite);
-    margin: 0;
-  }
-
   /* -------- Post feed preview -------- */
   .feed-preview {
     display: grid;
@@ -329,17 +312,11 @@ const featuredPosts = featuredSlugs
   }
 
   /* -------- Problem band (paper, editorial) -------- */
-  /* Sits between the hero (with its writings feed) and the mist framework block.
-     Paper surface with a hairline top so it reads as its own beat, not a tail
-     of the feed above it. */
+  /* First beat after the hero. Paper surface with a hairline top. */
   .problem {
     background: var(--color-paper);
     border-top: 0.5px solid var(--color-line);
     padding-block: var(--space-20);
-  }
-
-  .problem__inner {
-    max-width: 920px;
   }
 
   .problem__eyebrow {
@@ -391,10 +368,6 @@ const featuredPosts = featuredSlugs
     background: var(--color-mist);
     border-top: 0.5px solid var(--color-line);
     padding-block: var(--space-20);
-  }
-
-  .framework__inner {
-    max-width: 920px;
   }
 
   .framework__eyebrow {
@@ -455,5 +428,43 @@ const featuredPosts = featuredSlugs
 
   @media (max-width: 640px) {
     .framework { padding-block: var(--space-16); }
+  }
+  /* -------- Shared band type (writing) -------- */
+  /* Same eyebrow / title / lede scale as the problem and framework bands,
+     so every section on the page opens the same way. */
+  .section__eyebrow {
+    font-family: var(--font-mono);
+    font-size: var(--text-mono-sm);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+    color: var(--color-cobalt);
+    font-weight: 500;
+    margin: 0 0 var(--space-5);
+  }
+
+  .section__title {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: var(--text-3xl);
+    line-height: var(--lh-tight);
+    letter-spacing: var(--tracking-tight);
+    color: var(--color-ink);
+    margin: 0 0 var(--space-5);
+    max-width: 22ch;
+  }
+
+  /* -------- Selected writing (paper, follows the mist framework band) -------- */
+  /* No hairline: the change from mist back to paper carries the break. */
+  .writing {
+    background: var(--color-paper);
+    padding-top: var(--space-20);
+  }
+
+  .writing .feed-preview {
+    margin-top: var(--space-8);
+  }
+
+  @media (max-width: 640px) {
+    .writing { padding-top: var(--space-16); }
   }
 </style>

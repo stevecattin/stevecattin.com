@@ -9,6 +9,8 @@ export interface Props {
   secondaryLabel?: string;
   secondaryHref?: string;
   id?: string;
+  /** Align to .container-wide (homepage) instead of the narrower .container. */
+  wide?: boolean;
 }
 
 const {
@@ -21,11 +23,12 @@ const {
   secondaryLabel,
   secondaryHref,
   id,
+  wide = false,
 } = Astro.props;
 ---
 
 <section class="cta" id={id}>
-  <div class="container cta__inner">
+  <div class={wide ? 'container-wide cta__inner cta__inner--wide' : 'container cta__inner'}>
     <p class="cta__eyebrow">{eyebrow}</p>
     <h2 class="cta__headline">{headline}</h2>
     {body && <p class="cta__body">{body}</p>}
@@ -52,6 +55,12 @@ const {
 
   .cta__inner {
     max-width: 920px;
+  }
+
+  /* Wide variant: shares the page's left edge; the headline and body keep
+     their own ch limits, so the line length doesn't change. */
+  .cta__inner--wide {
+    max-width: var(--max-w-wide);
   }
 
   .cta__eyebrow {
