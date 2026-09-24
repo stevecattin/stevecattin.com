@@ -14,7 +14,7 @@ interface Props {
 
 const TESTIMONIALS: Record<
   string,
-  { quote: string; name: string; role: string; img: string }
+  { quote: string; name: string; role: string; shortRole?: string; img: string }
 > = {
   'karen-clarke': {
     quote:
@@ -41,7 +41,9 @@ const TESTIMONIALS: Record<
     quote:
       'Stève demonstrated great problem-solving skills as we worked to turn around the Tango GTM approach. He dug in to uncover root causes, laid out well-structured fixes that enabled strong cross-functional collaboration, and implemented measurement mechanisms so we could see what did or did not work.',
     name: 'Kristin Johnsen',
-    role: 'Advisory Director · Berkshire Partners',
+    role: 'Board Member, Tango · Advisory Director, Berkshire Partners · former Corporate VP, Enterprise Services, Microsoft',
+    // Row cards are narrow – they use the short title when one is set.
+    shortRole: 'Board Member, Tango · former Corporate VP, Microsoft',
     img: '/images/testimonials/kristin-johnsen.webp',
   },
 };
@@ -114,7 +116,7 @@ const showHead = Boolean(eyebrow || title);
               />
               <span class="voices__byline">
                 <span class="voices__name">{t.name}</span>
-                <span class="voices__role">{t.role}</span>
+                <span class="voices__role">{t.shortRole ?? t.role}</span>
               </span>
             </figcaption>
           </figure>

@@ -3,30 +3,22 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import CTABlock from '../components/CTABlock.astro';
 import Testimonials from '../components/Testimonials.astro';
 
-const audiences = [
+const moments = [
   {
-    tag: 'Scaled past your marketing',
-    body: 'You\'ve grown faster than your marketing – built by accident, a hire here, a tool there, maybe an agency you\'re not sure is working. But it\'s rarely only marketing. It\'s the operating model catching up with the growth, and marketing is where it shows first. I\'ve built the function from the inside, and run the ones next to it. We start with what to build, buy, and stop paying for – and work outward from there.',
+    title: "Your go-to-market grew by instinct. Now it has to grow by design.",
+    body: "A hire here, a tool there, an agency no one quite knows how to brief. It worked… until it didn't anymore. A round just closed, a first senior hire didn't land, or a new CEO arrived and is asking what has actually been built and how to scale and grow. Before you invest in the next stage, we work out what to build, what to buy, and what to stop paying for.",
   },
   {
-    tag: 'GTM under pressure',
-    body: 'GTM is holding up on the surface but the engine underneath is straining. Better to address it before it becomes visible. You want a senior operator who can read the signals and help you move before it becomes a crisis.',
+    title: "Growth has stalled, and no one can say why.",
+    body: "The funnel is shrinking. Targets get missed, quarter after quarter. Your revenue leaders are working harder than ever, and still, friction between teams slows everything down. It's rarely just a broken funnel. More often, it's a team fighting a system it has outgrown. I look at both.",
   },
   {
-    tag: 'European ← → North America',
-    body: 'You\'re a European company starting to take the US seriously (or the other way round). Or you\'re already there and finding it harder than the plan suggested. You want someone who has actually worked on that move, not someone who has watched others try.',
+    title: "You're taking something new to market.",
+    body: "A new country – Europe to North America, say. A new product, or a new segment. Or it's already out there, and it's harder than the plan said. We work out where it's likely to break – the story, the team, the way you sell – and fix that first.",
   },
   {
-    tag: 'Founder or CEO',
-    body: 'Your team is stuck and you can\'t quite name why. The strategy looks fine on paper, the hires are good, and yet things aren\'t landing. You need someone to sit in the room and ask the obvious question, not another deck.',
-  },
-  {
-    tag: 'Strategic moment',
-    body: 'Something significant is coming – an exit, a restructuring, a pivot. You want someone in the room who has been through one before and knows what it actually feels like from the inside.',
-  },
-  {
-    tag: 'Board or investor',
-    body: 'Your portfolio company is talented, well-funded, and somehow still slow. You need someone to go in, understand what\'s really happening, and tell you whether the right intervention is an operator, a coach, or an honest conversation with the founder.',
+    title: "Something big is coming.",
+    body: "A raise, an exit, a restructuring. The board wants a serious plan. The team needs someone who has been through it before, knows what it feels like, and can hold everything together. That's the seat I take: alongside the CEO, in front of investors, and with the team.",
   },
 ];
 
@@ -50,33 +42,37 @@ const modes = [
 
 const pillars = [
   {
-    title: 'A steady hand in constant change.',
-    body: 'I have been the constant while the companies around me went through existential change: downsizing, leadership change and team rebuilds, GTM reorganization.',
+    title: 'The whole engine, not just marketing.',
+    body: 'I\'ve built marketing inside scaling companies and sat on the leadership team above it. I\'ve shaped revenue strategies across the bowtie – acquisition, customer success, expansion. So I start where the spend isn\'t working, then name what it\'s really a symptom of: usually the operating model catching up with the growth.',
+  },
+  {
+    title: 'The people side of growth.',
+    body: 'A strategy is easy to write down. Whether it lands depends on the team: alignment, trust, the safety to say what isn\'t working. I look at the conversations that aren\'t happening as closely as I look at the funnel.',
+  },
+  {
+    title: 'A steady hand when it\'s hardest.',
+    body: 'Twice I\'ve been the constant while the company around me went through existential change – a downsize, an acquisition, a leadership rebuild. I know what it costs to be that close. Now I can stand close to it without being consumed by it.',
+  },
+  {
+    title: 'Two exits, from the inside.',
+    body: 'Operating leader and shareholder through both, on the deal team for the second, and the integration work after. I know what a company has to look like before the process starts.',
   },
   {
     title: 'A guide between business cultures.',
-    body: 'I have built and run teams on both sides of the Atlantic. I understand how culture varies between the US and Europe, between a startup and a Fortune 500 company, and how to use what each does well.',
+    body: 'I led a European company\'s move into North America – opened the office, hired the first team – and later ran global marketing for an American company. I understand how culture varies between the US and Europe, between a startup and a Fortune 500 company, and how to use what each does well.',
   },
   {
-    title: 'A focus on the destination.',
-    body: 'Whatever the destination is – an exit, a launch, a turnaround, a rebuild – I\'m focused on getting the team there. And if the destination is not clear, I\'ll work on that first.',
-  },
-  {
-    title: 'Rarely only marketing.',
-    body: 'I\'ve built marketing from inside scaling companies – never from the agency side of the table – and sat on the leadership team above it. So when the spend isn\'t working, I tell you what to ask for and what to stop paying for. Then I name what it\'s really a symptom of, which is usually the operating model catching up with the growth. The concrete fix is the way in. The bigger call is the work.',
-  },
-  {
-    title: 'A vision and framework for what\'s next.',
-    body: 'Transformation is the discipline of knowing what to automate, what to protect, and how to evolve a team when the rules underneath are changing.',
+    title: 'A framework for what AI changes.',
+    body: 'AI is changing what marketing teams do and how they\'re built. My framework maps what to automate, what to protect, and how to grow the team through it.',
     link: '/aima',
-    linkText: 'I built a framework for working through this.',
+    linkText: 'Explore the framework →',
   },
 ];
 
 const steps = [
   {
     num: '01',
-    title: 'A twenty-minute call.',
+    title: 'A forty-five-minute conversation.',
     body: 'No deck, no pitch. I ask what\'s actually going on. You ask whatever you need to. We both leave knowing whether this makes sense.',
   },
   {
@@ -98,65 +94,47 @@ const steps = [
 >
   <!-- Hero -->
   <section class="practice-hero container">
-    <p class="eyebrow">Work with me</p>
     <h1 class="practice-hero__title">
       Let's write <span class="accent">your</span> story.
     </h1>
     <p class="practice-hero__lede">
-      Every company has a story it's trying to tell. Some are stuck on the first
-      chapter or have lost the thread halfway through. Some are rewriting it
-      under pressure, with the clock running. And some are in the best possible
-      problem: growing fast, needing to build the team, the brand and the
-      operating model to match – before the money starts going to the wrong
-      things. I've been there – through rapid expansion and downsizes, leadership
-      shakeups, M&A processes, and the quiet moments when nobody knows what
-      to say.
+      Every company wants to write its success story. Some are stuck on the
+      first chapter and can't get to the second. Some are starting a new one:
+      a new market, a new product. Some are rewriting it under pressure, with
+      the clock running. And some have the best possible problem: the story is
+      moving faster than the company, and the team, the brand and the operating
+      model need to catch up – before the money starts going to the wrong
+      things. I've been there – through rapid expansion and downsizes,
+      leadership shakeups, M&A processes, and the quiet moments when nobody
+      knows what to say.
     </p>
   </section>
 
-  <!-- Who this is for -->
-  <section id="who-i-work-with" class="practice-audiences section container">
+  <!-- When to work with me -->
+  <section id="when" class="practice-audiences section container">
     <header class="practice-audiences__header">
-
+      <p class="eyebrow">When to work with me</p>
       <h2>If you recognize yourself here…</h2>
     </header>
 
     <ol class="practice-audiences__list">
-      {audiences.map((a) => (
+      {moments.map((m, i) => (
         <li class="practice-audiences__item">
-          <span class="practice-audiences__tag">{a.tag}</span>
-          <p class="practice-audiences__note">{a.body}</p>
+          <span class="practice-audiences__num">№ {String(i + 1).padStart(2, '0')}</span>
+          <div>
+            <h3 class="practice-audiences__title">{m.title}</h3>
+            <p class="practice-audiences__note">{m.body}</p>
+          </div>
         </li>
       ))}
     </ol>
+
+    <p class="practice-audiences__aside">Investor with a portfolio company in one of these moments? Same conversation.</p>
   </section>
 
   <!-- No rule after this one – the quote is itself the break between the
        recognition list and the offer. -->
   <Testimonials featuredId="kristin-johnsen" eyebrow="" title="" width="content" />
-
-  <!-- Engagement modes -->
-  <section class="practice-modes section container">
-    <header class="practice-modes__header">
-
-      <h2>Three ways to work together.</h2>
-    </header>
-
-    <div class="practice-modes__grid">
-      {modes.map((m, i) => (
-        <article class="practice-modes__card">
-          <span class="practice-modes__num">№ {String(i + 1).padStart(2, '0')}</span>
-          <h3><span>{m.title}</span></h3>
-          <p>{m.body}</p>
-          <p class="practice-modes__fit">{m.fit}</p>
-        </article>
-      ))}
-    </div>
-
-    <button class="practice-modes__cta" data-contact-trigger>Get in touch</button>
-  </section>
-
-  <hr class="rule" />
 
   <!-- Pillars -->
   <section class="practice-pillars section container">
@@ -185,13 +163,34 @@ const steps = [
     </p>
   </section>
 
+  <hr class="rule" />
+
+  <!-- Engagement modes -->
+  <section class="practice-modes section container">
+    <header class="practice-modes__header">
+
+      <h2>Three ways to work together.</h2>
+    </header>
+
+    <div class="practice-modes__grid">
+      {modes.map((m, i) => (
+        <article class="practice-modes__card">
+          <span class="practice-modes__num">№ {String(i + 1).padStart(2, '0')}</span>
+          <h3><span>{m.title}</span></h3>
+          <p>{m.body}</p>
+          <p class="practice-modes__fit">{m.fit}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
   <Testimonials rowIds={["karen-clarke", "christina-nahal", "berin-sadikovic"]} />
 
   <CTABlock
     id="book"
     eyebrow="Are we a match?"
     headline="The best way to know is a conversation."
-    body="Twenty minutes. No deck, no pitch. I'll ask what's actually going on, and we'll see whether this makes sense for both of us."
+    body="Forty-five minutes. No deck, no pitch. I'll ask what's actually going on, and we'll see whether this makes sense for both of us."
     ctaLabel="Reach out"
     ctaModal={true}
     secondaryLabel="Read some writing first"
@@ -210,9 +209,6 @@ const steps = [
     padding-bottom: 0;
   }
 
-  .practice-hero .eyebrow {
-    margin-bottom: var(--space-6);
-  }
 
   .practice-hero__title {
     font-family: var(--font-display);
@@ -276,7 +272,7 @@ const steps = [
 
   .practice-audiences__item {
     display: grid;
-    grid-template-columns: 220px 1fr;
+    grid-template-columns: 72px 1fr;
     gap: var(--space-8);
     padding-block: var(--space-6);
     border-top: 1px solid var(--color-line);
@@ -286,13 +282,30 @@ const steps = [
     border-bottom: 1px solid var(--color-line);
   }
 
-  .practice-audiences__tag {
+  .practice-audiences__num {
     font-family: var(--font-mono);
     font-size: var(--text-mono-sm);
     letter-spacing: var(--tracking-wide);
     text-transform: uppercase;
     color: var(--color-cobalt);
     font-weight: 500;
+  }
+
+  .practice-audiences__title {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    line-height: 1.25;
+    letter-spacing: var(--tracking-tight);
+    color: var(--color-ink);
+    margin-bottom: var(--space-2);
+    max-width: 40ch;
+  }
+
+  .practice-audiences__aside {
+    margin-top: var(--space-6);
+    font-family: var(--font-accent);
+    font-style: italic;
+    color: var(--color-ash);
   }
 
   .practice-audiences__note {
