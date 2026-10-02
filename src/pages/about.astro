@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import GlowBackground from '../components/GlowBackground.astro';
 import CTABlock from '../components/CTABlock.astro';
 import Facets from '../components/Facets.astro';
 
@@ -43,6 +44,9 @@ const principles = [
   title="About Stève Cattin"
   description="Twenty years across GTM, Ops and People – fifteen in B2B tech, two exits, and a love for the obvious question nobody's asking."
 >
+  <div class="glow-scope">
+  <GlowBackground strength={0.3} />
+
   <!-- Hero -->
   <section class="about-hero container">
     <p class="eyebrow">About</p>
@@ -200,6 +204,7 @@ const principles = [
     secondaryLabel="Read some writing first"
     secondaryHref="/blog"
   />
+  </div>
 </BaseLayout>
 
 <style>

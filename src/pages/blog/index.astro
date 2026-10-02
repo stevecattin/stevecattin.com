@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import GlowBackground from '../../components/GlowBackground.astro';
 import PostCard from '../../components/PostCard.astro';
 import FeaturedPostCard from '../../components/FeaturedPostCard.astro';
 import { getCollection } from 'astro:content';
@@ -19,6 +20,9 @@ const categories = ['Leadership', 'Marketing', 'Founding', 'Personal'].filter(
   title="Writing – Stève Cattin"
   description="Essays on leadership, brand, founding, and the quieter seasons in between."
 >
+  <div class="glow-scope">
+  <GlowBackground strength={0.3} />
+
   <section class="blog-hero container">
     <p class="eyebrow">Writing</p>
     <h1 class="blog-hero__title">
@@ -79,6 +83,7 @@ const categories = ['Leadership', 'Marketing', 'Founding', 'Personal'].filter(
       ))}
     </div>
   </section>
+  </div>
 </BaseLayout>
 
 <script>

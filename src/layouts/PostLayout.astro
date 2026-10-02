@@ -1,5 +1,6 @@
 ---
 import BaseLayout from './BaseLayout.astro';
+import GlowBackground from '../components/GlowBackground.astro';
 
 export interface Props {
   frontmatter: {
@@ -32,6 +33,9 @@ const dateLabel = new Date(pubDate).toLocaleDateString('en-US', {
   ogImageAlt={`${title} – an essay by Stève Cattin`}
   ogType="article"
 >
+  <div class="glow-scope">
+  <GlowBackground strength={0.3} dimTo={0.3} />
+
   <article class="post">
     <header class="post__header container">
       <p class="post__meta">
@@ -67,6 +71,7 @@ const dateLabel = new Date(pubDate).toLocaleDateString('en-US', {
       </p>
     </footer>
   </article>
+  </div>
 </BaseLayout>
 
 <style>
