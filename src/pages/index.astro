@@ -1,8 +1,9 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import PostCard from '../components/PostCard.astro';
 import Testimonials from '../components/Testimonials.astro';
 import CTABlock from '../components/CTABlock.astro';
+import GlowBackground from '../components/GlowBackground.astro';
+import AimaCone from '../components/AimaCone.astro';
 import { getCollection, type CollectionEntry } from 'astro:content';
 
 const allPosts = await getCollection('blog', ({ data }) => !data.draft);
@@ -19,39 +20,63 @@ const bySlug = new Map(allPosts.map((post) => [post.slug, post]));
 const featuredPosts = featuredSlugs
   .map((slug) => bySlug.get(slug))
   .filter((post): post is CollectionEntry<'blog'> => post !== undefined);
+
+const formatDate = (d: Date) =>
+  d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
+// The four moments – short versions of the "When to work with me" list on
+// /practice (full text lives there; keep the titles in sync).
+const moments = [
+  {
+    title: 'Your go-to-market grew by instinct. Now it has to grow by design.',
+    body: 'A round just closed, or a new CEO arrived. We work out what to build, what to buy, and what to stop paying for.',
+  },
+  {
+    title: 'Growth has stalled, and no one can say why.',
+    body: "It's rarely just the funnel. More often, it's a team fighting a system it has outgrown.",
+  },
+  {
+    title: "You're taking something new to market.",
+    body: "A new country, product or segment. We find where it's likely to break, and fix that first.",
+  },
+  {
+    title: 'Something big is coming.',
+    body: "A raise, an exit, a restructuring. Someone who has been through it, alongside the CEO and the team.",
+  },
+];
+
+// AIMA at a glance: the five stages (the pillars are named in the copy).
 ---
 
 <BaseLayout
   title="Stève Cattin – Fractional CMO, Advisor, Sparring Partner"
   description="Fractional CMO, advisor and sparring partner for founders, executives and their teams. When something's stuck, it's usually the space and the stories between them."
 >
-  <section class="hero">
+  <!-- The moving light sits in a sticky, viewport-tall layer that stays
+       behind the content from the hero down to the closing night band,
+       then scrolls away with it. Sections inside are transparent. -->
+  <div class="glow-scope">
+  <GlowBackground strength={0.4} />
+
+  <section class="hero hero--glow">
     <div class="hero__inner container-wide">
       <div class="hero__lede">
         <div class="hero__copy">
-          <p class="eyebrow-pill">
-            <span class="dot-mark" aria-hidden="true"></span>
-            Fractional CMO. Advisor. Sparring Partner.
-          </p>
+          <p class="hero__greeting">Hi, I'm <span class="hero__name">Stève.</span></p>
 
-          <h1 class="hero__headline">Hi, I'm Stève.</h1>
-
-          <p class="hero__sub hero__sub--intro">
-            I partner with founders, execs and their teams when growth gets complicated. I work on the strategy, the processes, the goals – and on what no spreadsheet captures: how people feel, the energy in the room, and the things left untold.
-          </p>
+          <h1 class="hero__headline">
+            When growth gets <span class="hero__accent">complicated.</span>
+          </h1>
 
           <p class="hero__sub">
-            Twenty years across GTM, Ops and People – fifteen in B2B Tech, two acquisitions in – taught me that when something isn't working, it's rarely just the plan or just the team.
-            <span class="hero__sub--emphasis">It's usually the space, and the stories, between them.</span>
+            I partner with founders, execs and their teams to make it work. I take care of the system – the strategy, the processes, the goals – and of what no spreadsheet captures: how people feel, the energy in the room, the things left untold.
           </p>
 
           <div class="hero__cta-row">
-            <button class="hero__cta hero__cta--primary" data-contact-trigger>
+            <button class="hero__cta" data-contact-trigger>
               Tell me your story →
             </button>
-            <a href="/practice#when" class="hero__cta hero__cta--secondary">
-              When to work with me →
-            </a>
+            <a href="#when" class="hero__link">When to work with me</a>
           </div>
         </div>
 
@@ -69,67 +94,87 @@ const featuredPosts = featuredSlugs
     </div>
   </section>
 
-  <section class="problem" aria-labelledby="problem-title">
+  <section id="when" class="moments" aria-labelledby="moments-title">
     <div class="container-wide">
-      <p class="problem__eyebrow">The pattern I keep seeing</p>
-      <h2 id="problem-title" class="problem__title">
-        Companies scale faster than the way they're <em class="problem__accent">run.</em>
+      <p class="section-eyebrow">When to work with me</p>
+      <h2 id="moments-title" class="moments__title">
+        Companies scale faster than the way they're <span class="accent">run.</span>
       </h2>
-      <p class="problem__lede">
-        Marketing is usually where it shows first – the spend grows, the
-        structure doesn't, and money leaves faster than results come back. But
-        it's rarely only marketing. It's the operating model catching up with
-        the growth. I've built these functions from the inside, and sat at the
-        table above them – so we start where it's concrete, and work toward the
-        bigger question underneath.
-      </p>
+
+      <ol class="moments__list">
+        {moments.map((m, i) => (
+          <li class="moments__item">
+            <span class="moments__num">№ {String(i + 1).padStart(2, '0')}</span>
+            <h3 class="moments__item-title">{m.title}</h3>
+            <p class="moments__item-body">{m.body}</p>
+          </li>
+        ))}
+      </ol>
+
+      <div class="moments__foot">
+        <p class="moments__aside">Investor with a portfolio company in one of these moments? Same conversation.</p>
+        <a href="/practice#when" class="text-link">The full picture on Work with me →</a>
+      </div>
     </div>
   </section>
 
   <Testimonials
     featuredId="karen-clarke"
     rowIds={["kristin-johnsen", "christina-nahal", "berin-sadikovic"]}
+    title=""
+    lead
   />
 
   <section class="framework" aria-labelledby="framework-title">
-    <div class="container-wide">
-      <p class="framework__eyebrow">The framework I built</p>
-      <h2 id="framework-title" class="framework__title">
-        The AI Marketing Ascendancy Framework.
-      </h2>
-      <p class="framework__lede">
-        My framework for moving marketing teams from AI-curious to
-        AI-confident – across people, processes, and technology.
-      </p>
-      <a href="/aima" class="framework__cta">
-        Explore the framework <span class="arrow" aria-hidden="true">→</span>
-      </a>
+    <div class="container-wide framework__inner">
+      <div class="framework__copy">
+        <p class="section-eyebrow">The framework I built</p>
+        <h2 id="framework-title" class="section-title">
+          The AI Marketing Ascendancy Framework.
+        </h2>
+        <p class="framework__lede">
+          Achieving AI marketing ascendancy across people, processes, and
+          technology – five stages, from AI-curious to AI-confident. I meet your
+          team where it is, and take it where it needs to be.
+        </p>
+        <a href="/aima" class="text-link">Explore the framework →</a>
+      </div>
+
+      <div class="framework__cone">
+        <AimaCone uid="home-cone" />
+      </div>
     </div>
   </section>
 
   <section class="writing" aria-labelledby="writing-title">
     <div class="container-wide">
-      <p class="section__eyebrow">Selected writing</p>
-      <h2 id="writing-title" class="section__title">
-        Essays, frameworks, and the occasional strong opinion.
+      <p class="section-eyebrow">Selected writing</p>
+      <h2 id="writing-title" class="section-title">
+        Essays, field notes, and the occasional strong opinion.
       </h2>
 
-      <div class="feed-preview">
+      <ul class="writing__list">
         {featuredPosts.map((post) => (
-          <PostCard
-            href={`/blog/${post.slug}/`}
-            title={post.data.title}
-            category={post.data.category}
-            pubDate={post.data.pubDate}
-            readingTime={post.data.readingTime}
-          />
+          <li>
+            <a href={`/blog/${post.slug}/`} class="writing__row">
+              <span class="writing__cat">{post.data.category}</span>
+              <span class="writing__title">{post.data.title}</span>
+              <span class="writing__meta">
+                {formatDate(post.data.pubDate)}{post.data.readingTime && ` · ${post.data.readingTime}`}
+              </span>
+              <span class="writing__arrow" aria-hidden="true">→</span>
+            </a>
+          </li>
         ))}
-      </div>
+      </ul>
+
+      <a href="/blog" class="text-link writing__all">All writing →</a>
     </div>
   </section>
 
   <CTABlock
     wide
+    night
     eyebrow="Where we start"
     headline="Something stuck? Start with the story."
     body="Tell me what's happening. We'll figure out together where to begin."
@@ -138,31 +183,39 @@ const featuredPosts = featuredSlugs
     secondaryLabel="When to work with me →"
     secondaryHref="/practice#when"
   />
+  </div>
 </BaseLayout>
+
 
 <style>
   /* -------- Hero -------- */
   .hero {
-    background: var(--color-paper);
+    position: relative;
+    overflow: hidden;
+    background: transparent;
     padding-top: clamp(48px, 5vw, 96px);
     padding-bottom: var(--space-20);
   }
 
-  /* Asymmetric two-column lede: copy on the left, portrait on the right.
-     Portrait is bottom-aligned; text floats centered in the row so it sits
-     balanced between nav and the writings section, with breathing room
-     above the eyebrow and below the CTA. The min-height guarantees enough
-     vertical space for that breathing room at any container width. */
+  .hero__inner {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* The name stays ink – "complicated." is the hero's one accent word. */
+  .hero__name {
+    color: inherit;
+  }
+
+  /* Asymmetric two-column lede: copy on the left, portrait on the right. */
   .hero__lede {
     display: grid;
     grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
     gap: clamp(32px, 5vw, 72px);
-    min-height: clamp(560px, 55vh, 680px);
-    margin-bottom: 0;
+    align-items: end;
   }
 
   .hero__copy {
-    /* keep the existing copy block intact; just lets the portrait sit beside it */
     min-width: 0;
     align-self: center;
   }
@@ -170,14 +223,10 @@ const featuredPosts = featuredSlugs
   .hero__portrait {
     margin: 0;
     aspect-ratio: 3 / 4;
-    max-width: 460px;
-    justify-self: center;
-    align-self: end;
+    max-width: 440px;
+    justify-self: end;
     width: 100%;
     overflow: hidden;
-    /* No frame, no shadow – the photograph sits directly on the paper and
-       carries its own edges. Radius steps up from the button scale: at this
-       size a 2px corner reads as an accident rather than a decision. */
     border-radius: var(--radius-md);
   }
 
@@ -189,59 +238,27 @@ const featuredPosts = featuredSlugs
     object-position: center top;
   }
 
-  /* Mobile: copy stacks on top, portrait below it – same visual logic as
-     desktop, just collapsed into one column. Centered (rather than
-     right-aligned) because there's no asymmetric grid to justify against
-     once we're single-column. */
-  @media (max-width: 760px) {
-    .hero__lede {
-      grid-template-columns: 1fr;
-      gap: var(--space-8);
-      min-height: 0;     /* let content set the height; no desktop min */
-      margin-bottom: 0;
-    }
-
-    .hero__portrait {
-      justify-self: center;
-      align-self: end;
-      max-width: 280px;
-    }
-
-    /* CTAs stack vertically and stretch full-width on mobile – easier tap
-       targets and a cleaner rhythm above the portrait. */
-    .hero__cta-row {
-      flex-direction: column;
-    }
-
-    .hero__cta {
-      justify-content: center;
-    }
+  .hero__greeting {
+    font-size: var(--text-xl);
+    font-weight: 500;
+    color: var(--color-ink);
+    margin: 0 0 var(--space-6);
   }
 
-  /* Reset the hero__cta-row bottom margin – the lede grid handles spacing now. */
-  .hero__lede .hero__cta-row {
-    margin-bottom: 0;
-  }
-
-  .eyebrow-pill {
-    margin-bottom: var(--space-10);
-  }
-
+  /* The promise leads; the greeting introduces it. */
   .hero__headline {
     font-family: var(--font-display);
     font-weight: 500;
-    font-size: var(--text-hero);
-    line-height: var(--lh-tight);
-    letter-spacing: var(--tracking-tight);
+    font-size: clamp(48px, 6.6vw, 100px);
+    line-height: 0.98;
+    letter-spacing: var(--tracking-tighter);
     color: var(--color-ink);
-    margin-bottom: var(--space-8);
-    max-width: 820px;
+    margin: 0 0 var(--space-8);
+    max-width: 11.5em;
+    text-wrap: balance;
   }
 
   .hero__accent {
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-style: normal;
     color: var(--color-cobalt);
   }
 
@@ -250,223 +267,266 @@ const featuredPosts = featuredSlugs
     line-height: var(--lh-normal);
     color: var(--color-graphite);
     max-width: 600px;
-    margin-bottom: var(--space-10);
-  }
-
-  .hero__sub--intro {
-    margin-bottom: var(--space-6);
-  }
-
-  .hero__sub--emphasis {
-    font-weight: 700;
+    margin: 0 0 var(--space-10);
   }
 
   .hero__cta-row {
     display: flex;
-    gap: var(--space-3);
+    align-items: center;
+    gap: var(--space-7, 28px);
     flex-wrap: wrap;
-    margin-bottom: var(--space-18);
   }
 
+  /* One button. The secondary path is a quiet text link. */
   .hero__cta {
     display: inline-flex;
     align-items: center;
-    gap: var(--space-2);
     font-weight: 500;
-    font-size: 14px;
-    padding: 13px 22px;
+    font-size: 15px;
+    padding: 14px 24px;
     border-radius: var(--radius-sm);
     letter-spacing: 0.01em;
-    text-decoration: none;
-    transition: background var(--dur-fast) var(--ease-out),
-                color var(--dur-fast) var(--ease-out),
-                border-color var(--dur-fast) var(--ease-out);
+    background: var(--color-cobalt);
+    color: var(--color-white);
+    transition: background var(--dur-fast) var(--ease-out);
   }
-
-  .hero__cta--primary {
+  .hero__cta:hover {
     background: var(--color-ink);
     color: var(--color-paper);
   }
-  .hero__cta--primary:hover {
-    background: var(--color-cobalt);
-    color: var(--color-paper);
+
+  .hero__link {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--color-ink);
+    text-decoration: underline;
+    text-underline-offset: 5px;
+    text-decoration-color: color-mix(in srgb, var(--color-ink) 30%, transparent);
+    transition: text-decoration-color var(--dur-fast) var(--ease-out);
+  }
+  .hero__link:hover {
+    color: var(--color-ink);
+    text-decoration-color: var(--color-cobalt);
   }
 
-  .hero__cta--secondary {
-    background: transparent;
-    color: var(--color-cobalt);
-    border: 1px solid var(--color-cobalt);
-  }
-  .hero__cta--secondary:hover {
-    background: var(--color-cobalt);
-    color: var(--color-paper);
-  }
-
-  /* -------- Post feed preview -------- */
-  .feed-preview {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--space-4);
+  @media (max-width: 760px) {
+    .hero__lede {
+      grid-template-columns: 1fr;
+      gap: var(--space-10);
+    }
+    .hero__portrait {
+      justify-self: center;
+      max-width: 300px;
+    }
   }
 
-  @media (max-width: 960px) {
-    .feed-preview { grid-template-columns: 1fr; }
-  }
-
-  /* -------- Problem band (paper, editorial) -------- */
-  /* First beat after the hero. Paper surface with a hairline top. */
-  .problem {
-    background: var(--color-paper);
-    border-top: 0.5px solid var(--color-line);
-    padding-block: var(--space-20);
-  }
-
-  .problem__eyebrow {
+  /* -------- Shared section type -------- */
+  .section-eyebrow {
     font-family: var(--font-mono);
     font-size: var(--text-mono-sm);
     text-transform: uppercase;
     letter-spacing: var(--tracking-wide);
     color: var(--color-cobalt);
     font-weight: 500;
-    margin: 0 0 var(--space-5);
+    margin: 0 0 var(--space-4);
   }
 
-  .problem__title {
+  .section-title {
     font-family: var(--font-display);
     font-weight: 500;
-    font-size: var(--text-3xl);
-    line-height: var(--lh-tight);
+    font-size: var(--text-display);
+    line-height: 1.04;
     letter-spacing: var(--tracking-tight);
     color: var(--color-ink);
     margin: 0 0 var(--space-5);
-    max-width: 20ch;
+    text-wrap: balance;
   }
 
-  .problem__accent {
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-style: normal;
+  .text-link {
+    font-size: 15px;
+    font-weight: 500;
     color: var(--color-cobalt);
   }
+  .text-link:hover { color: var(--color-ink); }
 
-  .problem__lede {
-    font-size: var(--text-lg);
-    line-height: var(--lh-normal);
+  /* -------- When to work with me: thesis + the four moments -------- */
+  .moments {
+    padding-block: var(--space-20) var(--space-24);
+    scroll-margin-top: 64px;
+  }
+
+  .moments__title {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(36px, 4.6vw, 64px);
+    line-height: 1.02;
+    letter-spacing: var(--tracking-tight);
+    color: var(--color-ink);
+    margin: 0 0 var(--space-16);
+    max-width: 18ch;
+    text-wrap: balance;
+  }
+
+  .accent { color: var(--color-cobalt); }
+
+  .moments__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--space-8);
+  }
+
+  .moments__item {
+    border-top: 1px solid var(--color-line);
+    padding-top: var(--space-6);
+  }
+
+  .moments__num {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: var(--text-mono-sm);
+    letter-spacing: var(--tracking-wide);
+    color: var(--color-cobalt);
+    margin-bottom: var(--space-4);
+  }
+
+  .moments__item-title {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 22px;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: var(--color-ink);
+    margin: 0 0 var(--space-3);
+  }
+
+  .moments__item-body {
+    font-size: 16px;
+    line-height: 1.6;
     color: var(--color-graphite);
-    max-width: 60ch;
     margin: 0;
   }
 
+  .moments__foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--space-6);
+    flex-wrap: wrap;
+    margin-top: var(--space-12);
+  }
+
+  .moments__aside {
+    font-size: 16px;
+    color: var(--color-graphite);
+    margin: 0;
+  }
+
+  @media (max-width: 1100px) {
+    .moments__list { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: var(--space-10); }
+  }
   @media (max-width: 640px) {
-    .problem { padding-block: var(--space-16); }
+    .moments { padding-block: var(--space-16); }
+    .moments__list { grid-template-columns: 1fr; }
   }
 
-  /* -------- Framework section (mist, editorial) -------- */
-  /* Full-bleed mist block, hairline above. Echoes the About pullquote's
-     editorial weight – this is "durable IP," not a feed item. No card
-     chrome: the surface itself carries the section break, type does the
-     rest. Container-wide centers the inner column. */
+  /* -------- Framework: copy + AIMA at a glance -------- */
   .framework {
-    background: var(--color-mist);
     border-top: 0.5px solid var(--color-line);
-    padding-block: var(--space-20);
+    padding-block: var(--space-24);
   }
 
-  .framework__eyebrow {
-    font-family: var(--font-mono);
-    font-size: var(--text-mono-sm);
-    text-transform: uppercase;
-    letter-spacing: var(--tracking-wide);
-    color: var(--color-cobalt);
-    font-weight: 500;
-    margin: 0 0 var(--space-5);
-  }
-
-  .framework__title {
-    font-family: var(--font-display);
-    font-weight: 500;
-    font-size: var(--text-3xl);
-    line-height: var(--lh-tight);
-    letter-spacing: var(--tracking-tight);
-    color: var(--color-ink);
-    margin: 0 0 var(--space-5);
-    max-width: 22ch;
+  .framework__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: clamp(40px, 6vw, 96px);
+    align-items: center;
   }
 
   .framework__lede {
     font-size: var(--text-lg);
     line-height: var(--lh-normal);
     color: var(--color-graphite);
-    max-width: 56ch;
+    max-width: 48ch;
     margin: 0 0 var(--space-8);
   }
 
-  .framework__cta {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2);
-    font-family: var(--font-mono);
-    font-size: var(--text-mono-sm);
-    text-transform: uppercase;
-    letter-spacing: var(--tracking-wide);
-    color: var(--color-cobalt);
-    font-weight: 500;
-    text-decoration: none;
-    transition: color var(--dur-fast) var(--ease-out);
+  /* The cone itself lives in AimaCone.astro. */
+  .framework__cone {
+    width: 100%;
+    max-width: 580px;
+    justify-self: center;
   }
 
-  .framework__cta:hover {
-    color: var(--color-cobalt-deep);
+  @media (max-width: 960px) {
+    .framework__inner { grid-template-columns: 1fr; }
   }
-
-  .framework__cta:hover .arrow {
-    transform: translateX(4px);
-  }
-
-  .framework__cta .arrow {
-    display: inline-block;
-    transition: transform var(--dur-fast) var(--ease-out);
-  }
-
   @media (max-width: 640px) {
     .framework { padding-block: var(--space-16); }
   }
-  /* -------- Shared band type (writing) -------- */
-  /* Same eyebrow / title / lede scale as the problem and framework bands,
-     so every section on the page opens the same way. */
-  .section__eyebrow {
+
+  /* -------- Selected writing: a typographic list -------- */
+  .writing {
+    border-top: 0.5px solid var(--color-line);
+    padding-block: var(--space-24) var(--space-8);
+  }
+
+  .writing__list {
+    list-style: none;
+    margin: var(--space-10) 0 var(--space-8);
+    padding: 0;
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .writing__row {
+    display: grid;
+    grid-template-columns: 160px minmax(0, 1fr) auto 24px;
+    align-items: baseline;
+    gap: var(--space-6);
+    padding-block: var(--space-7, 28px);
+    border-top: 1px solid var(--color-line);
+    color: var(--color-ink);
+  }
+
+  .writing__cat,
+  .writing__meta {
     font-family: var(--font-mono);
     font-size: var(--text-mono-sm);
     text-transform: uppercase;
     letter-spacing: var(--tracking-wide);
-    color: var(--color-cobalt);
-    font-weight: 500;
-    margin: 0 0 var(--space-5);
   }
+  .writing__cat { color: var(--color-cobalt); }
+  .writing__meta { color: var(--color-ash); white-space: nowrap; }
 
-  .section__title {
+  .writing__title {
     font-family: var(--font-display);
     font-weight: 500;
-    font-size: var(--text-3xl);
-    line-height: var(--lh-tight);
-    letter-spacing: var(--tracking-tight);
-    color: var(--color-ink);
-    margin: 0 0 var(--space-5);
-    max-width: 22ch;
+    font-size: clamp(22px, 2.2vw, 30px);
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+    transition: color var(--dur-fast) var(--ease-out);
   }
 
-  /* -------- Selected writing (paper, follows the mist framework band) -------- */
-  /* No hairline: the change from mist back to paper carries the break. */
-  .writing {
-    background: var(--color-paper);
-    padding-top: var(--space-20);
+  .writing__arrow {
+    font-size: 20px;
+    transition: transform var(--dur-fast) var(--ease-out);
   }
 
-  .writing .feed-preview {
-    margin-top: var(--space-8);
-  }
+  .writing__row:hover .writing__title { color: var(--color-cobalt); }
+  .writing__row:hover .writing__arrow { transform: translateX(4px); }
 
-  @media (max-width: 640px) {
-    .writing { padding-top: var(--space-16); }
+  @media (max-width: 760px) {
+    .writing { padding-block: var(--space-16) var(--space-4); }
+    .writing__row {
+      grid-template-columns: 1fr auto;
+      grid-template-areas: "cat arrow" "title title" "meta meta";
+      row-gap: var(--space-2);
+    }
+    .writing__cat { grid-area: cat; }
+    .writing__title { grid-area: title; }
+    .writing__meta { grid-area: meta; }
+    .writing__arrow { grid-area: arrow; }
   }
 </style>

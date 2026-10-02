@@ -11,6 +11,8 @@ export interface Props {
   id?: string;
   /** Align to .container-wide (homepage) instead of the narrower .container. */
   wide?: boolean;
+  /** Navy band with moving gradient light + grain (homepage closing band). */
+  night?: boolean;
 }
 
 const {
@@ -24,14 +26,24 @@ const {
   secondaryHref,
   id,
   wide = false,
+  night = false,
 } = Astro.props;
 ---
 
-<section class="cta" id={id}>
+<section class:list={['cta', { 'cta--night': night }]} id={id}>
+  {night && (
+    <div class="night-bg" aria-hidden="true">
+      <span class="night-bg__blob night-bg__blob--1 cta__blob--1"></span>
+      <span class="night-bg__blob night-bg__blob--2 cta__blob--2"></span>
+      <span class="night-bg__blob night-bg__blob--3 cta__blob--3"></span>
+      <span class="night-bg__grain"></span>
+    </div>
+  )}
   <div class={wide ? 'container-wide cta__inner cta__inner--wide' : 'container cta__inner'}>
     <p class="cta__eyebrow">{eyebrow}</p>
     <h2 class="cta__headline">{headline}</h2>
     {body && <p class="cta__body">{body}</p>}
+    {Astro.slots.has('default') && <div class="cta__extra"><slot /></div>}
 
     <div class="cta__actions">
       {ctaModal
@@ -91,6 +103,8 @@ const {
     margin-bottom: var(--space-8);
   }
 
+  .cta__extra { margin-bottom: var(--space-10); }
+
   .cta__actions {
     display: flex;
     gap: var(--space-3);
@@ -118,13 +132,63 @@ const {
     color: var(--color-ink);
   }
 
+  /* Secondary path is a quiet text link, never a second button. */
   .cta__btn--secondary {
     background: transparent;
     color: var(--color-paper);
-    border: 1px solid color-mix(in srgb, var(--color-paper) 30%, transparent);
+    padding-inline: var(--space-2);
+    text-decoration: underline;
+    text-underline-offset: 5px;
+    text-decoration-color: color-mix(in srgb, var(--color-paper) 40%, transparent);
   }
   .cta__btn--secondary:hover {
-    background: color-mix(in srgb, var(--color-paper) 10%, transparent);
     color: var(--color-paper);
+    text-decoration-color: var(--color-paper);
   }
+
+  /* -------- Night variant (homepage closing band) -------- */
+  .cta--night {
+    position: relative;
+    overflow: hidden;
+    background: var(--color-night);
+  }
+
+  .cta--night .cta__inner {
+    position: relative;
+    z-index: 1;
+  }
+
+  .cta__blob--1 {
+    width: 760px; height: 760px; top: -260px; left: 53%;
+    background: radial-gradient(circle at 60% 40%, var(--color-night-azure), var(--color-night-royal));
+    filter: blur(182px);
+    opacity: 0.7;
+  }
+
+  .cta__blob--2 {
+    width: 620px; height: 620px; top: 120px; left: -120px;
+    background: radial-gradient(circle at 30% 70%, var(--color-night-royal), var(--color-night-deep));
+    filter: blur(148px);
+    opacity: 0.7;
+  }
+
+  .cta__blob--3 {
+    width: 300px; height: 300px; top: 43%; left: 62%;
+    background: radial-gradient(circle at 40% 40%, var(--color-night-coral-soft), var(--color-night-coral));
+    filter: blur(72px);
+    opacity: 0.7;
+  }
+
+  .cta--night .cta__eyebrow { color: var(--color-night-powder); }
+  .cta--night .cta__body { color: var(--color-night-haze); }
+
+  .cta--night .cta__btn--primary {
+    background: var(--color-paper);
+    color: var(--color-night);
+  }
+  .cta--night .cta__btn--primary:hover {
+    background: var(--color-night-powder);
+    color: var(--color-night);
+  }
+
 </style>

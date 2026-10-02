@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import CTABlock from '../components/CTABlock.astro';
+import GlowBackground from '../components/GlowBackground.astro';
 import Testimonials from '../components/Testimonials.astro';
 
 const moments = [
@@ -24,23 +25,30 @@ const moments = [
 
 const modes = [
   {
+    glyph: 'seat',
+    meta: 'In the seat · 1–3 days a week',
     title: 'Fractional executive.',
     body: 'One to three days a week, in the seat. I usually come in on the function that\'s most exposed – for a company scaling past its structure, that\'s typically marketing or GTM. But it rarely stays in one box. I\'ve run People and Operations too, and sat on the executive team – so I hire who needs hiring, decide what needs deciding, free you to focus on what only you can do, and I\'m in the room for what fits no single function: vision, product, the calls only the leadership team can make.',
     fit: 'Right for you if you need someone who can hold a function and think about the whole company alongside you.',
   },
   {
+    glyph: 'beside',
+    meta: 'Outside the org chart · A regular cadence',
     title: 'Advisory.',
     body: 'A regular cadence outside the org chart. For founders and execs who already have a team and a plan, and want a senior operator to think with – about the next quarter\'s bets, the leadership decisions that don\'t have an obvious right answer, the conversations you\'d rather not have alone. I\'m not in the day-to-day, but close enough to the work to be useful.',
     fit: 'Right for you if the team is in place and what you need is a trusted person to pressure-test the plan.',
   },
   {
+    glyph: 'one',
+    meta: 'One to one · Off the record',
     title: 'Sparring, privately.',
     body: 'For leaders who sense the hardest problem they\'re carrying is the one inside themselves. A room with no audience and no agenda – confidential, off the org chart, off the record. Just the time to think it through with someone who has been in your seat, and seen this kind of problem up close, more than once.',
     fit: 'Right for you if what\'s getting in the way isn\'t the company – it\'s you, and you want someone to think it through with.',
   },
 ];
 
-const pillars = [
+// Why me – what I bring to the room. The depth lives on About.
+const reasons = [
   {
     title: 'The whole engine, not just marketing.',
     body: 'I\'ve built marketing inside scaling companies and sat on the leadership team above it. I\'ve shaped revenue strategies across the bowtie – acquisition, customer success, expansion. So I start where the spend isn\'t working, then name what it\'s really a symptom of: usually the operating model catching up with the growth.',
@@ -54,21 +62,16 @@ const pillars = [
     body: 'Twice I\'ve been the constant while the company around me went through existential change – a downsize, an acquisition, a leadership rebuild. I know what it costs to be that close. Now I can stand close to it without being consumed by it.',
   },
   {
-    title: 'Two exits, from the inside.',
-    body: 'Operating leader and shareholder through both, on the deal team for the second, and the integration work after. I know what a company has to look like before the process starts.',
-  },
-  {
     title: 'A guide between business cultures.',
     body: 'I led a European company\'s move into North America – opened the office, hired the first team – and later ran global marketing for an American company. I understand how culture varies between the US and Europe, between a startup and a Fortune 500 company, and how to use what each does well.',
   },
   {
     title: 'A framework for what AI changes.',
     body: 'AI is changing what marketing teams do and how they\'re built. My framework maps what to automate, what to protect, and how to grow the team through it.',
-    link: '/aima',
-    linkText: 'Explore the framework →',
   },
 ];
 
+// How it starts – shown inside the closing night band.
 const steps = [
   {
     num: '01',
@@ -78,7 +81,7 @@ const steps = [
   {
     num: '02',
     title: 'A short first scope.',
-    body: 'If it does make sense, I\'ll suggest where to start – usually a contained first engagement before anything long-term. I don\'t do six-month commitments before we\'ve worked together once.',
+    body: 'If it does make sense, I\'ll suggest where to start – usually a contained first engagement before anything long-term.',
   },
   {
     num: '03',
@@ -92,459 +95,512 @@ const steps = [
   title="Practice – Stève Cattin"
   description="Who I work with, what I offer, and how to find out if we're a match."
 >
-  <!-- Hero -->
-  <section class="practice-hero container">
-    <h1 class="practice-hero__title">
-      Let's write <span class="accent">your</span> story.
-    </h1>
-    <p class="practice-hero__lede">
-      Every company wants to write its success story. Some are stuck on the
-      first chapter and can't get to the second. Some are starting a new one:
-      a new market, a new product. Some are rewriting it under pressure, with
-      the clock running. And some have the best possible problem: the story is
-      moving faster than the company, and the team, the brand and the operating
-      model need to catch up – before the money starts going to the wrong
-      things. I've been there – through rapid expansion and downsizes,
-      leadership shakeups, M&A processes, and the quiet moments when nobody
-      knows what to say.
-    </p>
-  </section>
+  <div class="glow-scope">
+  <GlowBackground strength={0.3} />
 
-  <!-- When to work with me -->
-  <section id="when" class="practice-audiences section container">
-    <header class="practice-audiences__header">
-      <p class="eyebrow">When to work with me</p>
-      <h2>If you recognize yourself here…</h2>
-    </header>
-
-    <ol class="practice-audiences__list">
-      {moments.map((m, i) => (
-        <li class="practice-audiences__item">
-          <span class="practice-audiences__num">№ {String(i + 1).padStart(2, '0')}</span>
-          <div>
-            <h3 class="practice-audiences__title">{m.title}</h3>
-            <p class="practice-audiences__note">{m.body}</p>
-          </div>
-        </li>
-      ))}
-    </ol>
-
-    <p class="practice-audiences__aside">Investor with a portfolio company in one of these moments? Same conversation.</p>
-  </section>
-
-  <!-- No rule after this one – the quote is itself the break between the
-       recognition list and the offer. -->
-  <Testimonials featuredId="kristin-johnsen" eyebrow="" title="" width="content" />
-
-  <!-- Pillars -->
-  <section class="practice-pillars section container">
-    <header class="practice-pillars__header">
-
-      <h2>What I bring to the room.</h2>
-    </header>
-
-    <div class="practice-pillars__grid">
-      {pillars.map((p, i) => (
-        <article class="practice-pillars__card">
-          <span class="practice-pillars__num">№ {String(i + 1).padStart(2, '0')}</span>
-          <h3>{p.title}</h3>
-          <p>{p.body}</p>
-          {p.link && (
-            <a href={p.link} class="practice-pillars__card-link">{p.linkText}</a>
-          )}
-        </article>
-      ))}
+  <!-- Hero: one column – headline, then the story at reading width -->
+  <section class="practice-hero">
+    <div class="container-wide practice-hero__inner">
+      <h1 class="practice-hero__title">
+        Let's write <span class="accent">your</span> story.
+      </h1>
+      <div class="practice-hero__side">
+        <p class="practice-hero__lede">
+          <b>Every company wants to write its success story.</b>
+          Some are stuck on the first chapter and can't get to the second.
+          Some are starting a new one: a new market, a new product. Some are
+          rewriting it under pressure, with the clock running. And some have
+          the best possible problem: the story is moving faster than the
+          company, and the team, the brand and the operating model need to catch
+          up – before the money starts going to the wrong things. I've been there –
+          through rapid expansion and downsizes, leadership shakeups, M&amp;A
+          processes, and the quiet moments when nobody knows what to say.
+        </p>
+      </div>
     </div>
-
-    <p class="practice-pillars__note">
-      Want to understand more about who I am and how I think before reaching out?
-      The <a href="/about">About page</a> has the path, the philosophy, and what
-      twenty years of this work has actually taught me.
-    </p>
   </section>
 
-  <hr class="rule" />
+  <!-- When to work with me: the heading holds its place while the four
+       moments scroll past on the right. -->
+  <section id="when" class="practice-section practice-moments" aria-labelledby="moments-title">
+    <div class="container-wide practice-split">
+      <header class="practice-split__head practice-split__head--sticky">
+        <p class="section-eyebrow">When to work with me</p>
+        <h2 id="moments-title" class="section-title">If you recognize yourself here…</h2>
+        <p class="practice-moments__aside">Investor with a portfolio company in one of these moments? Same conversation.</p>
+      </header>
+
+      <ol class="practice-moments__list">
+        {moments.map((m, i) => (
+          <li class="practice-moments__item">
+            <span class="num">№ {String(i + 1).padStart(2, '0')}</span>
+            <h3 class="practice-moments__title">{m.title}</h3>
+            <p class="practice-moments__body">{m.body}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <Testimonials featuredId="kristin-johnsen" eyebrow="" title="" />
 
   <!-- Engagement modes -->
-  <section class="practice-modes section container">
-    <header class="practice-modes__header">
+  <section id="modes" class="practice-section practice-modes" aria-labelledby="modes-title">
+    <div class="container-wide">
+      <h2 id="modes-title" class="section-title practice-head">Three ways to work together.</h2>
 
-      <h2>Three ways to work together.</h2>
-    </header>
-
-    <div class="practice-modes__grid">
-      {modes.map((m, i) => (
-        <article class="practice-modes__card">
-          <span class="practice-modes__num">№ {String(i + 1).padStart(2, '0')}</span>
-          <h3><span>{m.title}</span></h3>
-          <p>{m.body}</p>
-          <p class="practice-modes__fit">{m.fit}</p>
-        </article>
-      ))}
+      <ol class="modes-list">
+        {modes.map((m) => (
+          <li class="practice-modes__item">
+            <svg class="mode-glyph" viewBox="0 0 160 112" aria-hidden="true" focusable="false">
+              {m.glyph === 'seat' && (
+                <>
+                  <circle class="mode-glyph__org" cx="80" cy="56" r="46" />
+                  <circle class="mode-glyph__team" cx="60" cy="38" r="3.5" />
+                  <circle class="mode-glyph__team" cx="101" cy="40" r="3.5" />
+                  <circle class="mode-glyph__team" cx="58" cy="75" r="3.5" />
+                  <circle class="mode-glyph__team" cx="100" cy="76" r="3.5" />
+                  <circle class="mode-glyph__halo" cx="80" cy="57" r="16" />
+                  <circle class="mode-glyph__me" cx="80" cy="57" r="6.5" />
+                </>
+              )}
+              {m.glyph === 'beside' && (
+                <>
+                  <circle class="mode-glyph__org" cx="80" cy="56" r="46" />
+                  <circle class="mode-glyph__team" cx="62" cy="40" r="3.5" />
+                  <circle class="mode-glyph__team" cx="96" cy="38" r="3.5" />
+                  <circle class="mode-glyph__team" cx="66" cy="74" r="3.5" />
+                  <circle class="mode-glyph__team" cx="98" cy="73" r="3.5" />
+                  <circle class="mode-glyph__team" cx="80" cy="57" r="3.5" />
+                  <line class="mode-glyph__link" x1="128" y1="56" x2="146" y2="56" />
+                  <circle class="mode-glyph__halo" cx="154" cy="56" r="16" />
+                  <circle class="mode-glyph__me" cx="154" cy="56" r="6.5" />
+                </>
+              )}
+              {m.glyph === 'one' && (
+                <>
+                  <circle class="mode-glyph__room" cx="64" cy="56" r="30" />
+                  <circle class="mode-glyph__them" cx="52" cy="56" r="6.5" />
+                  <circle class="mode-glyph__halo" cx="77" cy="56" r="16" />
+                  <circle class="mode-glyph__me" cx="77" cy="56" r="6.5" />
+                </>
+              )}
+            </svg>
+            <p class="practice-modes__meta">{m.meta}</p>
+            <h3 class="practice-modes__title">{m.title}</h3>
+            <p class="practice-modes__fit">{m.fit}</p>
+            <p class="practice-modes__body">{m.body}</p>
+          </li>
+        ))}
+      </ol>
     </div>
   </section>
 
-  <Testimonials rowIds={["karen-clarke", "christina-nahal", "berin-sadikovic"]} />
+  <!-- Why me – what I bring to the room; the depth is on About -->
+  <section class="practice-section practice-why" aria-labelledby="why-title">
+    <div class="container-wide v2-split">
+      <header class="practice-why__head">
+        <p class="section-eyebrow">Why me</p>
+        <h2 id="why-title" class="section-title">What I bring to the room.</h2>
+      </header>
+      <div>
+        <ul class="practice-why__list">
+          {reasons.map((r) => (
+            <li class="practice-why__item">
+              <h3 class="practice-why__title">{r.title}</h3>
+              <div>
+                <p class="practice-why__body">{r.body}</p>
+                {r.link && (
+                  <a href={r.link} class="text-link practice-why__item-link">{r.linkText}</a>
+                )}
+              </div>
+            </li>
+          ))}
+        </ul>
+        <a href="/about" class="text-link practice-why__link">Learn more about me on the About page →</a>
+      </div>
+    </div>
+  </section>
+
+  <Testimonials
+    featuredId="nicolette-brenden"
+    rowIds={["karen-clarke", "christina-nahal", "berin-sadikovic", "benedikt-koppel"]}
+    title=""
+    lead
+  />
 
   <CTABlock
     id="book"
-    eyebrow="Are we a match?"
+    wide
+    night
+    eyebrow="How it starts"
     headline="The best way to know is a conversation."
-    body="Forty-five minutes. No deck, no pitch. I'll ask what's actually going on, and we'll see whether this makes sense for both of us."
-    ctaLabel="Reach out"
+    ctaLabel="Tell me your story →"
     ctaModal={true}
-    secondaryLabel="Read some writing first"
-    secondaryHref="/blog"
-  />
+  >
+    <ol class="night-steps">
+      {steps.map((st) => (
+        <li class="night-steps__item">
+          <span class="night-steps__num">{st.num}</span>
+          <h3 class="night-steps__title">{st.title}</h3>
+          <p class="night-steps__body">{st.body}</p>
+        </li>
+      ))}
+    </ol>
+  </CTABlock>
+  </div>
 </BaseLayout>
 
 <style>
-  /* -------- Hero -------- */
-  /* No max-width here – the container sets the frame so the left edge lines up
-     with every section below. Reading measure is capped per element instead. */
-  /* Top padding only. The section below brings its own 96px top padding, so
-     giving the hero a bottom padding too just stacks two gaps into one. */
-  .practice-hero {
-    padding-top: clamp(4rem, 4vw + 3rem, 7rem);
-    padding-bottom: 0;
+  /* Design principles v2: one paper ground with hairlines, type-led lists,
+     asymmetric two-column layouts, one action ("Tell me your story"). */
+
+  /* -------- Shared (eyebrow, title, text-link live in global.css) -------- */
+  .num {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: var(--text-mono-sm);
+    letter-spacing: var(--tracking-wide);
+    color: var(--color-cobalt);
+    font-weight: 500;
+    margin-bottom: var(--space-4);
   }
 
+  .practice-section {
+    padding-block: var(--space-24);
+    border-top: 0.5px solid var(--color-line);
+    scroll-margin-top: 64px;
+  }
+
+  /* Heading left, content right (≈5:7). */
+  .practice-split {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: clamp(40px, 6vw, 96px);
+    align-items: start;
+  }
+
+  .practice-split__head--sticky {
+    position: sticky;
+    top: 112px;
+  }
+
+  .practice-split--intro {
+    align-items: end;
+    margin-bottom: var(--space-16);
+  }
+
+  .practice-head { margin-bottom: var(--space-16); }
+
+  .practice-intro {
+    font-size: 16px;
+    line-height: var(--lh-normal);
+    color: var(--color-graphite);
+    max-width: 52ch;
+    margin: 0;
+  }
+  .practice-intro a {
+    color: var(--color-cobalt);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  /* -------- Hero -------- */
+  .practice-hero {
+    padding-block: clamp(4rem, 4vw + 3rem, 7rem) var(--space-24);
+  }
+
+  .practice-hero__inner {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(32px, 4vw, 56px);
+  }
+
+  /* Story text at a comfortable reading width under the headline. */
+  .practice-hero__side { max-width: 64ch; }
 
   .practice-hero__title {
     font-family: var(--font-display);
-    font-size: var(--text-hero);
-    line-height: 0.98;
-    letter-spacing: -0.035em;
-    margin-bottom: var(--space-6);
-    max-width: 14ch;
+    font-weight: 500;
+    font-size: clamp(52px, 7vw, 104px);
+    line-height: 0.96;
+    letter-spacing: var(--tracking-tighter);
+    color: var(--color-ink);
+    margin: 0;
+    text-wrap: balance;
   }
-  .practice-hero__title .accent {
-    color: var(--color-cobalt);
+
+  .practice-hero__title .accent { color: var(--color-cobalt); }
+
+  .practice-hero__lead {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(22px, 2vw, 28px);
+    line-height: 1.25;
+    letter-spacing: -0.015em;
+    color: var(--color-ink);
+    margin: 0 0 var(--space-4);
   }
 
   .practice-hero__lede {
     font-size: var(--text-lg);
     line-height: var(--lh-normal);
     color: var(--color-graphite);
-    max-width: 60ch;
+    margin: 0;
+  }
+  /* The opening line stands out; the rest reads as plain text. */
+  .practice-hero__lede b { color: var(--color-ink); font-weight: 500; }
+
+
+  /* -------- The four moments -------- */
+  .practice-moments__aside {
+    margin: var(--space-6) 0 0;
+    font-size: 16px;
+    line-height: var(--lh-normal);
+    color: var(--color-graphite);
+    max-width: 36ch;
   }
 
-  /* -------- Audiences -------- */
-  .practice-audiences__header {
-    margin-bottom: var(--space-10);
-    max-width: 680px;
-  }
-
-  .practice-modes__cta {
-    display: flex;
-    align-items: center;
-    width: fit-content;
-    margin-top: var(--space-12);
-    margin-inline: auto;
-    padding: 13px 22px;
-    border-radius: var(--radius-sm);
-    font-size: 14px;
-    font-weight: 500;
-    letter-spacing: 0.01em;
-    background: var(--color-cobalt);
-    color: var(--color-paper);
-    border: none;
-    cursor: pointer;
-    transition: background var(--dur-fast) var(--ease-out);
-  }
-
-  .practice-modes__cta:hover {
-    background: var(--color-ink);
-  }
-
-  .practice-audiences__header h2 {
-    font-family: var(--font-display);
-    font-size: var(--text-display);
-    letter-spacing: var(--tracking-tight);
-    margin-top: var(--space-3);
-  }
-
-  .practice-audiences__list {
+  .practice-moments__list {
     list-style: none;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .practice-audiences__item {
-    display: grid;
-    grid-template-columns: 72px 1fr;
-    gap: var(--space-8);
-    padding-block: var(--space-6);
-    border-top: 1px solid var(--color-line);
-    align-items: baseline;
-  }
-  .practice-audiences__item:last-child {
+    margin: 0;
+    padding: 0;
     border-bottom: 1px solid var(--color-line);
   }
 
-  .practice-audiences__num {
-    font-family: var(--font-mono);
-    font-size: var(--text-mono-sm);
-    letter-spacing: var(--tracking-wide);
-    text-transform: uppercase;
-    color: var(--color-cobalt);
-    font-weight: 500;
+  .practice-moments__item {
+    padding-block: var(--space-8);
+    border-top: 1px solid var(--color-line);
   }
 
-  .practice-audiences__title {
+  .practice-moments__title {
     font-family: var(--font-display);
-    font-size: 1.25rem;
-    line-height: 1.25;
-    letter-spacing: var(--tracking-tight);
+    font-weight: 500;
+    font-size: clamp(22px, 2.2vw, 28px);
+    line-height: 1.18;
+    letter-spacing: -0.015em;
     color: var(--color-ink);
-    margin-bottom: var(--space-2);
-    max-width: 40ch;
+    margin: 0 0 var(--space-3);
+    text-wrap: balance;
   }
 
-  .practice-audiences__aside {
-    margin-top: var(--space-6);
-    font-family: var(--font-accent);
-    font-style: italic;
+  .practice-moments__body {
+    font-size: 17px;
+    line-height: var(--lh-normal);
+    color: var(--color-graphite);
+    margin: 0;
+    max-width: 62ch;
+  }
+
+  /* -------- Typographic grid (pillars, modes) -------- */
+  .practice-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-12) var(--space-10);
+  }
+
+  .practice-grid__item {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid var(--color-line);
+    padding-top: var(--space-6);
+  }
+
+  .practice-grid__title {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(22px, 2vw, 26px);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: var(--color-ink);
+    margin: 0 0 var(--space-3);
+  }
+
+  .practice-grid__body {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--color-graphite);
+    margin: 0 0 var(--space-4);
+  }
+
+  .practice-grid__item .text-link { margin-top: auto; }
+
+  /* -------- Modes: three seats, three glyphs --------
+     The circle is the company, the cobalt dot is me: inside it, beside it,
+     or one to one with you. */
+  .modes-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-12) var(--space-10);
+  }
+
+  .practice-modes__item {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid var(--color-line);
+    padding-top: var(--space-8);
+  }
+
+  .mode-glyph {
+    width: 160px;
+    height: 112px;
+    margin: 0 0 var(--space-6) -34px;
+    overflow: visible;
+  }
+  .mode-glyph__org { fill: none; stroke: var(--color-ink); stroke-width: 1.25; }
+  .mode-glyph__room { fill: none; stroke: var(--color-ink); stroke-width: 1.25; stroke-dasharray: 3 4; }
+  .mode-glyph__team { fill: color-mix(in srgb, var(--color-ink) 35%, transparent); }
+  .mode-glyph__them { fill: var(--color-ink); }
+  .mode-glyph__link { stroke: var(--color-ink); stroke-width: 1.25; stroke-dasharray: 2 3; }
+  .mode-glyph__me { fill: var(--color-cobalt); }
+  .mode-glyph__halo {
+    fill: var(--color-glow-blue);
+    opacity: 0.22;
+    filter: blur(6px);
+  }
+  @keyframes mode-glow { 0%, 100% { opacity: 0.16; } 50% { opacity: 0.34; } }
+  @media (prefers-reduced-motion: no-preference) {
+    .mode-glyph__halo { animation: mode-glow 3.6s ease-in-out infinite; }
+    .practice-modes__item:nth-child(2) .mode-glyph__halo { animation-delay: 1.2s; }
+    .practice-modes__item:nth-child(3) .mode-glyph__halo { animation-delay: 2.4s; }
+  }
+
+  .practice-modes__meta {
+    font-family: var(--font-mono);
+    font-size: var(--text-mono-xs);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
     color: var(--color-ash);
+    margin: 0 0 var(--space-3);
   }
 
-  .practice-audiences__note {
-    font-size: 1.02rem;
-    line-height: var(--lh-normal);
-    color: var(--color-ink);
-    max-width: 62ch;
-  }
-
-  /* -------- Modes -------- */
-  .practice-modes__header {
-    margin-bottom: var(--space-10);
-    max-width: 680px;
-  }
-  .practice-modes__header h2 {
+  .practice-modes__title {
     font-family: var(--font-display);
-    font-size: var(--text-display);
-    letter-spacing: var(--tracking-tight);
-    margin-top: var(--space-3);
-  }
-
-  .practice-modes__grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--space-6);
-  }
-
-  .practice-modes__card {
-    background: var(--color-white);
-    border: 0.5px solid var(--color-line);
-    padding: var(--space-7);
-    border-radius: var(--radius-md);
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-3);
-  }
-
-  .practice-modes__num {
-    font-family: var(--font-mono);
-    font-size: var(--text-mono-sm);
-    letter-spacing: var(--tracking-wide);
-    text-transform: uppercase;
-    color: var(--color-cobalt);
     font-weight: 500;
-  }
-
-  .practice-modes__card h3 {
-    font-family: var(--font-display);
-    font-size: var(--text-xl);
-    line-height: 1.4;
-    letter-spacing: var(--tracking-tight);
+    font-size: clamp(28px, 2.8vw, 38px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
     color: var(--color-ink);
+    margin: 0 0 var(--space-4);
   }
 
-  .practice-modes__card h3 span {
-    color: var(--color-paper);
-    background-color: var(--color-cobalt);
-    padding: 2px 6px;
-    box-decoration-break: clone;
-    -webkit-box-decoration-break: clone;
-  }
-
-  .practice-modes__card p {
-    font-size: 0.98rem;
-    line-height: var(--lh-normal);
-    color: var(--color-graphite);
-  }
-
+  /* "Right for you if…" comes first – it's how you choose. */
   .practice-modes__fit {
-    margin-top: auto;
-    padding-top: var(--space-4);
-    border-top: 1px solid var(--color-line);
-    font-size: 0.9rem !important;
-    color: var(--color-ink) !important;
-    font-style: italic;
-  }
-
-  /* -------- Pillars -------- */
-  .practice-pillars__intro {
-    font-size: 1.05rem;
-    line-height: var(--lh-prose);
-    color: var(--color-graphite);
-    max-width: 62ch;
-    margin-bottom: var(--space-10);
-  }
-
-  .practice-pillars__header {
-    margin-bottom: var(--space-10);
-    max-width: 680px;
-  }
-  .practice-pillars__header h2 {
-    font-family: var(--font-display);
-    font-size: var(--text-display);
-    letter-spacing: var(--tracking-tight);
-    margin-top: var(--space-3);
-  }
-
-  .practice-pillars__grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--space-6);
-  }
-
-  .practice-pillars__card {
-    background: var(--color-white);
-    border: 0.5px solid var(--color-line);
-    padding: var(--space-8);
-    border-radius: var(--radius-md);
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-3);
-  }
-
-  .practice-pillars__num {
-    font-family: var(--font-mono);
-    font-size: var(--text-mono-sm);
-    letter-spacing: var(--tracking-wide);
-    text-transform: uppercase;
-    color: var(--color-cobalt);
-    font-weight: 500;
-  }
-
-  .practice-pillars__card h3 {
-    font-family: var(--font-display);
-    font-size: var(--text-xl);
-    letter-spacing: var(--tracking-tight);
+    font-size: 18px;
+    line-height: 1.5;
     color: var(--color-ink);
+    margin: 0 0 var(--space-5);
   }
 
-  .practice-pillars__card p {
-    font-size: 0.98rem;
-    line-height: var(--lh-normal);
+  .practice-modes__body {
+    font-size: 15.5px;
+    line-height: 1.6;
     color: var(--color-graphite);
+    margin: 0;
+    padding-top: var(--space-5);
+    border-top: 0.5px solid var(--color-line);
   }
 
-  .practice-pillars__card-link {
-    font-size: 0.9rem;
-    color: var(--color-cobalt);
-    text-decoration: underline;
-    text-underline-offset: 3px;
-    margin-top: auto;
-  }
-
-  /* -------- Process -------- */
-  .practice-process__header {
-    margin-bottom: var(--space-10);
-    max-width: 680px;
-  }
-
-  .practice-process__header h2 {
-    font-family: var(--font-display);
-    font-size: var(--text-display);
-    letter-spacing: var(--tracking-tight);
-    margin-top: var(--space-3);
-  }
-
-  .practice-process__list {
+  /* -------- Why me: four lines, hairlines -------- */
+  .practice-why__link { display: inline-block; margin-top: var(--space-8); }
+  .practice-why__item-link { display: inline-block; margin-top: var(--space-3); font-size: 15px; }
+  .practice-why__list {
     list-style: none;
-    display: flex;
-    flex-direction: column;
-    max-width: 760px;
-  }
-
-  .practice-process__item {
-    display: grid;
-    grid-template-columns: 80px 1fr;
-    gap: var(--space-8);
-    padding-block: var(--space-6);
-    border-top: 1px solid var(--color-line);
-    align-items: baseline;
-  }
-  .practice-process__item:last-child {
+    margin: 0;
+    padding: 0;
     border-bottom: 1px solid var(--color-line);
   }
-
-  .practice-process__num {
-    font-family: var(--font-mono);
-    font-size: var(--text-base);
-    color: var(--color-cobalt);
-    font-weight: 500;
-    letter-spacing: var(--tracking-mono);
+  .practice-why__item {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    gap: var(--space-8);
+    align-items: baseline;
+    padding-block: var(--space-6);
+    border-top: 1px solid var(--color-line);
   }
-
-  .practice-process__content h3 {
+  .practice-why__title {
     font-family: var(--font-display);
-    font-size: var(--text-lg);
-    letter-spacing: var(--tracking-tight);
+    font-weight: 500;
+    font-size: clamp(20px, 1.8vw, 24px);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
     color: var(--color-ink);
-    margin-bottom: var(--space-2);
+    margin: 0;
   }
-
-  .practice-process__content p {
-    font-size: 1.02rem;
-    line-height: var(--lh-normal);
+  .practice-why__body {
+    font-size: 16px;
+    line-height: 1.55;
     color: var(--color-graphite);
-    max-width: 58ch;
+    margin: 0;
+  }
+  @media (max-width: 640px) {
+    .practice-why__item { grid-template-columns: 1fr; gap: var(--space-2); }
   }
 
-  .practice-pillars__note {
-    margin-top: var(--space-10);
-    font-size: 0.95rem;
-    line-height: var(--lh-normal);
-    color: var(--color-graphite);
+  /* -------- How it starts (inside the night band) -------- */
+  .night-steps {
+    list-style: none;
+    margin: var(--space-10) 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-10);
+    max-width: 1080px;
   }
-
-  .practice-pillars__note a {
-    color: var(--color-cobalt);
-    text-decoration: underline;
-    text-underline-offset: 3px;
+  .night-steps__item {
+    border-top: 1px solid color-mix(in srgb, var(--color-night-powder) 28%, transparent);
+    padding-top: var(--space-5);
   }
-
-  /* -------- Bridge -------- */
-  .practice-bridge {
-    padding-block: var(--space-10);
+  .night-steps__num {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: var(--text-mono-sm);
+    letter-spacing: var(--tracking-wide);
+    color: var(--color-night-powder);
+    margin-bottom: var(--space-3);
   }
-
-  .practice-bridge p {
-    font-size: 1.05rem;
-    line-height: var(--lh-prose);
-    color: var(--color-graphite);
+  .night-steps__title {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    color: var(--color-paper);
+    margin: 0 0 var(--space-2);
   }
-
-  .practice-bridge a {
-    color: var(--color-cobalt);
-    text-decoration: underline;
-    text-underline-offset: 3px;
+  .night-steps__body {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--color-night-haze);
+    margin: 0;
   }
 
   /* -------- Responsive -------- */
+  @media (max-width: 1000px) {
+    .practice-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .modes-list { grid-template-columns: 1fr; gap: var(--space-4); }
+    .practice-modes__item { display: grid; grid-template-columns: 180px minmax(0, 1fr); column-gap: var(--space-8); }
+    .practice-modes__item > * { grid-column: 2; }
+    .practice-modes__item > .mode-glyph { grid-column: 1; grid-row: 1 / span 4; }
+    .night-steps { grid-template-columns: 1fr; gap: var(--space-6); }
+  }
+
   @media (max-width: 800px) {
-    .practice-pillars__grid { grid-template-columns: 1fr; }
-    .practice-modes__grid { grid-template-columns: 1fr; }
-    .practice-audiences__item {
-      grid-template-columns: 1fr;
-      gap: var(--space-2);
-    }
-    .practice-process__item {
-      grid-template-columns: 1fr;
-      gap: var(--space-2);
-    }
+    .practice-split { grid-template-columns: 1fr; }
+    .practice-split__head--sticky { position: static; }
+    .practice-split--intro { margin-bottom: var(--space-10); }
+  }
+
+  @media (max-width: 640px) {
+    .practice-section { padding-block: var(--space-16); }
+    .practice-grid { grid-template-columns: 1fr; }
+    .practice-modes__item { display: flex; }
+    .mode-glyph { width: 128px; height: 90px; margin-left: -27px; }
   }
 </style>

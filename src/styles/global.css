@@ -238,3 +238,182 @@ em { font-style: italic; }
   .section { padding-block: var(--space-16); }
   .section-tight { padding-block: var(--space-12); }
 }
+
+
+/* ============================================================
+   Night band – moving gradient light + grain
+   Used by the homepage hero and the closing CTA band. Structure:
+   <div class="night-bg" aria-hidden="true">
+     <span class="night-bg__blob night-bg__blob--N"></span> …
+     <span class="night-bg__grain"></span>
+   </div>
+   Blob placement/colour lives with each component; motion and grain here.
+   ============================================================ */
+.night-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: var(--color-night);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.night-bg__blob {
+  position: absolute;
+  border-radius: 50%;
+  will-change: transform;
+}
+
+.night-bg__blob--1 { animation: night-drift-1 64s ease-in-out infinite; }
+.night-bg__blob--2 { animation: night-drift-2 82s ease-in-out infinite; }
+.night-bg__blob--3 { animation: night-drift-3 71s ease-in-out infinite; mix-blend-mode: screen; }
+
+.night-bg__grain {
+  position: absolute;
+  inset: 0;
+  background-image: url("/images/noise.png");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+  opacity: 0.36;
+  mix-blend-mode: overlay;
+}
+
+@keyframes night-drift-1 {
+  0%   { transform: translate(0, 0) scale(1); }
+  20%  { transform: translate(-170px, 70px) scale(1.05); }
+  45%  { transform: translate(140px, 150px) scale(0.97); }
+  70%  { transform: translate(260px, -60px) scale(1.03); }
+  100% { transform: translate(0, 0) scale(1); }
+}
+
+@keyframes night-drift-2 {
+  0%   { transform: translate(0, 0) scale(1); }
+  25%  { transform: translate(260px, -90px) scale(1.04); }
+  50%  { transform: translate(110px, 130px) scale(0.96); }
+  75%  { transform: translate(-140px, 60px) scale(1.06); }
+  100% { transform: translate(0, 0) scale(1); }
+}
+
+@keyframes night-drift-3 {
+  0%   { transform: translate(0, 0) scale(1); }
+  30%  { transform: translate(-120px, -80px) scale(1.08); }
+  60%  { transform: translate(90px, -140px) scale(0.94); }
+  100% { transform: translate(0, 0) scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .night-bg__blob { animation: none; }
+}
+
+
+/* ============================================================
+   v2 primitives (design principles v2, Oct 2026)
+   Shared by Practice, About and AIMA. Pages can still scope their
+   own versions; these are the defaults.
+   ============================================================ */
+
+/* Accent words inside headlines keep the headline's weight – the color
+   marks the word, not a heavier cut. (The footer's bold "stories." is a
+   paragraph, not a heading, and keeps its own weight.) */
+h1 .accent,
+h2 .accent { font-weight: inherit; }
+
+.section-eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--text-mono-sm);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-cobalt);
+  font-weight: 500;
+  margin: 0 0 var(--space-4);
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: var(--text-display);
+  line-height: 1.04;
+  letter-spacing: var(--tracking-tight);
+  color: var(--color-ink);
+  margin: 0;
+  text-wrap: balance;
+}
+
+.text-link {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--color-cobalt);
+}
+.text-link:hover { color: var(--color-ink); }
+
+/* Underlined ink link – the quiet secondary action next to a button. */
+.ink-link {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--color-ink);
+  text-decoration: underline;
+  text-underline-offset: 5px;
+  text-decoration-color: color-mix(in srgb, var(--color-ink) 30%, transparent);
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+.ink-link:hover { text-decoration-color: var(--color-cobalt); }
+
+/* The one primary button, cobalt on paper. */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  font-weight: 500;
+  font-size: 15px;
+  padding: 14px 24px;
+  border-radius: var(--radius-sm);
+  letter-spacing: 0.01em;
+  background: var(--color-cobalt);
+  color: var(--color-white);
+  border: 0;
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-out);
+}
+.btn-primary:hover { background: var(--color-ink); color: var(--color-paper); }
+
+/* Hairline-topped section on the one paper ground. */
+.v2-section {
+  padding-block: var(--space-24);
+  border-top: 0.5px solid var(--color-line);
+  scroll-margin-top: 64px;
+}
+@media (max-width: 640px) {
+  .v2-section { padding-block: var(--space-16); }
+}
+
+/* Heading left, content right (≈5:7). */
+.v2-split {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: clamp(40px, 6vw, 96px);
+  align-items: start;
+}
+.v2-sticky { position: sticky; top: 112px; }
+@media (max-width: 860px) {
+  .v2-split { grid-template-columns: 1fr; }
+  .v2-sticky { position: static; }
+}
+
+/* Lit text – words go from ash to ink as they cross the reading line.
+   CSS scroll-driven animation where supported; plain ink everywhere else.
+   Markup: <p class="lit"><span>word</span> <span>word</span>…</p> */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .lit > span {
+      animation: lit-word linear both;
+      animation-timeline: view();
+      animation-range: cover 18% cover 42%;
+    }
+  }
+}
+@keyframes lit-word {
+  from { color: color-mix(in srgb, var(--color-ink) 22%, transparent); }
+  to   { color: var(--color-ink); }
+}

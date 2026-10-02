@@ -1,12 +1,15 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import CTABlock from '../components/CTABlock.astro';
+import GlowBackground from '../components/GlowBackground.astro';
+import AimaCone from '../components/AimaCone.astro';
 
 /* ---------------------------------------------------------------
-   The AI Marketing Ascendancy Framework — flagship page (FRAST-10)
-   Framing prose rewritten in Stève's voice (FRAST-73). Tables and
-   maturity/growth content kept structural; four interactive modules
-   replace the long linear tables. Palette: Paper/Ink/Cobalt/Mist only.
+   The AI Marketing Ascendancy Framework – flagship page.
+   Design principles v2: one paper ground with hairlines, type-led
+   tables instead of cards, and the cone as the page's instrument –
+   drawn once in the hero, then used to walk the five stages in the
+   maturity model (blue is where you are, coral where you're going).
    --------------------------------------------------------------- */
 
 const howToUse = [
@@ -208,58 +211,68 @@ const crossCutting = [
   { name: `Governance`, body: `Clear policies for internal and external content use, accountability models, and documentation.` },
 ];
 
+// Where each of the "five ways in" leads on this page.
+const wayTargets = ['#what-changes', '#use-cases', '#maturity', '#growth', '#cross-cutting'];
+const stageNames = pillars[0].stages.map((s) => s.name);
+const toc = [
+  { href: '#challenges', label: `Why it's hard` },
+  { href: '#how-to-use', label: 'How to use it' },
+  { href: '#what-changes', label: 'The challenges' },
+  { href: '#use-cases', label: 'Use cases' },
+  { href: '#economics', label: 'The economics' },
+  { href: '#maturity', label: 'Maturity model' },
+  { href: '#growth', label: 'Growth framework' },
+  { href: '#cross-cutting', label: 'Cross-cutting' },
+  { href: '#how-this-was-made', label: 'How this was made' },
+];
 ---
 
 <BaseLayout
   title="The AI Marketing Ascendancy Framework"
   description="A practical framework for moving marketing teams from AI-curious to AI-confident: the challenges, a use-case library, and a maturity model across people, processes, and technology."
 >
-  <div class="aima-body">
+  <div class="glow-scope">
+  <GlowBackground strength={0.3} dimTo={0.3} coral={false} />
+
+  <!-- Hero: the name, the why, and the cone drawing itself once -->
+  <section class="aima-hero" id="intro">
+    <div class="container-wide">
+      <div class="aima-hero__top">
+        <p class="section-eyebrow">Framework <span class="aima-version">v2.0</span></p>
+        <h1 class="aima-hero__title">The AI Marketing <span class="accent">Ascendancy</span> Framework.</h1>
+        <p class="aima-hero__lede">
+          I built this framework because I couldn't find one that met my needs – so I made what I
+          wished existed. It's here to help you and your team move from AI-curious to AI-confident.
+          It walks through the challenges (inside the team and outside it), maps practical use cases
+          across the marketing value chain, and lays out a maturity model across People, Processes,
+          and Technology. There's also a role-based growth framework – what AI fluency should look
+          like as a marketer moves from junior to lead.
+        </p>
+      </div>
+
+      <div class="aima-hero__cone">
+        <AimaCone uid="aima-hero" mode="once" w={1200} h={220} />
+      </div>
+    </div>
+  </section>
+
+  <div class="aima-body container-wide">
     <aside class="aima-toc" aria-label="On this page">
       <span class="aima-toc__label">On this page</span>
       <nav>
-        <a href="#intro" class="aima-toc__link">Intro</a>
-        <a href="#challenges" class="aima-toc__link">Why it's hard</a>
-        <a href="#how-to-use" class="aima-toc__link">How to use it</a>
-        <a href="#what-changes" class="aima-toc__link">The challenges</a>
-        <a href="#use-cases" class="aima-toc__link">Use cases</a>
-        <a href="#economics" class="aima-toc__link">The economics</a>
-        <a href="#maturity" class="aima-toc__link">Maturity model</a>
-        <a href="#growth" class="aima-toc__link">Growth framework</a>
-        <a href="#cross-cutting" class="aima-toc__link">Cross-cutting</a>
+        {toc.map((t, i) => (
+          <a href={t.href} class="aima-toc__link"><span>{String(i + 1).padStart(2, '0')}</span>{t.label}</a>
+        ))}
       </nav>
     </aside>
+
     <div class="aima-main">
 
-  <!-- Hero -->
-  <section class="aima-hero" id="intro">
-    <div class="aima-eyebrow-row">
-      <span class="eyebrow">Framework</span>
-      <span class="aima-version">v2.0</span>
-    </div>
-    <h1 class="aima-hero__title">The AI Marketing Ascendancy Framework</h1>
-    <p class="aima-hero__lede">
-      I built this framework because I couldn't find one that met my needs – so I made what I
-      wished existed. It's here to help you and your team move from AI-curious to AI-confident.
-      It walks through the challenges (inside the team and outside it), maps practical use cases
-      across the marketing value chain, and lays out a maturity model across People, Processes,
-      and Technology. There's also a role-based growth framework – what AI fluency should look
-      like as a marketer moves from junior to lead.
-    </p>
-    <p class="aima-disclosure">
-      This framework was built with AI – the first version with ChatGPT, this one with Claude.
-      The switch reflects my own path with AI, where choosing the right tool, and knowing when
-      to change it, is part of the work. The structure, direction, and thinking are mine, drawn
-      from hands-on work with marketing teams; AI supported drafting and refinement under human
-      guidance.
-    </p>
-  </section>
-
   <!-- Why it isn't plug-and-play -->
-  <section class="aima-section" id="challenges">
-    <header class="aima-section__head">
-      <p class="eyebrow">The challenge</p>
-      <h2>Why AI adoption isn't a plug-and-play move</h2>
+  <section class="aima-section aima-section--first" id="challenges">
+    <header class="aima-head">
+      <p class="section-eyebrow">The challenge</p>
+      <h2 class="section-title">Why AI adoption isn't a plug-and-play move.</h2>
     </header>
     <div class="aima-prose">
       <p>
@@ -278,83 +291,69 @@ const crossCutting = [
         where the ethics sit. And it lands at the same time as a shift we don't control – how
         people discover, trust, and engage with brands in an AI-mediated world.
       </p>
-      <blockquote class="aima-pull">
-        Those who adapt will amplify their impact. Those who don't risk becoming invisible.
-      </blockquote>
     </div>
+    <blockquote class="aima-pull">
+      Those who adapt will amplify their impact. Those who don't risk becoming <span class="aima-pull__fade">invisible.</span>
+    </blockquote>
   </section>
 
-  <!-- How to use -->
+  <!-- How to use: each way in jumps to its section -->
   <section class="aima-section" id="how-to-use">
-    <header class="aima-section__head">
-      <p class="eyebrow">How to use this</p>
-      <h2>Five ways in</h2>
+    <header class="aima-head">
+      <p class="section-eyebrow">How to use this</p>
+      <h2 class="section-title">Five ways in.</h2>
     </header>
-    <ol class="aima-steps">
+    <ol class="aima-ways">
       {howToUse.map((s, i) => (
-        <li class="aima-steps__item">
-          <span class="aima-steps__num">№ {String(i + 1).padStart(2, '0')}</span>
-          <div>
-            <h3>{s.title}</h3>
-            <p>{s.body}</p>
-          </div>
+        <li>
+          <a href={wayTargets[i]} class="aima-ways__row">
+            <span class="aima-num">№ {String(i + 1).padStart(2, '0')}</span>
+            <span class="aima-ways__title">{s.title}</span>
+            <span class="aima-ways__body">{s.body}</span>
+            <span class="aima-ways__arrow" aria-hidden="true">↓</span>
+          </a>
         </li>
       ))}
     </ol>
   </section>
 
-  <hr class="rule" />
-
-  <!-- Challenges: interactive internal/external toggle -->
+  <!-- Challenges: inside the team / out in the market -->
   <section class="aima-section" id="what-changes">
-    <header class="aima-section__head">
-      <p class="eyebrow">The challenges, up close</p>
-      <h2>What AI is actually changing</h2>
-      <p class="aima-section__sub">The same pressures show up in two places – inside the team, and out in the market. Switch between them.</p>
+    <header class="aima-head">
+      <p class="section-eyebrow">The challenges, up close</p>
+      <h2 class="section-title">What AI is actually changing.</h2>
+      <p class="aima-sub">The same pressures show up in two places – inside the team, and out in the market. Switch between them.</p>
     </header>
 
     <div class="aima-switch" data-switch>
-      <div class="aima-seg" role="tablist" aria-label="Challenge scope">
-        <button class="aima-seg__btn" data-switch-btn="internal" aria-pressed="true">Internal <span class="aima-seg__count">7</span></button>
-        <button class="aima-seg__btn" data-switch-btn="external" aria-pressed="false">External <span class="aima-seg__count">6</span></button>
+      <div class="aima-tabs" role="tablist" aria-label="Challenge scope">
+        <button type="button" role="tab" class="aima-tab" data-switch-btn="internal" aria-selected="true">Inside the team <span>7</span></button>
+        <button type="button" role="tab" class="aima-tab" data-switch-btn="external" aria-selected="false" tabindex="-1">Out in the market <span>6</span></button>
       </div>
 
-      <div class="aima-cardgrid" data-switch-panel="internal">
-        {challengesInternal.map((c) => (
-          <article class="aima-chal">
-            <h3 class="aima-chal__name">{c.name}</h3>
-            <p class="aima-chal__desc">{c.desc}</p>
-            <div class="aima-chal__impact">
-              <span class="aima-chal__label">Forces you to</span>
-              <p>{c.impact}</p>
+      {[{ key: 'internal', items: challengesInternal }, { key: 'external', items: challengesExternal }].map((set, k) => (
+        <div class="aima-table aima-table--chal" role="tabpanel" data-switch-panel={set.key} hidden={k !== 0}>
+          <div class="aima-table__head" aria-hidden="true">
+            <span>The pressure</span><span>What's happening</span><span>Forces you to</span>
+          </div>
+          {set.items.map((c) => (
+            <div class="aima-table__row">
+              <h3 class="aima-table__name">{c.name}</h3>
+              <p class="aima-table__cell">{c.desc}</p>
+              <p class="aima-table__cell aima-table__cell--ink"><span class="aima-table__inline">Forces you to</span>{c.impact}</p>
             </div>
-          </article>
-        ))}
-      </div>
-
-      <div class="aima-cardgrid" data-switch-panel="external" hidden>
-        {challengesExternal.map((c) => (
-          <article class="aima-chal">
-            <h3 class="aima-chal__name">{c.name}</h3>
-            <p class="aima-chal__desc">{c.desc}</p>
-            <div class="aima-chal__impact">
-              <span class="aima-chal__label">Forces you to</span>
-              <p>{c.impact}</p>
-            </div>
-          </article>
-        ))}
-      </div>
+          ))}
+        </div>
+      ))}
     </div>
   </section>
 
-  <hr class="rule" />
-
-  <!-- Use cases: expandable cards -->
+  <!-- Use cases: one row per function, opens in place -->
   <section class="aima-section" id="use-cases">
-    <header class="aima-section__head">
-      <p class="eyebrow">Use-case library</p>
-      <h2>Where AI actually helps</h2>
-      <div class="aima-section__sub">
+    <header class="aima-head">
+      <p class="section-eyebrow">Use-case library</p>
+      <h2 class="section-title">Where AI actually helps.</h2>
+      <div class="aima-sub">
         <p>
           A working list of where AI actually helps, grouped by function. It's not exhaustive –
           it's here to spark ideas about what's possible, and just as often to flag where a human
@@ -367,24 +366,27 @@ const crossCutting = [
       </div>
     </header>
 
-    <div class="aima-uc__grid">
+    <div class="aima-uc">
       {useCases.map((u, i) => (
-        <details class="aima-uc" open={i === 0}>
+        <details class="aima-uc__item" open={i === 0}>
           <summary class="aima-uc__summary">
             <span class="aima-uc__name">{u.name}</span>
-            <span class="aima-uc__meta">{u.chips.length} use cases<span class="aima-uc__sign" aria-hidden="true"></span></span>
+            <span class="aima-uc__count">{u.chips.length} use cases</span>
+            <span class="aima-uc__sign" aria-hidden="true"></span>
           </summary>
           <div class="aima-uc__body">
-            <div class="aima-uc__chips">
-              {u.chips.map((ch) => <span class="aima-uc__chip">{ch}</span>)}
-            </div>
-            <div class="aima-note aima-note--good">
-              <span class="aima-note__label">AI works well for</span>
-              <p>{u.worksWell}</p>
-            </div>
-            <div class="aima-note aima-note--caution">
-              <span class="aima-note__label">Use with caution</span>
-              <p>{u.caution}</p>
+            <ul class="aima-uc__chips">
+              {u.chips.map((ch) => <li>{ch}</li>)}
+            </ul>
+            <div class="aima-uc__notes">
+              <div>
+                <span class="aima-label">AI works well for</span>
+                <p>{u.worksWell}</p>
+              </div>
+              <div>
+                <span class="aima-label aima-label--ash">Use with caution</span>
+                <p>{u.caution}</p>
+              </div>
             </div>
           </div>
         </details>
@@ -392,13 +394,11 @@ const crossCutting = [
     </div>
   </section>
 
-  <hr class="rule" />
-
   <!-- The economics of AI -->
   <section class="aima-section" id="economics">
-    <header class="aima-section__head">
-      <p class="eyebrow">The economics</p>
-      <h2>AI feels free. It isn't.</h2>
+    <header class="aima-head">
+      <p class="section-eyebrow">The economics</p>
+      <h2 class="section-title">AI feels free. It isn't.</h2>
     </header>
     <div class="aima-prose">
       <p>
@@ -415,79 +415,72 @@ const crossCutting = [
         question anymore. It's a budget one.
       </p>
     </div>
-    <div class="aima-cardgrid" style="margin-top: var(--space-10);">
-      <article class="aima-chal">
-        <h3 class="aima-chal__name">A token isn't free</h3>
-        <p class="aima-chal__desc">The per-use cost hides at small scale and shows up hard at volume. Know the unit cost before you automate something that runs thousands of times a month.</p>
-      </article>
-      <article class="aima-chal">
-        <h3 class="aima-chal__name">Cheaper than a person? Do the math</h3>
-        <p class="aima-chal__desc">Sometimes AI wins on cost, sometimes a person does it right the first time. It's a calculation, not an assumption – and it changes per task.</p>
-      </article>
-      <article class="aima-chal">
-        <h3 class="aima-chal__name">The budget is moving</h3>
-        <p class="aima-chal__desc">AI is shifting from a central experimentation budget to each function's P&amp;L. When it lands on your line, the cost is yours to own – so understand it now.</p>
-      </article>
-    </div>
+    <ol class="aima-cols aima-cols--3">
+      <li>
+        <h3 class="aima-cols__title">A token isn't free</h3>
+        <p>The per-use cost hides at small scale and shows up hard at volume. Know the unit cost before you automate something that runs thousands of times a month.</p>
+      </li>
+      <li>
+        <h3 class="aima-cols__title">Cheaper than a person? Do the math</h3>
+        <p>Sometimes AI wins on cost, sometimes a person does it right the first time. It's a calculation, not an assumption – and it changes per task.</p>
+      </li>
+      <li>
+        <h3 class="aima-cols__title">The budget is moving</h3>
+        <p>AI is shifting from a central experimentation budget to each function's P&amp;L. When it lands on your line, the cost is yours to own – so understand it now.</p>
+      </li>
+    </ol>
   </section>
 
-  <hr class="rule" />
-
-  <!-- Maturity model: tabbed pillars + stepper -->
+  <!-- Maturity model: the cone as the instrument, then each pillar in depth -->
   <section class="aima-section" id="maturity">
-    <header class="aima-section__head">
-      <p class="eyebrow">Maturity model</p>
-      <h2>Where your team stands</h2>
-      <p class="aima-section__sub">Three pillars, five stages each. Move from AI-curious to AI-fluent while keeping ethics, quality, and creativity. Pick a pillar, then walk the stages.</p>
+    <header class="aima-head">
+      <p class="section-eyebrow">Maturity model</p>
+      <h2 class="section-title">Where you stand.</h2>
+      <p class="aima-sub">Five stages for people, processes and tech each.</p>
     </header>
 
-    <div class="aima-switch aima-maturity" data-switch>
+    <div class="aima-instrument">
+      <AimaCone uid="aima-scrub" mode="scrub" w={1000} h={180} stages={stageNames}>
+        {stageNames.map((name, j) => (
+          <div class="aima-stage" data-stage-panel={j} hidden={j !== 0}>
+            <p class="aima-stage__title"><span class="aima-label">Stage {String(j + 1).padStart(2, '0')}</span>{name}</p>
+            <div class="aima-stage__grid">
+              {pillars.map((p) => (
+                <div class="aima-stage__cell">
+                  <span class="aima-label aima-label--ash">{p.label}</span>
+                  <p>{p.stages[j].desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </AimaCone>
+    </div>
+
+    <h3 class="aima-subhead">Inside each pillar</h3>
+
+    <div class="aima-switch" data-switch>
       <div class="aima-tabs" role="tablist" aria-label="Maturity pillar">
         {pillars.map((p, i) => (
-          <button class="aima-tab" data-switch-btn={p.key} aria-pressed={i === 0 ? 'true' : 'false'}>{p.label}</button>
+          <button type="button" role="tab" class="aima-tab" data-switch-btn={p.key} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? undefined : -1}>{p.label} <span>{p.subdomains.length}</span></button>
         ))}
       </div>
 
       {pillars.map((p, i) => (
-        <div class="aima-pillar" data-switch-panel={p.key} hidden={i !== 0}>
+        <div class="aima-pillar" role="tabpanel" data-switch-panel={p.key} hidden={i !== 0}>
           <p class="aima-pillar__intro">{p.intro}</p>
-
-          <div class="aima-subgrid">
-            {p.subdomains.map((sd) => (
-              <div class="aima-sub">
-                <div class="aima-sub__name">{sd.name}</div>
-                <div class="aima-sub__act">{sd.activity}</div>
-                <dl class="aima-sub__meta">
-                  <div class="aima-sub__row">
-                    <dt>Maturity indicator</dt>
-                    <dd>{sd.indicator}</dd>
-                  </div>
-                  <div class="aima-sub__row">
-                    <dt>Metrics to consider</dt>
-                    <dd>{sd.metrics}</dd>
-                  </div>
-                </dl>
-              </div>
-            ))}
-          </div>
-
-          <div class="aima-stepper" data-switch>
-            <span class="aima-stepper__label">Stage progression — click to walk it</span>
-            <div class="aima-steps-row" role="tablist" aria-label={`${p.label} stages`}>
-              {p.stages.map((st, j) => (
-                <button class="aima-step" data-switch-btn={`s${j}`} aria-pressed={j === 0 ? 'true' : 'false'}>
-                  <span class="aima-step__n">{j + 1}</span>
-                  <span class="aima-step__name">{st.name}</span>
-                </button>
-              ))}
+          <div class="aima-table aima-table--sub">
+            <div class="aima-table__head" aria-hidden="true">
+              <span>Subdomain</span><span>Maturity indicator</span><span>Metrics to consider</span>
             </div>
-            {p.stages.map((st, j) => (
-              <div class="aima-stage" data-switch-panel={`s${j}`} hidden={j !== 0}>
-                <div class="aima-stage__head">
-                  <span class="aima-stage__num">Stage {j + 1}</span>
-                  <span class="aima-stage__name">{st.name}</span>
+            {p.subdomains.map((sd) => (
+              <div class="aima-table__row">
+                <div>
+                  <h4 class="aima-table__name">{sd.name}</h4>
+                  <p class="aima-table__act">{sd.activity}</p>
                 </div>
-                <p>{st.desc}</p>
+                <p class="aima-table__cell aima-table__cell--ink"><span class="aima-table__inline">Maturity indicator</span>{sd.indicator}</p>
+                <p class="aima-table__cell"><span class="aima-table__inline">Metrics to consider</span>{sd.metrics}</p>
               </div>
             ))}
           </div>
@@ -495,9 +488,9 @@ const crossCutting = [
       ))}
     </div>
 
-    <!-- Make the progress visible (FRAST-73 addition; ties to the 5-15) -->
+    <!-- Make the progress visible (ties to the 5-15) -->
     <aside class="aima-callout">
-      <span class="aima-callout__label">One thing worth making explicit</span>
+      <span class="aima-label">One thing worth making explicit</span>
       <p>
         Make the progress visible. The teams that get good at this treat their AI use like
         show-and-tell – what someone tried this week, what worked, what flopped. I'd run it
@@ -508,40 +501,36 @@ const crossCutting = [
     </aside>
   </section>
 
-  <hr class="rule" />
-
   <!-- Growth framework: role selector -->
   <section class="aima-section" id="growth">
-    <header class="aima-section__head">
-      <p class="eyebrow">Marketer growth framework</p>
-      <h2>What AI fluency looks like at your level</h2>
-      <p class="aima-section__sub">
+    <header class="aima-head">
+      <p class="section-eyebrow">Marketer growth framework</p>
+      <h2 class="section-title">What AI fluency looks like at your level.</h2>
+      <p class="aima-sub">
         Pick a level and see how the four dimensions shift. Adapted from the Developer Growth
         Framework by Tamara Buckland (@LadyGalaxyNZ), updated for AI.
       </p>
     </header>
 
     <div class="aima-switch" data-switch>
-      <div class="aima-tabs" role="tablist" aria-label="Seniority level">
-        {growthRoles.map((r, i) => (
-          <button class="aima-tab" data-switch-btn={r.key} aria-pressed={r.key === 'senior' ? 'true' : 'false'}>{r.label}</button>
+      <div class="aima-tabs aima-tabs--levels" role="tablist" aria-label="Seniority level">
+        {growthRoles.map((r) => (
+          <button type="button" role="tab" class="aima-tab" data-switch-btn={r.key} aria-selected={r.key === 'senior' ? 'true' : 'false'} tabindex={r.key === 'senior' ? undefined : -1}>{r.label}</button>
         ))}
       </div>
 
       {growthRoles.map((r) => (
-        <div class="aima-dimgrid" data-switch-panel={r.key} hidden={r.key !== 'senior'}>
+        <div class="aima-dims" role="tabpanel" data-switch-panel={r.key} hidden={r.key !== 'senior'}>
           {growthDims.map((d) => (
             <article class="aima-dim">
-              <div class="aima-dim__head">
-                <span class="aima-dim__name">{d.name}</span>
+              <header class="aima-dim__head">
+                <h3 class="aima-dim__name">{d.name}</h3>
                 <span class="aima-dim__def">{d.def}</span>
-              </div>
-              <div class="aima-dim__body">
-                <p class="aima-dim__p">{r.lines[d.key].base}</p>
-                <div class="aima-dim__ai">
-                  <span class="aima-dim__ai-label">+ AI skills</span>
-                  <p>{r.lines[d.key].ai}</p>
-                </div>
+              </header>
+              <p class="aima-dim__p">{r.lines[d.key].base}</p>
+              <div class="aima-dim__ai">
+                <span class="aima-label">+ AI skills</span>
+                <p>{r.lines[d.key].ai}</p>
               </div>
             </article>
           ))}
@@ -550,108 +539,157 @@ const crossCutting = [
     </div>
   </section>
 
-  <hr class="rule" />
-
   <!-- Cross-cutting -->
   <section class="aima-section" id="cross-cutting">
-    <header class="aima-section__head">
-      <p class="eyebrow">Cross-cutting</p>
-      <h2>What runs across every pillar</h2>
-      <p class="aima-section__sub">A few things don't sit inside a single pillar – they run across all of them.</p>
+    <header class="aima-head">
+      <p class="section-eyebrow">Cross-cutting</p>
+      <h2 class="section-title">What runs across every pillar.</h2>
+      <p class="aima-sub">A few things don't sit inside a single pillar – they run across all of them.</p>
     </header>
-    <div class="aima-cardgrid">
+    <ol class="aima-cols aima-cols--4">
       {crossCutting.map((c) => (
-        <article class="aima-chal">
-          <h3 class="aima-chal__name">{c.name}</h3>
-          <p class="aima-chal__desc">{c.body}</p>
-        </article>
+        <li>
+          <h3 class="aima-cols__title">{c.name}</h3>
+          <p>{c.body}</p>
+        </li>
       ))}
-    </div>
+    </ol>
   </section>
+
+    <aside class="aima-made" id="how-this-was-made">
+      <span class="aima-made__label">How this was made</span>
+      <p>
+        This framework was built with AI – the first version with ChatGPT, this one with Claude.
+        The switch reflects my own path with AI, where choosing the right tool, and knowing when
+        to change it, is part of the work. The structure, direction, and thinking are mine, drawn
+        from hands-on work with marketing teams; AI supported drafting and refinement under human
+        guidance.
+      </p>
+    </aside>
 
     </div>
   </div>
 
   <CTABlock
+    wide
+    night
     eyebrow="Doing this with your team?"
     headline="The framework is the map. The hard part is the walk."
     body="If you're moving a marketing team from AI-curious to AI-confident and want a senior operator in the room for it, that's the kind of work I do."
-    ctaLabel="Reach out"
+    ctaLabel="Tell me your story →"
     ctaModal={true}
-    secondaryLabel="Read some writing first"
+    secondaryLabel="Read some writing first →"
     secondaryHref="/blog"
   />
+  </div>
 </BaseLayout>
 
 <style>
-  /* ---------- Hero ---------- */
-  .aima-hero {
-    padding-top: 0;
-    padding-bottom: var(--space-12);
-  }
-  .aima-hero .eyebrow { margin-bottom: var(--space-6); }
-  .aima-eyebrow-row {
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
-    margin-bottom: var(--space-6);
-  }
-  .aima-eyebrow-row .eyebrow { margin-bottom: 0; }
-  .aima-version {
-    font-family: var(--font-mono);
-    font-size: var(--text-mono-sm);
-    letter-spacing: var(--tracking-mono);
-    color: var(--color-cobalt);
-    background: var(--color-cobalt-tint);
-    padding: 2px 8px;
-    border-radius: var(--radius-sm);
-  }
-  .aima-hero__title {
-    font-family: var(--font-display);
-    font-size: var(--text-display);
-    line-height: var(--lh-tight);
-    letter-spacing: var(--tracking-tight);
-    margin-bottom: var(--space-6);
-    max-width: 20ch;
-  }
-  .aima-hero__lede {
-    font-size: var(--text-lg);
-    line-height: var(--lh-normal);
-    color: var(--color-graphite);
-    max-width: 64ch;
-    margin-bottom: var(--space-8);
-  }
-  .aima-disclosure {
-    font-family: var(--font-accent);
-    font-style: italic;
-    font-size: var(--text-base);
-    line-height: var(--lh-normal);
-    color: var(--color-graphite);
-    max-width: 64ch;
-    border-left: 2px solid var(--color-line);
-    padding-left: var(--space-5);
-  }
-
   /* Switch panels: a plain [hidden] loses to the grid display rules below,
      so hide with force. This is what makes the toggles actually toggle. */
   [hidden] { display: none !important; }
 
+  .aima-num {
+    font-family: var(--font-mono);
+    font-size: var(--text-mono-sm);
+    letter-spacing: var(--tracking-wide);
+    color: var(--color-cobalt);
+    font-weight: 500;
+  }
+
+  .aima-label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: var(--text-mono-xs);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+    color: var(--color-cobalt);
+    font-weight: 500;
+    margin-bottom: var(--space-2);
+  }
+  .aima-label--ash { color: var(--color-ash); }
+
+  /* ---------- Hero ---------- */
+  .aima-hero {
+    padding-top: clamp(4rem, 4vw + 3rem, 7rem);
+    padding-bottom: var(--space-20);
+  }
+
+  .aima-hero__top { max-width: 1180px; }
+
+  .aima-version {
+    display: inline-block;
+    margin-left: var(--space-2);
+    padding: 2px 8px;
+    border: 1px solid color-mix(in srgb, var(--color-cobalt) 35%, transparent);
+    border-radius: 999px;
+    letter-spacing: var(--tracking-mono);
+  }
+
+  .aima-hero__title {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(46px, 6.6vw, 100px);
+    line-height: 0.98;
+    letter-spacing: var(--tracking-tighter);
+    color: var(--color-ink);
+    margin: 0;
+    max-width: 20ch;
+    text-wrap: balance;
+  }
+  .aima-hero__title .accent { color: var(--color-cobalt); }
+
+  .aima-hero__lede {
+    font-size: var(--text-lg);
+    line-height: var(--lh-normal);
+    color: var(--color-graphite);
+    margin: var(--space-8) 0 0;
+    max-width: 76ch;
+  }
+
+  .aima-hero__cone {
+    margin-top: clamp(40px, 4.4vw, 64px);
+  }
+
+  /* "How this was made" closes the main column, quietly. */
+  .aima-made {
+    display: grid;
+    grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+    gap: var(--space-8);
+    padding-block: var(--space-10) var(--space-20);
+    border-top: 0.5px solid var(--color-line);
+    scroll-margin-top: var(--space-16);
+  }
+  .aima-made__label {
+    font-family: var(--font-mono);
+    font-size: var(--text-mono-sm);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+    color: var(--color-ash);
+  }
+  .aima-made p {
+    font-size: 15px;
+    line-height: var(--lh-normal);
+    color: var(--color-graphite);
+    margin: 0;
+    max-width: 68ch;
+  }
+
   /* ---------- Two-column body with sticky index ---------- */
   .aima-body {
-    max-width: var(--max-w-wide);
-    margin-inline: auto;
-    padding-inline: var(--space-6);
-    padding-top: var(--space-14);
     display: grid;
-    grid-template-columns: 190px minmax(0, 1fr);
-    gap: var(--space-12);
+    grid-template-columns: 200px minmax(0, 1fr);
+    gap: var(--space-16);
     align-items: start;
+    padding-top: 0;
   }
   .aima-main { min-width: 0; }
+
   .aima-toc {
     position: sticky;
     top: var(--space-20);
     align-self: start;
+    padding-top: var(--space-20);
   }
   .aima-toc__label {
     display: block;
@@ -660,425 +698,519 @@ const crossCutting = [
     letter-spacing: var(--tracking-wide);
     text-transform: uppercase;
     color: var(--color-ash);
-    margin-bottom: var(--space-3);
+    margin-bottom: var(--space-4);
   }
   .aima-toc nav { display: flex; flex-direction: column; border-left: 1px solid var(--color-line); }
   .aima-toc__link {
-    font-size: 0.9rem;
+    display: flex;
+    gap: var(--space-3);
+    font-size: 14px;
     line-height: var(--lh-snug);
     color: var(--color-graphite);
-    text-decoration: none;
     padding: 7px var(--space-4);
     margin-left: -1px;
     border-left: 2px solid transparent;
     transition: color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
   }
+  .aima-toc__link span {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: var(--tracking-mono);
+    color: var(--color-ash);
+    padding-top: 3px;
+  }
   .aima-toc__link:hover { color: var(--color-ink); }
   .aima-toc__link.is-active {
-    color: var(--color-cobalt);
+    color: var(--color-ink);
     border-left-color: var(--color-cobalt);
     font-weight: 500;
   }
-
-  .aima-hero, .aima-section, .aima-section-tight { scroll-margin-top: var(--space-20); }
+  .aima-toc__link.is-active span { color: var(--color-cobalt); }
 
   /* ---------- Section scaffolding ---------- */
-  .aima-section { padding-block: var(--space-20); }
-  .aima-section-tight { padding-block: var(--space-14); }
-  .aima-section__head { margin-bottom: var(--space-10); max-width: 680px; }
-  .aima-section__head .eyebrow { margin-bottom: var(--space-3); }
-  .aima-section__head h2 {
-    font-family: var(--font-display);
-    font-size: var(--text-display);
-    letter-spacing: var(--tracking-tight);
-    line-height: var(--lh-snug);
+  .aima-section {
+    padding-block: var(--space-20);
+    border-top: 0.5px solid var(--color-line);
+    scroll-margin-top: var(--space-16);
   }
-  .aima-section__sub {
-    margin-top: var(--space-4);
-    font-size: var(--text-base);
+  .aima-section--first { border-top: 0; }
+
+  .aima-head {
+    margin-bottom: var(--space-12);
+    max-width: 760px;
+  }
+  .aima-sub {
+    margin-top: var(--space-5);
+    font-size: 17px;
+    line-height: var(--lh-normal);
+    color: var(--color-graphite);
+    max-width: 62ch;
+  }
+  .aima-sub p { margin: 0 0 var(--space-3); }
+  .aima-sub p:last-child { margin-bottom: 0; }
+
+  .aima-prose { max-width: 66ch; }
+  .aima-prose p {
+    font-size: 17px;
+    line-height: var(--lh-prose);
+    color: var(--color-ink);
+    margin: 0 0 var(--space-5);
+  }
+
+  /* The pull line, set big – the last word fades out, as promised. */
+  .aima-pull {
+    margin: var(--space-12) 0 0;
+    padding: 0;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(28px, 3.2vw, 46px);
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+    color: var(--color-ink);
+    max-width: 22ch;
+    text-wrap: balance;
+  }
+  .aima-pull__fade { color: color-mix(in srgb, var(--color-ink) 18%, transparent); }
+
+  /* ---------- Five ways in: rows that jump ---------- */
+  .aima-ways {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-bottom: 1px solid var(--color-line);
+  }
+  .aima-ways__row {
+    display: grid;
+    grid-template-columns: 64px minmax(0, 5fr) minmax(0, 7fr) 24px;
+    gap: var(--space-6);
+    align-items: baseline;
+    padding-block: var(--space-6);
+    border-top: 1px solid var(--color-line);
+    color: inherit;
+  }
+  .aima-ways__title {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 21px;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    color: var(--color-ink);
+    transition: color var(--dur-fast) var(--ease-out);
+  }
+  .aima-ways__body {
+    font-size: 16px;
     line-height: var(--lh-normal);
     color: var(--color-graphite);
   }
-  .aima-section__sub p { margin-bottom: var(--space-3); }
-  .aima-section__sub p:last-child { margin-bottom: 0; }
+  .aima-ways__arrow {
+    color: var(--color-ash);
+    transition: transform var(--dur-med) var(--ease-out), color var(--dur-fast) var(--ease-out);
+  }
+  .aima-ways__row:hover .aima-ways__title,
+  .aima-ways__row:hover .aima-ways__arrow { color: var(--color-cobalt); }
+  .aima-ways__row:hover .aima-ways__arrow { transform: translateY(3px); }
 
-  /* ---------- Prose + pull quote ---------- */
-  .aima-prose { max-width: 64ch; }
-  .aima-prose p {
-    font-size: 1.05rem;
-    line-height: var(--lh-prose);
-    color: var(--color-ink);
-    margin-bottom: var(--space-5);
-  }
-  .aima-pull {
-    font-family: var(--font-accent);
-    font-style: italic;
-    font-size: var(--text-xl);
-    line-height: var(--lh-snug);
-    color: var(--color-ink);
-    border-left: 3px solid var(--color-cobalt);
-    padding: var(--space-2) 0 var(--space-2) var(--space-5);
-    margin: var(--space-8) 0 0;
-  }
-
-  /* ---------- How-to steps ---------- */
-  .aima-steps { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; max-width: 820px; }
-  .aima-steps__item {
-    display: grid;
-    grid-template-columns: 64px 1fr;
-    gap: var(--space-6);
-    padding-block: var(--space-6);
-    border-top: 1px solid var(--color-line);
-    align-items: baseline;
-  }
-  .aima-steps__item:last-child { border-bottom: 1px solid var(--color-line); }
-  .aima-steps__num {
-    font-family: var(--font-mono);
-    font-size: var(--text-mono-sm);
-    letter-spacing: var(--tracking-wide);
-    text-transform: uppercase;
-    color: var(--color-cobalt);
-    font-weight: 500;
-  }
-  .aima-steps__item h3 {
-    font-family: var(--font-display);
-    font-size: var(--text-lg);
-    letter-spacing: var(--tracking-tight);
-    color: var(--color-ink);
-    margin-bottom: var(--space-1);
-  }
-  .aima-steps__item p { font-size: 1rem; line-height: var(--lh-normal); color: var(--color-graphite); max-width: 60ch; }
-
-  /* ---------- Segmented control (challenges) ---------- */
-  .aima-seg {
-    display: inline-flex;
-    gap: 2px;
-    background: var(--color-mist);
-    padding: 3px;
-    border-radius: var(--radius-md);
-    margin-bottom: var(--space-8);
-  }
-  .aima-seg__btn {
-    font-family: var(--font-display);
-    font-size: var(--text-sm);
-    font-weight: 500;
-    padding: 9px 18px;
-    border: none;
-    border-radius: var(--radius-sm);
-    background: transparent;
-    color: var(--color-graphite);
-    cursor: pointer;
-    transition: background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
-  }
-  .aima-seg__btn[aria-pressed="true"] { background: var(--color-white); color: var(--color-ink); box-shadow: 0 1px 3px rgba(0,0,0,0.10); }
-  .aima-seg__count { color: var(--color-ash); margin-left: var(--space-1); }
-
-  /* ---------- Card grid (challenges, cross-cutting) ---------- */
-  .aima-cardgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-5); }
-  .aima-chal {
-    background: var(--color-white);
-    border: 0.5px solid var(--color-line);
-    border-radius: var(--radius-md);
-    padding: var(--space-6);
+  /* ---------- Text tabs (challenges, pillars, levels) ---------- */
+  .aima-tabs {
     display: flex;
-    flex-direction: column;
-    gap: var(--space-3);
+    flex-wrap: wrap;
+    gap: var(--space-8);
+    border-bottom: 0.5px solid var(--color-line);
+    margin-bottom: var(--space-2);
   }
-  .aima-chal__name {
+  .aima-tab {
+    position: relative;
+    background: none;
+    border: 0;
+    padding: 0 0 var(--space-4);
+    cursor: pointer;
     font-family: var(--font-display);
-    font-size: var(--text-lg);
-    letter-spacing: var(--tracking-tight);
-    color: var(--color-ink);
+    font-weight: 500;
+    font-size: 21px;
+    letter-spacing: -0.01em;
+    color: var(--color-ash);
+    transition: color var(--dur-fast) var(--ease-out);
   }
-  .aima-chal__desc { font-size: 0.95rem; line-height: var(--lh-normal); color: var(--color-graphite); }
-  .aima-chal__impact { margin-top: auto; padding-top: var(--space-3); border-top: 1px solid var(--color-line); }
-  .aima-chal__label {
+  .aima-tab span {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: var(--tracking-mono);
+    color: var(--color-ash);
+    margin-left: 4px;
+    vertical-align: 6px;
+  }
+  .aima-tab:hover { color: var(--color-ink); }
+  .aima-tab[aria-selected='true'] { color: var(--color-ink); }
+  .aima-tab[aria-selected='true']::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 2px;
+    background: var(--color-cobalt);
+  }
+  .aima-tab:focus-visible { outline: 2px solid var(--color-cobalt); outline-offset: 4px; }
+
+  /* ---------- Typographic tables ---------- */
+  .aima-table__head,
+  .aima-table__row {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 4fr) minmax(0, 4fr);
+    gap: var(--space-8);
+  }
+  .aima-table__head {
+    padding-block: var(--space-4);
     font-family: var(--font-mono);
     font-size: var(--text-mono-xs);
-    letter-spacing: var(--tracking-wide);
     text-transform: uppercase;
-    color: var(--color-cobalt);
+    letter-spacing: var(--tracking-wide);
+    color: var(--color-ash);
+  }
+  .aima-table__head span:last-child { color: var(--color-cobalt); }
+  .aima-table__row {
+    padding-block: var(--space-6);
+    border-top: 0.5px solid var(--color-line);
+    align-items: baseline;
+  }
+  .aima-table__row:last-child { border-bottom: 0.5px solid var(--color-line); }
+  .aima-table__name {
+    font-family: var(--font-display);
     font-weight: 500;
+    font-size: 19px;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    color: var(--color-ink);
+    margin: 0;
   }
-  .aima-chal__impact p { font-size: 0.95rem; line-height: var(--lh-normal); color: var(--color-ink); margin-top: var(--space-1); }
+  .aima-table__act {
+    font-size: 15px;
+    line-height: var(--lh-normal);
+    color: var(--color-graphite);
+    margin: var(--space-2) 0 0;
+  }
+  .aima-table__cell {
+    font-size: 15.5px;
+    line-height: var(--lh-normal);
+    color: var(--color-graphite);
+    margin: 0;
+  }
+  .aima-table__cell--ink { color: var(--color-ink); }
+  .aima-table__inline { display: none; }
 
-  /* ---------- Use-case expandable cards ---------- */
-  .aima-uc__grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-5); align-items: start; }
-  .aima-uc {
-    background: var(--color-white);
-    border: 0.5px solid var(--color-line);
-    border-radius: var(--radius-md);
-    padding: var(--space-5) var(--space-6);
-  }
-  .aima-uc[open] { box-shadow: 0 2px 14px rgba(0,0,0,0.05); }
+  /* ---------- Use cases ---------- */
+  .aima-uc { border-bottom: 1px solid var(--color-line); }
+  .aima-uc__item { border-top: 1px solid var(--color-line); }
   .aima-uc__summary {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto 20px;
+    gap: var(--space-6);
+    align-items: baseline;
+    padding-block: var(--space-6);
     cursor: pointer;
     list-style: none;
-    gap: var(--space-4);
   }
   .aima-uc__summary::-webkit-details-marker { display: none; }
   .aima-uc__name {
     font-family: var(--font-display);
-    font-size: var(--text-lg);
-    letter-spacing: var(--tracking-tight);
+    font-weight: 500;
+    font-size: clamp(21px, 2vw, 26px);
+    letter-spacing: -0.015em;
     color: var(--color-ink);
+    transition: color var(--dur-fast) var(--ease-out);
   }
-  .aima-uc__meta {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-3);
-    font-size: 0.85rem;
+  .aima-uc__summary:hover .aima-uc__name { color: var(--color-cobalt); }
+  .aima-uc__count {
+    font-family: var(--font-mono);
+    font-size: var(--text-mono-xs);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
     color: var(--color-ash);
-    white-space: nowrap;
   }
-  .aima-uc__sign { position: relative; width: 12px; height: 12px; flex: none; }
+  .aima-uc__sign {
+    position: relative;
+    width: 14px;
+    height: 14px;
+    align-self: center;
+  }
   .aima-uc__sign::before,
   .aima-uc__sign::after {
     content: "";
     position: absolute;
-    background: var(--color-cobalt);
-    transition: opacity var(--dur-fast) var(--ease-out);
+    left: 0;
+    top: 50%;
+    width: 14px;
+    height: 1.5px;
+    background: var(--color-ink);
+    transition: transform var(--dur-med) var(--ease-out);
   }
-  .aima-uc__sign::before { top: 5px; left: 0; width: 12px; height: 2px; }
-  .aima-uc__sign::after { top: 0; left: 5px; width: 2px; height: 12px; }
-  .aima-uc[open] .aima-uc__sign::after { opacity: 0; }
-  .aima-uc__body { margin-top: var(--space-5); display: flex; flex-direction: column; gap: var(--space-4); }
-  .aima-uc__chips { display: flex; flex-wrap: wrap; gap: var(--space-2); }
-  .aima-uc__chip {
-    font-family: var(--font-mono);
-    font-size: var(--text-mono-sm);
-    color: var(--color-graphite);
-    background: var(--color-mist);
-    padding: 4px 8px;
-    border-radius: var(--radius-sm);
-  }
-  .aima-note { border-radius: var(--radius-sm); padding: var(--space-3) var(--space-4); }
-  .aima-note p { font-size: 0.95rem; line-height: var(--lh-snug); color: var(--color-ink); margin-top: var(--space-1); }
-  .aima-note__label {
-    font-family: var(--font-mono);
-    font-size: var(--text-mono-xs);
-    letter-spacing: var(--tracking-wide);
-    text-transform: uppercase;
-    font-weight: 500;
-  }
-  .aima-note--good { background: var(--color-cobalt-tint); border-left: 3px solid var(--color-cobalt); }
-  .aima-note--good .aima-note__label { color: var(--color-cobalt-deep); }
-  .aima-note--caution { background: var(--color-mist); border-left: 3px solid var(--color-ink); }
-  .aima-note--caution .aima-note__label { color: var(--color-graphite); }
+  .aima-uc__sign::after { transform: rotate(90deg); }
+  .aima-uc__item[open] .aima-uc__sign::after { transform: rotate(0deg); }
 
-  /* ---------- Maturity: tabs + stepper ---------- */
-  .aima-tabs { display: flex; gap: var(--space-2); flex-wrap: wrap; margin-bottom: var(--space-7); }
-  .aima-tab {
-    font-family: var(--font-display);
-    font-size: var(--text-base);
-    font-weight: 500;
-    padding: 9px 18px;
-    border-radius: var(--radius-sm);
-    background: var(--color-white);
-    color: var(--color-graphite);
-    border: 1px solid var(--color-line);
-    cursor: pointer;
-    transition: all var(--dur-fast) var(--ease-out);
+  .aima-uc__body { padding-bottom: var(--space-8); }
+  .aima-uc__chips {
+    list-style: none;
+    margin: 0 0 var(--space-6);
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
   }
-  .aima-tab[aria-pressed="true"] { background: var(--color-cobalt); color: var(--color-paper); border-color: var(--color-cobalt); }
-  .aima-pillar__intro {
-    font-size: 1.05rem;
+  .aima-uc__chips li {
+    font-size: 14px;
+    color: var(--color-ink);
+    padding: 5px 12px;
+    border: 1px solid var(--color-line);
+    border-radius: 999px;
+  }
+  .aima-uc__notes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-10);
+  }
+  .aima-uc__notes p {
+    font-size: 16px;
     line-height: var(--lh-normal);
     color: var(--color-ink);
-    max-width: 68ch;
-    margin-bottom: var(--space-6);
-  }
-  .aima-subgrid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1px;
-    background: var(--color-line);
-    border: 1px solid var(--color-line);
-    border-radius: var(--radius-md);
-    overflow: hidden;
-    margin-bottom: var(--space-8);
-  }
-  .aima-sub { background: var(--color-white); padding: var(--space-4) var(--space-5); }
-  .aima-sub__name { font-family: var(--font-display); font-size: var(--text-base); font-weight: 500; color: var(--color-ink); margin-bottom: 2px; }
-  .aima-sub__act { font-size: 0.9rem; line-height: var(--lh-snug); color: var(--color-graphite); }
-  .aima-sub__meta { margin: var(--space-3) 0 0; display: flex; flex-direction: column; gap: var(--space-2); }
-  .aima-sub__row { display: flex; flex-direction: column; gap: 1px; }
-  .aima-sub__row dt {
-    font-family: var(--font-mono);
-    font-size: var(--text-mono-xs);
-    letter-spacing: var(--tracking-wide);
-    text-transform: uppercase;
-    color: var(--color-cobalt);
-  }
-  .aima-sub__row dd {
     margin: 0;
-    font-size: 0.85rem;
-    line-height: var(--lh-snug);
-    color: var(--color-graphite);
   }
 
-  .aima-stepper { border-top: 1px solid var(--color-line); padding-top: var(--space-6); }
-  .aima-stepper__label {
-    display: block;
-    font-family: var(--font-mono);
-    font-size: var(--text-mono-sm);
-    letter-spacing: var(--tracking-wide);
-    text-transform: uppercase;
-    color: var(--color-ash);
+  /* ---------- Column lists (economics, cross-cutting) ---------- */
+  .aima-cols {
+    list-style: none;
+    margin: var(--space-12) 0 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-10) var(--space-8);
+  }
+  .aima-cols--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .aima-cols--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top: 0; }
+  .aima-cols li {
+    border-top: 1px solid var(--color-line);
+    padding-top: var(--space-5);
+  }
+  .aima-cols__title {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 19px;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    color: var(--color-ink);
+    margin: 0 0 var(--space-3);
+  }
+  .aima-cols p {
+    font-size: 15.5px;
+    line-height: var(--lh-normal);
+    color: var(--color-graphite);
+    margin: 0;
+  }
+
+  /* ---------- Maturity: the instrument ---------- */
+  .aima-instrument {
+    margin-bottom: var(--space-20);
+  }
+  .aima-stage { margin-top: var(--space-10); }
+  .aima-stage__title {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(30px, 3vw, 40px);
+    line-height: 1.05;
+    letter-spacing: var(--tracking-tight);
+    color: var(--color-ink);
+    margin: 0 0 var(--space-8);
+  }
+  .aima-stage__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-8);
+  }
+  .aima-stage__cell {
+    border-top: 1px solid var(--color-line);
+    padding-top: var(--space-5);
+  }
+  .aima-stage__cell p {
+    font-size: 16px;
+    line-height: var(--lh-normal);
+    color: var(--color-ink);
+    margin: 0;
+  }
+  .aima-stage:not([hidden]) { animation: aima-fade var(--dur-slow) var(--ease-out); }
+  @keyframes aima-fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+  .aima-subhead {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(26px, 2.6vw, 34px);
+    letter-spacing: var(--tracking-tight);
+    color: var(--color-ink);
+    margin: 0 0 var(--space-8);
+  }
+
+  .aima-pillar__intro {
+    font-size: 17px;
+    line-height: var(--lh-normal);
+    color: var(--color-ink);
+    max-width: 62ch;
+    margin: var(--space-8) 0 var(--space-6);
+  }
+
+  .aima-callout {
+    display: grid;
+    grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+    gap: var(--space-8);
+    margin-top: var(--space-16);
+    padding-top: var(--space-6);
+    border-top: 2px solid var(--color-cobalt);
+    max-width: 920px;
+  }
+  .aima-callout p {
+    font-size: 17px;
+    line-height: var(--lh-prose);
+    color: var(--color-ink);
+    margin: 0;
+  }
+  .aima-callout a {
+    color: var(--color-cobalt);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  /* ---------- Growth framework ---------- */
+  .aima-dims {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-12) var(--space-10);
+    margin-top: var(--space-10);
+  }
+  .aima-dim {
+    border-top: 1px solid var(--color-line);
+    padding-top: var(--space-5);
+  }
+  .aima-dim__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-2) var(--space-4);
     margin-bottom: var(--space-4);
   }
-  .aima-steps-row { display: flex; gap: var(--space-2); margin-bottom: var(--space-5); }
-  .aima-step {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 3px;
-    padding: var(--space-3) var(--space-1);
-    border-radius: var(--radius-sm);
-    background: var(--color-white);
-    border: 1px solid var(--color-line);
-    color: var(--color-ash);
-    cursor: pointer;
-    transition: all var(--dur-fast) var(--ease-out);
+  .aima-dim__name {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 30px;
+    letter-spacing: var(--tracking-tight);
+    color: var(--color-ink);
+    margin: 0;
   }
-  .aima-step__n { font-family: var(--font-mono); font-size: var(--text-base); font-weight: 500; }
-  .aima-step__name { font-size: 0.75rem; font-weight: 500; text-align: center; }
-  .aima-step[aria-pressed="true"] { background: var(--color-cobalt); color: var(--color-paper); border-color: var(--color-cobalt); }
-  .aima-stage {
-    background: var(--color-white);
-    border: 0.5px solid var(--color-line);
-    border-left: 3px solid var(--color-cobalt);
-    border-radius: var(--radius-md);
-    padding: var(--space-5) var(--space-6);
-  }
-  .aima-stage__head { display: flex; align-items: baseline; gap: var(--space-3); margin-bottom: var(--space-2); }
-  .aima-stage__num { font-family: var(--font-mono); font-size: var(--text-mono-sm); letter-spacing: var(--tracking-wide); text-transform: uppercase; color: var(--color-cobalt); }
-  .aima-stage__name { font-family: var(--font-display); font-size: var(--text-lg); font-weight: 500; color: var(--color-ink); }
-  .aima-stage p { font-size: 1rem; line-height: var(--lh-normal); color: var(--color-ink); }
-
-  /* ---------- Make progress visible callout ---------- */
-  .aima-callout {
-    margin-top: var(--space-10);
-    background: var(--color-mist);
-    border-radius: var(--radius-md);
-    padding: var(--space-6) var(--space-7);
-    max-width: 820px;
-  }
-  .aima-callout__label {
-    display: block;
-    font-family: var(--font-mono);
-    font-size: var(--text-mono-sm);
-    letter-spacing: var(--tracking-wide);
-    text-transform: uppercase;
-    color: var(--color-cobalt);
-    margin-bottom: var(--space-2);
-  }
-  .aima-callout p { font-size: 1.02rem; line-height: var(--lh-normal); color: var(--color-ink); }
-  .aima-callout a { color: var(--color-cobalt); text-decoration: underline; text-underline-offset: 3px; }
-
-  /* ---------- Growth dimension grid ---------- */
-  .aima-dimgrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-5); }
-  .aima-dim {
-    background: var(--color-white);
-    border: 0.5px solid var(--color-line);
-    border-radius: var(--radius-md);
-    padding: var(--space-6);
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-3);
-  }
-  .aima-dim__head { display: flex; align-items: baseline; gap: var(--space-3); flex-wrap: wrap; }
-  .aima-dim__name { font-family: var(--font-display); font-size: var(--text-lg); font-weight: 600; color: var(--color-ink); }
-  .aima-dim__def { font-size: 0.85rem; color: var(--color-ash); }
-  .aima-dim__body { display: flex; flex-direction: column; gap: var(--space-4); }
-  .aima-dim__p { margin: 0; font-size: 0.95rem; line-height: var(--lh-normal); color: var(--color-graphite); }
-  .aima-dim__ai {
-    background: var(--color-cobalt-tint);
-    border-left: 3px solid var(--color-cobalt);
-    border-radius: var(--radius-sm);
-    padding: var(--space-3) var(--space-4);
-  }
-  .aima-dim__ai-label {
-    display: block;
+  .aima-dim__def {
     font-family: var(--font-mono);
     font-size: var(--text-mono-xs);
-    letter-spacing: var(--tracking-wide);
     text-transform: uppercase;
-    color: var(--color-cobalt);
-    margin-bottom: 3px;
-  }
-  .aima-dim__ai p { margin: 0; font-size: 0.95rem; line-height: var(--lh-snug); color: var(--color-ink); }
-
-  /* ---------- Ideas ---------- */
-  .aima-ideas {
-    columns: 2;
-    column-gap: var(--space-10);
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    max-width: 820px;
-  }
-  .aima-ideas li {
-    break-inside: avoid;
-    padding: var(--space-3) 0;
-    border-top: 1px solid var(--color-line);
-    font-size: 0.98rem;
-    color: var(--color-graphite);
-  }
-  .aima-sig {
-    font-family: var(--font-accent);
-    font-style: italic;
-    font-size: var(--text-lg);
+    letter-spacing: var(--tracking-mono);
     color: var(--color-ash);
-    margin-top: var(--space-10);
+  }
+  .aima-dim__p {
+    font-size: 15.5px;
+    line-height: var(--lh-normal);
+    color: var(--color-graphite);
+    margin: 0;
+  }
+  .aima-dim__ai {
+    margin-top: var(--space-5);
+    padding-top: var(--space-4);
+    border-top: 1px dashed color-mix(in srgb, var(--color-cobalt) 30%, transparent);
+  }
+  .aima-dim__ai p {
+    font-size: 15.5px;
+    line-height: var(--lh-normal);
+    color: var(--color-ink);
+    margin: 0;
   }
 
   /* ---------- Responsive ---------- */
+  @media (max-width: 1100px) {
+    .aima-cols--4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
   @media (max-width: 1040px) {
     .aima-body { grid-template-columns: 1fr; }
     .aima-toc { display: none; }
+    /* The scrub cone's halo box reaches 40px past the frame; on narrow
+       screens clip it at the screen edge so the page never scrolls sideways.
+       (clip, not hidden: no scroll container, nothing else changes.) */
+    .aima-body { overflow-x: clip; }
   }
+
   @media (max-width: 860px) {
-    .aima-cardgrid { grid-template-columns: 1fr; }
-    .aima-uc__grid { grid-template-columns: 1fr; }
-    .aima-dimgrid { grid-template-columns: 1fr; }
-    .aima-subgrid { grid-template-columns: 1fr; }
+    .aima-made { grid-template-columns: 1fr; gap: var(--space-3); }
+    .aima-ways__row { grid-template-columns: 48px minmax(0, 1fr) 20px; }
+    .aima-ways__body { grid-column: 2; grid-row: 2; }
+    .aima-ways__arrow { grid-column: 3; grid-row: 1; }
+    .aima-table__head { display: none; }
+    .aima-table__row { grid-template-columns: 1fr; gap: var(--space-3); }
+    .aima-table__inline {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: var(--text-mono-xs);
+      text-transform: uppercase;
+      letter-spacing: var(--tracking-wide);
+      color: var(--color-ash);
+      margin-bottom: var(--space-1);
+    }
+    .aima-table--chal .aima-table__cell--ink .aima-table__inline { color: var(--color-cobalt); }
+    .aima-cols--3,
+    .aima-stage__grid,
+    .aima-uc__notes,
+    .aima-dims,
+    .aima-callout { grid-template-columns: 1fr; }
+    .aima-uc__notes { gap: var(--space-6); }
+    .aima-callout { gap: var(--space-3); }
   }
-  @media (max-width: 620px) {
-    .aima-steps__item { grid-template-columns: 1fr; gap: var(--space-2); }
-    .aima-ideas { columns: 1; }
-    .aima-step__name { font-size: 0.68rem; }
+
+  @media (max-width: 640px) {
+    .aima-hero { padding-top: var(--space-12); padding-bottom: var(--space-12); }
+    .aima-section { padding-block: var(--space-16); }
+    .aima-cols--4 { grid-template-columns: 1fr; }
+    .aima-tabs { gap: var(--space-5); }
+    .aima-tab { font-size: 18px; }
+    .aima-uc__summary { grid-template-columns: minmax(0, 1fr) 20px; }
+    .aima-uc__count { display: none; }
   }
+
   @media (prefers-reduced-motion: reduce) {
-    .aima-tab, .aima-step, .aima-seg__btn, .aima-uc__sign::before, .aima-uc__sign::after { transition: none; }
+    .aima-stage:not([hidden]) { animation: none; }
   }
 </style>
 
 <script>
-  /* Generic scoped switcher: buttons [data-switch-btn=KEY] toggle panels
-     [data-switch-panel=KEY] within the nearest [data-switch]. Handles nesting
-     (pillar tabs contain their own stage stepper) by matching on closest(). */
-  document.addEventListener('click', (e) => {
-    const target = e.target as HTMLElement;
-    const btn = target.closest('[data-switch-btn]') as HTMLElement | null;
-    if (!btn) return;
-    const scope = btn.closest('[data-switch]') as HTMLElement | null;
-    if (!scope) return;
-    const key = btn.getAttribute('data-switch-btn');
+  /* Tabs: each [data-switch-btn=KEY] shows [data-switch-panel=KEY] within
+     its own [data-switch] group. Listeners sit on the buttons themselves,
+     and the arrow keys move between tabs. */
+  document.querySelectorAll<HTMLElement>('[data-switch]').forEach((group) => {
+    const own = (sel: string) =>
+      Array.from(group.querySelectorAll<HTMLElement>(sel)).filter((el) => el.closest('[data-switch]') === group);
+    const tabs = own('[data-switch-btn]') as HTMLButtonElement[];
+    const panels = own('[data-switch-panel]');
+    if (!tabs.length) return;
 
-    scope.querySelectorAll('[data-switch-btn]').forEach((b) => {
-      if (b.closest('[data-switch]') === scope) {
-        b.setAttribute('aria-pressed', b === btn ? 'true' : 'false');
-      }
-    });
-    scope.querySelectorAll('[data-switch-panel]').forEach((p) => {
-      if (p.closest('[data-switch]') === scope) {
-        (p as HTMLElement).hidden = p.getAttribute('data-switch-panel') !== key;
-      }
+    const show = (tab: HTMLButtonElement, focus = false) => {
+      const key = tab.dataset.switchBtn;
+      tabs.forEach((t) => {
+        const on = t === tab;
+        t.setAttribute('aria-selected', on ? 'true' : 'false');
+        if (on) t.removeAttribute('tabindex'); else t.setAttribute('tabindex', '-1');
+      });
+      panels.forEach((p) => { p.hidden = p.dataset.switchPanel !== key; });
+      if (focus) tab.focus();
+    };
+
+    tabs.forEach((tab, i) => {
+      tab.addEventListener('click', () => show(tab));
+      tab.addEventListener('keydown', (e: KeyboardEvent) => {
+        if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+        e.preventDefault();
+        const next = (i + (e.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length;
+        show(tabs[next], true);
+      });
     });
   });
 

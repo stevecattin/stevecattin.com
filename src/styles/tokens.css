@@ -19,6 +19,22 @@
   --color-cobalt-deep: #1A1FD1;
   --color-white:    #FFFFFF;  /* post card surface */
 
+  /* ---------- Night palette – moving grain bands only (hero, closing CTA) ---------- */
+  --color-night:        #0F1633;  /* band background */
+  --color-night-deep:   #1B2E6B;
+  --color-night-royal:  #2B4CC9;
+  --color-night-azure:  #5A7FD6;
+  --color-night-sky:    #8FB0E4;  /* accent text on night */
+  --color-night-powder: #C4D6F0;  /* eyebrows on night */
+  --color-night-haze:   #E9EFFB;  /* body text on night */
+  --color-night-coral:  #F96B54;  /* closing band spark only – never in the hero */
+  --color-night-coral-soft: #FBB39F;
+
+  /* ---------- Hero glow (light) – homepage hero only ---------- */
+  --color-glow-cobalt-soft: #4D6BFF;
+  --color-glow-blue:        #3D5BFF;
+  --color-glow-blue-soft:   #7FA0FF;
+
   /* ---------- Typography ---------- */
   --font-display: "Cabinet Grotesk", system-ui, -apple-system, sans-serif;
   --font-body:    "General Sans", system-ui, -apple-system, sans-serif;

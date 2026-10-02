@@ -1,0 +1,156 @@
+---
+// The site's moving light: big soft blue lights and one coral spark on paper,
+// with white grain that only shows on the colour (design principles §4).
+//
+// Usage – wrap everything from the hero down to (and including) the closing
+// night band in `.glow-scope`, and put this component first inside it:
+//
+//   <div class="glow-scope">
+//     <GlowBackground strength={0.4} />
+//     <section class="hero">…</section>
+//     …
+//     <CTABlock night … />
+//   </div>
+//
+// The layer is sticky and one viewport tall, so the light stays behind the
+// content while you scroll, dims to `dimTo` of its strength as you leave the
+// hero, and is released when the scope ends. Sections inside the scope are
+// made transparent so the light shows through.
+interface Props {
+  /** Opacity of the lights at the top of the page (homepage: 0.4). */
+  strength?: number;
+  /** Fraction of `strength` kept once scrolled past the first screen. */
+  dimTo?: number;
+  /** The coral spark. Turn it off on pages whose hero already has its own
+   *  coral moment (the AIMA cone) – one coral per view. */
+  coral?: boolean;
+}
+const { strength = 0.4, dimTo = 0.4, coral = true } = Astro.props;
+---
+
+<div class="glow-stage" aria-hidden="true" style={`--glow-strength: ${strength}`} data-glow-dim={dimTo}>
+  <div class="glow">
+    <span class="night-bg__blob night-bg__blob--1 glow__blob glow__blob--1"></span>
+    <span class="night-bg__blob night-bg__blob--2 glow__blob glow__blob--2"></span>
+    <span class="night-bg__blob night-bg__blob--3 glow__blob glow__blob--3"></span>
+    {coral && <span class="night-bg__blob night-bg__blob--1 glow__blob glow__blob--4"></span>}
+    <span class="glow__grain"></span>
+  </div>
+</div>
+
+<script>
+  // Start each blob (here and in any night band) at a random point in its
+  // cycle, so the page never opens on the same frame twice.
+  document.querySelectorAll<HTMLElement>('.night-bg__blob').forEach((el) => {
+    const d = parseFloat(getComputedStyle(el).animationDuration) || 0;
+    if (d) el.style.animationDelay = `-${(Math.random() * d).toFixed(1)}s`;
+  });
+
+  // Full strength at the top, easing down once ~70% of a screen is scrolled.
+  const stage = document.querySelector<HTMLElement>('.glow-stage');
+  if (stage) {
+    const min = parseFloat(stage.dataset.glowDim ?? '0.4');
+    let ticking = false;
+    const update = () => {
+      const range = window.innerHeight * 0.7;
+      const t = Math.min(1, Math.max(0, window.scrollY / range));
+      const eased = t * t * (3 - 2 * t); // smoothstep
+      stage.style.setProperty('--glow-level', (1 - (1 - min) * eased).toFixed(3));
+      ticking = false;
+    };
+    window.addEventListener('scroll', () => {
+      if (!ticking) { ticking = true; requestAnimationFrame(update); }
+    }, { passive: true });
+    window.addEventListener('resize', update, { passive: true });
+    update();
+  }
+</script>
+
+<style is:global>
+  /* Scroll scope: everything from the hero to the closing night band. */
+  .glow-scope {
+    position: relative;
+    isolation: isolate;
+  }
+
+  /* One viewport tall, sticky, and taking no space (negative margin). */
+  .glow-stage {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    height: 100svh;
+    margin-bottom: -100vh;
+    margin-bottom: -100svh;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Every section in the scope sits above the light and lets it show. */
+  .glow-scope > :not(.glow-stage) {
+    position: relative;
+    z-index: 1;
+  }
+  /* (doubled class beats the component's own scoped paper background) */
+  .glow-scope .voices.voices {
+    background: transparent;
+  }
+
+  /* A closing night band sits flush on the footer's hairline; the footer
+     itself stays plain paper. */
+  main:has(.glow-scope) + .footer {
+    margin-top: 0;
+    position: relative;
+    z-index: 1;
+    background: var(--color-paper);
+  }
+
+  .glow {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    opacity: var(--glow-level, 1);
+    will-change: opacity;
+  }
+
+  .glow .glow__blob {
+    opacity: var(--glow-strength, 0.4);
+    mix-blend-mode: normal;
+  }
+
+  /* Smaller bright blue in the top-left corner and big bright blue on the
+     right; cobalt low on the left, mostly off-screen, so the copy sits on
+     clean paper; one smaller coral spark off-centre. */
+  .glow__blob--1 {
+    width: 640px; height: 640px; top: -360px; left: -300px;
+    background: radial-gradient(circle at 50% 50%, var(--color-glow-blue-soft), var(--color-glow-blue));
+    filter: blur(170px);
+  }
+
+  .glow__blob--2 {
+    width: 820px; height: 820px; top: 360px; left: 67%;
+    background: radial-gradient(circle at 50% 50%, var(--color-glow-blue-soft), var(--color-glow-blue));
+    filter: blur(213px);
+  }
+
+  .glow__blob--3 {
+    width: 540px; height: 540px; top: 600px; left: -240px;
+    background: radial-gradient(circle at 50% 50%, var(--color-glow-cobalt-soft), var(--color-cobalt));
+    filter: blur(140px);
+  }
+
+  .glow__blob--4 {
+    width: 380px; height: 380px; top: 410px; left: 37%;
+    background: radial-gradient(circle at 40% 40%, var(--color-night-coral-soft), var(--color-night-coral));
+    filter: blur(84px);
+  }
+
+  .glow__grain {
+    position: absolute;
+    inset: 0;
+    background-image: url("/images/grain-light.png");
+    background-repeat: repeat;
+    background-size: 256px 256px;
+    opacity: 0.6;
+  }
+</style>

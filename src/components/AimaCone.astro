@@ -1,0 +1,372 @@
+---
+/**
+ * AimaCone – the AI Marketing Ascendancy Framework as one beam of light:
+ * a single line at Aware that widens into a broad cone at Strategic,
+ * cobalt to coral, with the background's white grain.
+ *
+ * Modes
+ *  - loop  (homepage): draws itself when seen, rests, fades, starts again (8s).
+ *  - once  (AIMA hero): draws itself once when seen and stays.
+ *  - scrub (AIMA maturity model): an instrument. The full cone shows as a
+ *    faint ghost – where you could get to – and the lit part runs up to the
+ *    stage you pick (blue is where you are, coral is where you're going).
+ *    Stage buttons sit on the ticks; pass the stage descriptions in the
+ *    default slot as elements with [data-stage-panel="0…4"].
+ *
+ * Every instance needs a unique `uid` (SVG ids are document-global).
+ */
+interface Props {
+  uid: string;
+  mode?: 'loop' | 'once' | 'scrub';
+  /** viewBox size – the shape is generated for any aspect ratio. */
+  w?: number;
+  h?: number;
+  stages?: string[];
+  /** Accessible description of the graphic (loop/once). */
+  label?: string;
+  /** scrub: the stage it settles on when first seen (0-based). */
+  start?: number;
+}
+
+const {
+  uid,
+  mode = 'loop',
+  w = 580,
+  h = 200,
+  stages = ['Aware', 'Experimenting', 'Equipped', 'Operational', 'Strategic'],
+  start = 1,
+  label = 'The five stages of the framework – Aware, Experimenting, Equipped, Operational, Strategic – drawn as a beam that widens from a single line into a broad cone.',
+} = Astro.props;
+
+const r = (n: number) => Math.round(n * 10) / 10;
+const cy = h / 2;
+const d = `M 0 ${r(cy - 3)} C ${r(0.45 * w)} ${r(cy - 8)}, ${r(0.7 * w)} ${r(0.3 * h)}, ${w} 0 L ${w} ${h} C ${r(0.7 * w)} ${r(0.7 * h)}, ${r(0.45 * w)} ${r(cy + 8)}, 0 ${r(cy + 3)} Z`;
+const blur = r(14 * (h / 200));
+const guides = [0.25, 0.5, 0.75].map((f) => r(f * w));
+const last = stages.length - 1;
+const hidden = 'clip-path: inset(-40px 100% -40px -40px)';
+---
+
+<div
+  class:list={['aima-cone', `aima-cone--${mode}`]}
+  data-cone-mode={mode}
+  data-cone-start={start}
+  role={mode === 'scrub' ? 'group' : 'img'}
+  aria-label={mode === 'scrub' ? 'Stage progression – pick a stage' : label}
+>
+  <div class="aima-cone__frame">
+    {mode === 'scrub' && (
+      <svg class="aima-cone__ghost" viewBox={`0 0 ${w} ${h}`} aria-hidden="true" focusable="false">
+        <path d={d} />
+      </svg>
+    )}
+
+    <!-- Starts hidden inline (so it never flashes in full before the CSS
+         loads) and plays once it scrolls into view – see the script. -->
+    <div class="aima-cone__beam" style={mode === 'scrub' ? '--cone-t: 0' : hidden}>
+      <svg viewBox={`0 0 ${w} ${h}`} aria-hidden="true" focusable="false">
+        <defs>
+          <linearGradient id={`${uid}-grad`} x1="0" x2="1" y1="0" y2="0">
+            <stop offset="0" style="stop-color: var(--color-cobalt)" />
+            <stop offset="0.4" stop-color="#4D5BFF" />
+            <stop offset="0.72" stop-color="#B46BB0" />
+            <stop offset="1" style="stop-color: var(--color-night-coral)" />
+          </linearGradient>
+          <filter id={`${uid}-blur`} x="-10%" y="-40%" width="120%" height="180%">
+            <feGaussianBlur stdDeviation={blur} />
+          </filter>
+          <pattern id={`${uid}-grain`} patternUnits="userSpaceOnUse" width="256" height="256">
+            <image href="/images/grain-light.png" width="256" height="256" />
+          </pattern>
+          <clipPath id={`${uid}-clip`}><path d={d} /></clipPath>
+        </defs>
+        <path d={d} fill={`url(#${uid}-grad)`} filter={`url(#${uid}-blur)`} class="aima-cone__halo" />
+        <path d={d} fill={`url(#${uid}-grad)`} />
+        <path d={d} fill={`url(#${uid}-grain)`} class="aima-cone__grain" />
+        <g clip-path={`url(#${uid}-clip)`} class="aima-cone__guides">
+          {guides.map((x) => <line x1={x} x2={x} y1="0" y2={h} />)}
+        </g>
+      </svg>
+    </div>
+
+    {mode === 'scrub' && <span class="aima-cone__marker" aria-hidden="true"></span>}
+  </div>
+
+  {mode === 'scrub' ? (
+    <>
+      <div class="aima-cone__stages aima-cone__stages--buttons">
+        {stages.map((s, i) => (
+          <button
+            type="button"
+            class={`aima-cone__stage aima-cone__stage--${i + 1}`}
+            style={`--pos: ${(i / last) * 100}%`}
+            data-cone-stage={i}
+            aria-pressed={i === 0 ? 'true' : 'false'}
+          >
+            <span class="aima-cone__stage-n">{String(i + 1).padStart(2, '0')}</span>
+            <span class="aima-cone__stage-name">{s}</span>
+          </button>
+        ))}
+      </div>
+      <slot />
+      <div class="aima-cone__pager">
+        <button type="button" class="aima-cone__step" data-cone-step="-1">← Previous stage</button>
+        <button type="button" class="aima-cone__step" data-cone-step="1">Next stage →</button>
+      </div>
+    </>
+  ) : (
+    <ol class="aima-cone__stages">
+      {stages.map((s, i) => (
+        <li class={`aima-cone__stage aima-cone__stage--${i + 1}`} style={`--pos: ${(i / last) * 100}%`}>
+          <span class="aima-cone__stage-name">{s}</span>
+        </li>
+      ))}
+    </ol>
+  )}
+
+  <noscript><style>.aima-cone__beam { clip-path: none !important; --cone-t: 1.08 !important; }</style></noscript>
+</div>
+
+<style>
+  @property --cone-t {
+    syntax: '<number>';
+    inherits: false;
+    initial-value: 0;
+  }
+
+  .aima-cone { width: 100%; }
+
+  /* The drawing never takes a click – only the stage buttons do. */
+  .aima-cone__frame { position: relative; pointer-events: none; }
+
+  .aima-cone__beam svg,
+  .aima-cone__ghost {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  .aima-cone__halo { opacity: 0.45; }
+  .aima-cone__grain { opacity: 0.55; }
+  .aima-cone__guides line { stroke: rgba(255, 255, 255, 0.55); stroke-width: 1; }
+
+  /* loop – draw, rest, fade, again */
+  .aima-cone--loop .aima-cone__beam.is-playing {
+    animation: aima-reveal 8s cubic-bezier(.55, 0, .25, 1) infinite;
+  }
+  @keyframes aima-reveal {
+    0%   { clip-path: inset(-40px 100% -40px -40px); opacity: 1; }
+    55%  { clip-path: inset(-40px -40px -40px -40px); }
+    85%  { clip-path: inset(-40px -40px -40px -40px); opacity: 1; }
+    97%  { opacity: 0; }
+    100% { clip-path: inset(-40px 100% -40px -40px); opacity: 0; }
+  }
+
+  /* once – draw and stay */
+  .aima-cone--once .aima-cone__beam.is-playing {
+    animation: aima-draw 4.4s cubic-bezier(.55, 0, .25, 1) forwards;
+  }
+  @keyframes aima-draw {
+    from { clip-path: inset(-40px 100% -40px -40px); }
+    to   { clip-path: inset(-40px -40px -40px -40px); }
+  }
+
+  /* scrub – ghost of the whole path, lit up to the chosen stage */
+  .aima-cone__ghost path { fill: color-mix(in srgb, var(--color-ink) 5%, transparent); }
+  /* The lit part ends in a soft edge, like light, not a cut: a mask whose
+     stop moves with --cone-t (0–1). The beam box is padded by 40px so the
+     halo has room above, below and past the end. */
+  .aima-cone--scrub .aima-cone__beam {
+    position: absolute;
+    inset: -40px;
+    padding: 40px;
+    clip-path: none !important;
+    --cone-edge: calc(40px + (100% - 80px) * var(--cone-t));
+    -webkit-mask-image: linear-gradient(90deg, #000 0, #000 var(--cone-edge), transparent calc(var(--cone-edge) + 36px));
+    mask-image: linear-gradient(90deg, #000 0, #000 var(--cone-edge), transparent calc(var(--cone-edge) + 36px));
+    transition: --cone-t 1.2s cubic-bezier(.55, 0, .25, 1);
+  }
+  .aima-cone__marker {
+    position: absolute;
+    top: 50%;
+    left: 0%;
+    width: 18px;
+    height: 18px;
+    margin: -9px 0 0 -9px;
+    border-radius: 50%;
+    background: var(--color-cobalt);
+    border: 3px solid var(--color-paper);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--color-cobalt) 30%, transparent), 0 0 24px 6px color-mix(in srgb, var(--color-glow-blue) 45%, transparent);
+    transition: left 1.1s cubic-bezier(.55, 0, .25, 1);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .aima-cone--loop .aima-cone__beam,
+    .aima-cone--once .aima-cone__beam { animation: none !important; clip-path: none !important; }
+    .aima-cone--scrub .aima-cone__beam,
+    .aima-cone__marker { transition: none; }
+  }
+
+  /* -------- Stage labels on ticks -------- */
+  .aima-cone__stages {
+    position: relative;
+    list-style: none;
+    margin: var(--space-4) 0 0;
+    padding: 0;
+    height: 32px;
+  }
+
+  .aima-cone__stage {
+    position: absolute;
+    left: var(--pos);
+    top: 0;
+    padding-top: 14px;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+    color: var(--color-ash);
+  }
+
+  /* tick */
+  .aima-cone__stage::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: 1px;
+    height: 6px;
+    background: color-mix(in srgb, var(--color-ink) 25%, transparent);
+  }
+
+  .aima-cone__stage--1 { transform: none; }
+  .aima-cone__stage--1::before { left: 0; }
+  .aima-cone__stage--5 { transform: translateX(-100%); }
+  .aima-cone__stage--5::before { left: auto; right: 0; }
+  .aima-cone__stage--1 { color: var(--color-cobalt); }
+  .aima-cone__stage--5 { color: var(--color-night-coral); }
+
+  /* Stage buttons (scrub) */
+  .aima-cone__stages--buttons { height: 56px; }
+  .aima-cone__stages--buttons .aima-cone__stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    background: none;
+    border: 0;
+    cursor: pointer;
+    padding: 16px 6px 6px;
+    color: var(--color-ash);
+    font: inherit;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+    transition: color var(--dur-fast) var(--ease-out);
+  }
+  .aima-cone__stages--buttons .aima-cone__stage--1 { align-items: flex-start; padding-left: 0; }
+  .aima-cone__stages--buttons .aima-cone__stage--5 { align-items: flex-end; padding-right: 0; }
+  .aima-cone__stages--buttons .aima-cone__stage:hover { color: var(--color-ink); }
+  .aima-cone__stages--buttons .aima-cone__stage[aria-pressed='true'] { color: var(--color-ink); }
+  .aima-cone__stages--buttons .aima-cone__stage[aria-pressed='true'] .aima-cone__stage-name {
+    text-decoration: underline;
+    text-decoration-color: var(--color-cobalt);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 6px;
+  }
+  .aima-cone__stage-n { color: color-mix(in srgb, var(--color-ink) 35%, transparent); font-size: 10px; }
+  .aima-cone__stages--buttons .aima-cone__stage:focus-visible { outline: 2px solid var(--color-cobalt); outline-offset: 2px; }
+
+  .aima-cone__pager {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-6);
+    margin-top: var(--space-8);
+    padding-top: var(--space-5);
+    border-top: 0.5px solid var(--color-line);
+  }
+  .aima-cone__step {
+    background: none;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--color-cobalt);
+  }
+  .aima-cone__step:hover { color: var(--color-ink); }
+  .aima-cone__step:disabled { color: var(--color-ash); opacity: 0.5; cursor: default; }
+
+  @media (max-width: 640px) {
+    /* Only the first and last stage names fit on a phone. */
+    .aima-cone__stages:not(.aima-cone__stages--buttons) .aima-cone__stage--2 .aima-cone__stage-name,
+    .aima-cone__stages:not(.aima-cone__stages--buttons) .aima-cone__stage--3 .aima-cone__stage-name,
+    .aima-cone__stages:not(.aima-cone__stages--buttons) .aima-cone__stage--4 .aima-cone__stage-name { display: none; }
+    /* The instrument keeps its numbers; the panel names the stage. */
+    .aima-cone__stages--buttons .aima-cone__stage-name { display: none; }
+    .aima-cone__stages--buttons { height: 40px; }
+    .aima-cone__stages--buttons .aima-cone__stage-n { font-size: 12px; color: inherit; }
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.aima-cone').forEach((root) => {
+    const beam = root.querySelector<HTMLElement>('.aima-cone__beam');
+    if (!beam) return;
+    const mode = root.dataset.coneMode;
+
+    if (mode === 'scrub') {
+      const btns = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-cone-stage]'));
+      const panels = Array.from(root.querySelectorAll<HTMLElement>('[data-stage-panel]'));
+      const steps = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-cone-step]'));
+      const marker = root.querySelector<HTMLElement>('.aima-cone__marker');
+      const n = btns.length;
+      let cur = 0;
+      const set = (i: number) => {
+        cur = Math.max(0, Math.min(n - 1, i));
+        const pos = (cur / (n - 1)) * 100;
+        beam.style.setProperty('--cone-t', String(pos >= 100 ? 1.08 : pos / 100));
+        if (marker) marker.style.left = `${pos}%`;
+        btns.forEach((b, j) => b.setAttribute('aria-pressed', j === cur ? 'true' : 'false'));
+        panels.forEach((p) => { p.hidden = Number(p.dataset.stagePanel) !== cur; });
+        steps.forEach((s) => {
+          const dir = Number(s.dataset.coneStep);
+          s.disabled = (dir < 0 && cur === 0) || (dir > 0 && cur === n - 1);
+        });
+      };
+      btns.forEach((b, j) => b.addEventListener('click', () => set(j)));
+      steps.forEach((s) => s.addEventListener('click', () => set(cur + Number(s.dataset.coneStep))));
+      // Start at the beginning, then light up to the starting stage once
+      // it's on screen – so the first thing you see is the beam moving.
+      set(0);
+      const start = Number(root.dataset.coneStart ?? 0);
+      if (start > 0) {
+        let touched = false;
+        root.addEventListener('click', () => { touched = true; }, { once: true });
+        const io = new IntersectionObserver((entries) => {
+          if (entries.some((e) => e.isIntersecting)) {
+            io.disconnect();
+            setTimeout(() => { if (!touched) set(start); }, 350);
+          }
+        }, { threshold: 0.6 });
+        io.observe(root.querySelector('.aima-cone__frame') ?? root);
+      }
+      return;
+    }
+
+    // loop / once: start drawing only once the visual is on screen.
+    // Observe the unclipped wrapper – the beam itself starts fully clipped.
+    const io = new IntersectionObserver((entries) => {
+      if (entries.some((e) => e.isIntersecting)) {
+        beam.classList.add('is-playing');
+        beam.style.removeProperty('clip-path');
+        io.disconnect();
+      }
+    }, { threshold: 0.5 });
+    io.observe(root);
+  });
+</script>

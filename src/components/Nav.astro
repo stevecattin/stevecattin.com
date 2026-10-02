@@ -7,7 +7,6 @@ const isActive = (href: string) =>
 <header class="nav">
   <div class="container-wide nav__inner">
     <a href="/" class="nav__brand" aria-label="Stève Cattin – home">
-      <span class="nav__mark" aria-hidden="true">S.</span>
       <span class="nav__name">Stève Cattin</span>
     </a>
 
@@ -15,7 +14,7 @@ const isActive = (href: string) =>
       <a href="/practice" class:list={['nav__link', { 'is-active': isActive('/practice') }]}>Work with me</a>
       <a href="/about" class:list={['nav__link', { 'is-active': isActive('/about') }]}>About</a>
       <a href="/blog" class:list={['nav__link', { 'is-active': isActive('/blog') }]}>Writing</a>
-      <button class="nav__cta" data-contact-trigger>Reach out</button>
+      <button class="nav__cta" data-contact-trigger>Tell me your story</button>
     </nav>
 
     <button class="nav__hamburger" aria-label="Open menu" aria-expanded="false">
@@ -29,7 +28,7 @@ const isActive = (href: string) =>
     <a href="/practice" class:list={['nav__mobile-link', { 'is-active': isActive('/practice') }]}>Work with me</a>
     <a href="/about" class:list={['nav__mobile-link', { 'is-active': isActive('/about') }]}>About</a>
     <a href="/blog" class:list={['nav__mobile-link', { 'is-active': isActive('/blog') }]}>Writing</a>
-    <button class="nav__mobile-cta" data-contact-trigger>Reach out</button>
+    <button class="nav__mobile-cta" data-contact-trigger>Tell me your story</button>
   </div>
 </header>
 
@@ -74,13 +73,6 @@ const isActive = (href: string) =>
 
   .nav__brand:hover { color: var(--color-ink); }
 
-  .nav__mark {
-    font-family: var(--font-display);
-    font-size: 1.25rem;
-    font-weight: 600;
-    letter-spacing: -0.03em;
-    color: var(--color-cobalt);
-  }
 
   .nav__name {
     font-family: var(--font-display);
@@ -203,7 +195,6 @@ const isActive = (href: string) =>
   }
 
   @media (max-width: 640px) {
-    .nav__name { display: none; }
     .nav__links { display: none; }
     .nav__hamburger { display: flex; }
 
@@ -211,7 +202,7 @@ const isActive = (href: string) =>
       justify-content: space-between;
     }
 
-    /* Center the S. logo */
+    /* Center the name */
     .nav__brand {
       position: absolute;
       left: 50%;

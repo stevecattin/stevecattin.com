@@ -10,6 +10,9 @@ interface Props {
   /** 'wide' (1340) for standalone sections, 'content' (1180) to sit flush
    *  with a page whose sections use .container. */
   width?: 'wide' | 'content';
+  /** Featured quote becomes the section headline: large display type on a
+   *  hanging quote mark (homepage). Pair with title="" to drop the h2. */
+  lead?: boolean;
 }
 
 const TESTIMONIALS: Record<
@@ -46,6 +49,20 @@ const TESTIMONIALS: Record<
     shortRole: 'Board Member, Tango · former Corporate VP, Microsoft',
     img: '/images/testimonials/kristin-johnsen.webp',
   },
+  'benedikt-koppel': {
+    quote:
+      'Stève is genuinely AI-forward – learning, experimenting, and identifying where workflows can be simplified or automated, then turning those ideas into practical, repeatable ways of working.',
+    name: 'Benedikt Köppel',
+    role: 'Co-founder, Locatee · Head of AI Transformation, Tango',
+    img: '/images/testimonials/benedikt-koppel.webp',
+  },
+  'nicolette-brenden': {
+    quote:
+      "Stève has a gift for putting the human in the work. He leads with structure and clear direction, but he never lets you forget that the people doing the work matter as much as the results. He's shaped how I think about leadership myself, and any organization that brings him on will feel that lasting impact.",
+    name: 'Nicolette Brenden',
+    role: 'B2B SaaS Marketing Leader · Senior Marketing Manager, Tango',
+    img: '/images/testimonials/nicolette-brenden.webp',
+  },
 };
 
 const {
@@ -54,6 +71,7 @@ const {
   featuredId,
   rowIds = [],
   width = 'wide',
+  lead = false,
 } = Astro.props;
 
 const featured = featuredId ? TESTIMONIALS[featuredId] : null;
@@ -65,15 +83,15 @@ const showHead = Boolean(eyebrow || title);
 ---
 
 <section
-  class:list={['voices', { 'voices--bare': !showHead }]}
-  aria-labelledby={showHead ? 'voices-title' : undefined}
-  aria-label={showHead ? undefined : 'In their words'}
+  class:list={['voices', { 'voices--bare': !showHead, 'voices--lead': lead }]}
+  aria-labelledby={showHead && title ? 'voices-title' : undefined}
+  aria-label={showHead && title ? undefined : (eyebrow || 'In their words')}
 >
   <div class={width === 'content' ? 'container' : 'container-wide'}>
     {showHead && (
       <header class="voices__head">
         {eyebrow && <p class="voices__eyebrow">{eyebrow}</p>}
-        <h2 id="voices-title" class="voices__title">{title}</h2>
+        {title && <h2 id="voices-title" class="voices__title">{title}</h2>}
       </header>
     )}
 
@@ -100,7 +118,7 @@ const showHead = Boolean(eyebrow || title);
     )}
 
     {rows.length > 0 && (
-      <div class:list={['voices__row', { 'voices__row--lead': !featured, 'voices__row--three': rows.length === 3 }]}>
+      <div class:list={['voices__row', { 'voices__row--lead': !featured, 'voices__row--three': rows.length === 3 || rows.length === 6, 'voices__row--four': rows.length === 4 }]}>
         {rows.map((t) => (
           <figure class="voices__item">
             <blockquote class="voices__quote">{t.quote}</blockquote>
@@ -189,6 +207,7 @@ const showHead = Boolean(eyebrow || title);
     color: var(--color-ink);
     margin: 0;
     max-width: 18ch;
+    text-wrap: balance;
   }
 
   /* Featured quote – the lead. Big Cabinet Grotesk bold glyph hangs above the quote,
@@ -243,6 +262,16 @@ const showHead = Boolean(eyebrow || title);
     grid-template-columns: repeat(3, 1fr);
   }
 
+  /* Four quotes under a lead – a single row on wide screens. */
+  .voices__row--four {
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-10);
+  }
+  @media (max-width: 1180px) {
+    .voices__row--four {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
   @media (max-width: 980px) {
     .voices__row--three {
       grid-template-columns: 1fr 1fr;
@@ -306,7 +335,39 @@ const showHead = Boolean(eyebrow || title);
     line-height: 1.5;
   }
 
+  /* Lead variant – the featured quote is the headline. */
+  .voices--lead .voices__head { margin-bottom: var(--space-10); }
+
+  .voices--lead .voices__featured {
+    max-width: none;
+    padding-left: clamp(0px, 8.5vw, 120px);
+    margin-bottom: var(--space-20);
+  }
+
+  .voices--lead .voices__mark {
+    position: absolute;
+    left: -0.04em;
+    top: -14px;
+    height: auto;
+    margin: 0;
+    font-size: 200px;
+    line-height: 0.8;
+  }
+
+  .voices--lead .voices__lead {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(26px, 2.7vw, 38px);
+    line-height: 1.24;
+    letter-spacing: -0.015em;
+    max-width: 28em;
+    margin-bottom: var(--space-8);
+    text-wrap: pretty;
+  }
+
   @media (max-width: 760px) {
+    .voices--lead .voices__featured { padding-left: 0; }
+    .voices--lead .voices__mark { position: static; display: block; font-size: 110px; height: 50px; line-height: 0.5; margin-bottom: var(--space-2); }
     .voices__row {
       grid-template-columns: 1fr;
       gap: var(--space-10);
