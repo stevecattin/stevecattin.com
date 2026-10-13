@@ -33,6 +33,12 @@ const isActive = (href: string) =>
 </header>
 
 <script>
+  // Transparent over the page at the top; glass once the page moves.
+  const navBar = document.querySelector<HTMLElement>('.nav');
+  const syncNav = () => navBar?.classList.toggle('is-scrolled', window.scrollY > 8);
+  window.addEventListener('scroll', syncNav, { passive: true });
+  syncNav();
+
   const hamburger = document.querySelector('.nav__hamburger') as HTMLButtonElement;
   const mobileMenu = document.querySelector('.nav__mobile-menu') as HTMLElement;
 
@@ -46,14 +52,46 @@ const isActive = (href: string) =>
 </script>
 
 <style>
+  /* The bar floats over the page: no fill and no hairline at the top, so
+     it sits in the hero's light; once the page scrolls it turns to liquid
+     glass – translucent paper, strong blur, a light top edge, a soft lift. */
+  :global(:root) { --nav-h: 64px; }
+
   .nav {
-    position: sticky;
+    position: fixed;
     top: 0;
+    left: 0;
+    right: 0;
     z-index: 50;
-    background: color-mix(in srgb, var(--color-paper) 92%, transparent);
-    backdrop-filter: saturate(180%) blur(10px);
-    -webkit-backdrop-filter: saturate(180%) blur(10px);
-    border-bottom: 1px solid var(--color-line);
+    background: transparent;
+    transition:
+      background-color 0.3s var(--ease-out),
+      box-shadow 0.3s var(--ease-out),
+      backdrop-filter 0.3s var(--ease-out),
+      -webkit-backdrop-filter 0.3s var(--ease-out);
+  }
+
+  .nav.is-scrolled,
+  .nav:has(.nav__mobile-menu.is-open) {
+    background: color-mix(in srgb, var(--color-paper) 55%, transparent);
+    backdrop-filter: blur(22px) saturate(180%);
+    -webkit-backdrop-filter: blur(22px) saturate(180%);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.75),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.4),
+      0 12px 32px -20px rgba(16, 17, 20, 0.28);
+  }
+
+  @media (prefers-reduced-transparency: reduce) {
+    .nav.is-scrolled,
+    .nav:has(.nav__mobile-menu.is-open) {
+      background: var(--color-paper);
+    }
+  }
+
+  /* Pages without the moving light start below the bar. */
+  :global(main:not(:has(.glow-scope))) {
+    padding-top: var(--nav-h);
   }
 
   .nav__inner {

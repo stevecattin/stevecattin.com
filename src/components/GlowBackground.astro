@@ -115,6 +115,7 @@ const { strength = 0.4, dimTo = 0.4, coral = true } = Astro.props;
   .glow-scope {
     position: relative;
     isolation: isolate;
+    padding-top: var(--nav-h, 0px); /* content starts below the floating nav */
   }
 
   /* One viewport tall, sticky, and taking no space (negative margin). */
@@ -123,8 +124,11 @@ const { strength = 0.4, dimTo = 0.4, coral = true } = Astro.props;
     top: 0;
     height: 100vh;
     height: 100svh;
-    margin-bottom: -100vh;
-    margin-bottom: -100svh;
+    /* Pull the light up behind the (transparent) nav bar, and let the
+       content start right after the bar. */
+    margin-top: calc(-1 * var(--nav-h, 0px));
+    margin-bottom: calc(-100vh + var(--nav-h, 0px));
+    margin-bottom: calc(-100svh + var(--nav-h, 0px));
     overflow: hidden;
     pointer-events: none;
     z-index: 0;
