@@ -38,3 +38,6 @@ pnpm-debug.log*
 
 # claude worktrees
 .claude/worktrees/
+
+# Claude working files (build snapshots, deploy scripts, exports) – never commit
+/Claude outputs/
