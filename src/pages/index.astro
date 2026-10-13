@@ -68,9 +68,10 @@ const moments = [
             When growth gets <span class="hero__accent">complicated</span>
           </h1>
 
-          <p class="hero__sub">
-            I partner with founders, execs and their teams to make their marketing and go-to-market work. I take care of the system – the strategy, the processes, the goals – and of what no spreadsheet captures: how people feel, the culture, the things left unsaid.
-          </p>
+          <div class="hero__sub">
+            <p>I partner with founders, execs and their teams to make their marketing and go-to-market work, and increase revenue and profitability.</p>
+            <p>I take care of the system – the strategy, the processes, the goals – and of what no spreadsheet captures: how people feel, the culture, the things left unsaid.</p>
+          </div>
 
           <div class="hero__cta-row">
             <button class="hero__cta" data-contact-trigger>
@@ -80,12 +81,12 @@ const moments = [
           </div>
         </div>
 
-        <figure class="hero__portrait">
+        <figure class="hero__portrait" data-glow-focus>
           <img
-            src="/portrait-street.webp"
-            alt="Portrait of Stève Cattin on a New York City street"
-            width="920"
-            height="1227"
+            src="/portrait-popout.webp"
+            alt="Portrait of Stève Cattin"
+            width="720"
+            height="859"
             loading="eager"
             decoding="async"
           />
@@ -220,22 +221,23 @@ const moments = [
     align-self: center;
   }
 
+  /* Round, CV-style portrait: head breaks out of the top of a mist disc.
+     Disc and pop-out are baked into the image; the transparent master
+     cutout lives in assets-source/Portrait_Cutout.png. Centred in its
+     column so it sits closer to the copy; the big blue light starts behind
+     it (data-glow-focus, see GlowBackground). */
   .hero__portrait {
     margin: 0;
-    aspect-ratio: 3 / 4;
-    max-width: 440px;
-    justify-self: end;
     width: 100%;
-    overflow: hidden;
-    border-radius: var(--radius-md);
+    max-width: 360px;
+    justify-self: center;
+    align-self: center;
   }
 
   .hero__portrait img {
     display: block;
     width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center top;
+    height: auto;
   }
 
   .hero__greeting {
@@ -268,6 +270,17 @@ const moments = [
     color: var(--color-graphite);
     max-width: 600px;
     margin: 0 0 var(--space-10);
+  }
+
+  /* Two short beats – what it's for, then how – with a tight gap so they
+     still read as one thought. */
+  .hero__sub p {
+    margin: 0;
+    line-height: inherit;
+    text-wrap: pretty; /* no one-word last lines */
+  }
+  .hero__sub p + p {
+    margin-top: var(--space-4);
   }
 
   .hero__cta-row {
@@ -316,7 +329,7 @@ const moments = [
     }
     .hero__portrait {
       justify-self: center;
-      max-width: 300px;
+      max-width: 240px;
     }
   }
 

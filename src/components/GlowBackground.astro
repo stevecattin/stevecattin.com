@@ -16,6 +16,14 @@
 // content while you scroll, dims to `dimTo` of its strength as you leave the
 // hero, and is released when the scope ends. Sections inside the scope are
 // made transparent so the light shows through.
+//
+// The lights follow the content, not the screen: the light layer is centred
+// and capped a little wider than the content, so on large screens it stays
+// around the page instead of drifting into the empty margins.
+//
+// Optional focus: mark one element on the page with `data-glow-focus` and the
+// big blue light starts behind it (centred on it, first frame of its drift)
+// – the homepage portrait. Without the attribute, nothing changes.
 interface Props {
   /** Opacity of the lights at the top of the page (homepage: 0.4). */
   strength?: number;
@@ -45,6 +53,42 @@ const { strength = 0.4, dimTo = 0.4, coral = true } = Astro.props;
     const d = parseFloat(getComputedStyle(el).animationDuration) || 0;
     if (d) el.style.animationDelay = `-${(Math.random() * d).toFixed(1)}s`;
   });
+
+  // Focus light: park the big blue light behind [data-glow-focus] and start
+  // its drift from there, so the first frame lights that element.
+  const focus = document.querySelector<HTMLElement>('[data-glow-focus]');
+  const glowLayer = document.querySelector<HTMLElement>('.glow-stage .glow');
+  const focusLight = glowLayer?.querySelector<HTMLElement>('.glow__blob--2');
+  const scope = glowLayer?.closest<HTMLElement>('.glow-scope');
+  if (focus && glowLayer && focusLight && scope) {
+    // Two-column layouts only: on phones the element sits below the fold,
+    // so the lights keep their default places there.
+    const wide = window.matchMedia('(min-width: 761px)');
+    focusLight.style.animationDelay = '0s';
+    const place = () => {
+      if (!wide.matches) {
+        focusLight.classList.remove('glow__blob--focus');
+        focusLight.style.left = focusLight.style.top = '';
+        return;
+      }
+      focusLight.classList.add('glow__blob--focus');
+      const f = focus.getBoundingClientRect();
+      const g = glowLayer.getBoundingClientRect();
+      const s = scope.getBoundingClientRect();
+      const size = focusLight.offsetWidth;
+      // Horizontal: relative to the light layer. Vertical: where the element
+      // sits in the first screen (scope top), whatever the scroll position.
+      focusLight.style.left = `${f.left + f.width / 2 - g.left - size / 2}px`;
+      focusLight.style.top = `${f.top - s.top + f.height / 2 - size / 2}px`;
+    };
+    place();
+    window.addEventListener('load', place);
+    let raf = 0;
+    window.addEventListener('resize', () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(place);
+    }, { passive: true });
+  }
 
   // Full strength at the top, easing down once ~70% of a screen is scrolled.
   const stage = document.querySelector<HTMLElement>('.glow-stage');
@@ -105,10 +149,16 @@ const { strength = 0.4, dimTo = 0.4, coral = true } = Astro.props;
     background: var(--color-paper);
   }
 
+  /* Centred and capped a little wider than the content, so the lights stay
+     around the page on large screens. The stage clips; the layer doesn't,
+     so the blurred edges fade out naturally. */
   .glow {
     position: absolute;
-    inset: 0;
-    overflow: hidden;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: min(100%, calc(var(--max-w-wide) + 380px));
+    transform: translateX(-50%);
     opacity: var(--glow-level, 1);
     will-change: opacity;
   }
@@ -139,15 +189,27 @@ const { strength = 0.4, dimTo = 0.4, coral = true } = Astro.props;
     filter: blur(140px);
   }
 
+  /* The big blue light when it is parked behind a focus element (JS sets
+     its position). Slightly smaller and tighter, so it reads as a halo. */
+  .glow .glow__blob--focus {
+    width: 760px; height: 760px;
+    filter: blur(150px);
+  }
+
   .glow__blob--4 {
     width: 380px; height: 380px; top: 410px; left: 37%;
     background: radial-gradient(circle at 40% 40%, var(--color-night-coral-soft), var(--color-night-coral));
     filter: blur(84px);
   }
 
+  /* Grain stays full-bleed, centred on the (centred) light layer. */
   .glow__grain {
     position: absolute;
-    inset: 0;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 100vw;
+    transform: translateX(-50%);
     background-image: url("/images/grain-light.png");
     background-repeat: repeat;
     background-size: 256px 256px;
