@@ -1,0 +1,3 @@
+# Serve plain-text files (llms.txt, llms-full.txt) as UTF-8, so "Stève"
+# doesn't render as "StÃ¨ve" in browsers and AI tools.
+AddCharset UTF-8 .txt
