@@ -14,7 +14,10 @@
 
   <div class="modal__panel">
     <div class="modal__header">
-      <h2 class="modal__title" id="modal-title">Let's talk</h2>
+      <div class="modal__heading">
+        <h2 class="modal__title" id="modal-title">Everything starts with a story.</h2>
+        <p class="modal__lead">A simple first chat: you tell me what's happening, I listen and share what I see.</p>
+      </div>
       <button class="modal__close" aria-label="Close">
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
           <path d="M1 1L13 13M13 1L1 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
@@ -244,8 +247,9 @@
   /* ── Header ───────────────────────────────────────────────────── */
   .modal__header {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
+    gap: var(--space-4);
     margin-bottom: var(--space-6);
   }
 
@@ -255,6 +259,15 @@
     font-weight: 500;
     letter-spacing: var(--tracking-tight);
     color: var(--color-ink);
+    margin: 0;
+  }
+
+  .modal__lead {
+    margin: var(--space-2) 0 0;
+    font-size: var(--text-base);
+    line-height: 1.5;
+    color: var(--color-graphite);
+    text-wrap: pretty;
   }
 
   .modal__close {

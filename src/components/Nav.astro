@@ -8,13 +8,14 @@ const isActive = (href: string) =>
   <div class="container-wide nav__inner">
     <a href="/" class="nav__brand" aria-label="Stève Cattin – home">
       <span class="nav__name">Stève Cattin</span>
+      <span class="nav__role">Fractional CMO &amp; GTM Advisor</span>
     </a>
 
     <nav class="nav__links" aria-label="Primary">
       <a href="/practice" class:list={['nav__link', { 'is-active': isActive('/practice') }]}>Work with me</a>
       <a href="/about" class:list={['nav__link', { 'is-active': isActive('/about') }]}>About</a>
       <a href="/blog" class:list={['nav__link', { 'is-active': isActive('/blog') }]}>Writing</a>
-      <button class="nav__cta" data-contact-trigger>Tell me your story</button>
+      <button class="nav__cta" data-contact-trigger>Get in touch</button>
     </nav>
 
     <button class="nav__hamburger" aria-label="Open menu" aria-expanded="false">
@@ -28,7 +29,7 @@ const isActive = (href: string) =>
     <a href="/practice" class:list={['nav__mobile-link', { 'is-active': isActive('/practice') }]}>Work with me</a>
     <a href="/about" class:list={['nav__mobile-link', { 'is-active': isActive('/about') }]}>About</a>
     <a href="/blog" class:list={['nav__mobile-link', { 'is-active': isActive('/blog') }]}>Writing</a>
-    <button class="nav__mobile-cta" data-contact-trigger>Tell me your story</button>
+    <button class="nav__mobile-cta" data-contact-trigger>Get in touch</button>
   </div>
 </header>
 
@@ -104,8 +105,8 @@ const isActive = (href: string) =>
 
   .nav__brand {
     display: inline-flex;
-    align-items: baseline;
-    gap: var(--space-2);
+    align-items: center;
+    gap: var(--space-3);
     color: var(--color-ink);
   }
 
@@ -117,6 +118,23 @@ const isActive = (href: string) =>
     font-size: 0.95rem;
     font-weight: 500;
     letter-spacing: -0.01em;
+  }
+
+  /* The role, quieter than the name, behind a thin rule. Shown only where
+     the bar has room for it. */
+  .nav__role {
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: var(--color-graphite);
+    padding-left: var(--space-3);
+    border-left: 1px solid color-mix(in srgb, var(--color-ink) 20%, transparent);
+    line-height: 1.1;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 960px) {
+    .nav__role { display: none; }
   }
 
   .nav__links {

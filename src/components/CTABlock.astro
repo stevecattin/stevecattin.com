@@ -1,5 +1,7 @@
 ---
 export interface Props {
+  /** Small mono label above the headline. Defaults to "Work with me";
+   *  pass an empty string to show no label. */
   eyebrow?: string;
   headline: string;
   body?: string;
@@ -40,7 +42,7 @@ const {
     </div>
   )}
   <div class={wide ? 'container-wide cta__inner cta__inner--wide' : 'container cta__inner'}>
-    <p class="cta__eyebrow">{eyebrow}</p>
+    {eyebrow && <p class="cta__eyebrow">{eyebrow}</p>}
     <h2 class="cta__headline">{headline}</h2>
     {body && <p class="cta__body">{body}</p>}
     {Astro.slots.has('default') && <div class="cta__extra"><slot /></div>}
