@@ -142,7 +142,7 @@ const moments = [
       </div>
 
       <div class="framework__cone">
-        <AimaCone uid="home-cone" />
+        <AimaCone uid="home-cone" mode="scroll" />
       </div>
     </div>
   </section>
@@ -350,6 +350,17 @@ const moments = [
     color: var(--color-cobalt);
   }
   .text-link:hover { color: var(--color-ink); }
+
+  /* Touch screens: the text links get an invisible 12px above and below,
+     so they're a comfortable tap (~44px) without moving anything – the
+     negative margin cancels the padding in the layout. */
+  @media (pointer: coarse) {
+    .hero__link,
+    .text-link {
+      padding-block: var(--space-3);
+      margin-block: calc(-1 * var(--space-3));
+    }
+  }
 
   /* -------- When to work with me: thesis + the four moments -------- */
   .moments {

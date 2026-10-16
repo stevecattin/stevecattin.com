@@ -1,9 +1,11 @@
 ---
 /**
- * Facets — "Who is Stève" interactive self-portrait.
- * One unbroken ring (the whole person), six facets sitting ON it.
- * Click / tap a facet to reveal its voice + proof. Keyboard accessible.
- * Uses site tokens only (paper / ink / cobalt / mist). No imported fonts.
+ * Facets – "Who is Stève", told by scroll.
+ * A faint ring (the whole person) fills in, segment by segment, in the
+ * AIMA beam's cobalt → coral as you scroll; each segment is a facet and
+ * its voice + proof cross-fade in beside the ring. The sixth segment
+ * closes the ring. Clicking a facet scrolls to it. Phones, short screens
+ * and reduced motion get a stacked list with the same ring.
  */
 
 interface Proof { l: string; b: string; }
@@ -102,181 +104,241 @@ const FACETS: Facet[] = [
   },
 ];
 
-const CX = 300, CY = 300, R = 200, RL = 236;
+const N = FACETS.length;
+const CX = 300, CY = 300, R = 200, RL = 238;
+// The lit ring runs the AIMA beam's colours: cobalt → violet → coral.
+const SEG_COLORS = ['#2830FF', '#4D5BFF', '#7A63D8', '#B46BB0', '#D86C86', '#F96B54'];
+const r1 = (v: number) => Math.round(v * 10) / 10;
+const polar = (deg: number, rad: number) => {
+  const a = (deg * Math.PI) / 180;
+  return [CX + rad * Math.cos(a), CY + rad * Math.sin(a)];
+};
 const nodes = FACETS.map((f, i) => {
-  const ang = ((-90 + i * 60) * Math.PI) / 180;
-  const x = CX + R * Math.cos(ang);
-  const y = CY + R * Math.sin(ang);
-  const lx = CX + RL * Math.cos(ang);
-  const ly = CY + RL * Math.sin(ang);
-  const c = Math.cos(ang);
+  const deg = -90 + (i * 360) / N;
+  const [x, y] = polar(deg, R);
+  const [lx, ly] = polar(deg, RL);
+  const c = Math.cos((deg * Math.PI) / 180);
   const anchor = c > 0.2 ? 'start' : c < -0.2 ? 'end' : 'middle';
-  const n = f.lines.length;
-  const firstDy = 0.32 - (n - 1) * 0.525;
-  return { ...f, i, x, y, lx, ly, anchor, firstDy };
+  const lines = [String(i + 1).padStart(2, '0'), ...f.lines];
+  const firstDy = 0.32 - (lines.length - 1) * 0.55;
+  const [sx, sy] = polar(deg, R);
+  const [ex, ey] = polar(deg + 360 / N, R);
+  const arc = `M ${r1(sx)} ${r1(sy)} A ${R} ${R} 0 0 1 ${r1(ex)} ${r1(ey)}`;
+  return { ...f, i, x: r1(x), y: r1(y), lx: r1(lx), ly: r1(ly), anchor, lines, firstDy, arc, color: SEG_COLORS[i] };
 });
+const total = String(N).padStart(2, '0');
 ---
 
-<section class="facets container" aria-label="Who is Stève — six facets">
-  <div class="facets__stage">
-    <div class="facets__ringwrap">
-      <svg class="facets__svg" viewBox="-50 30 700 560" data-active role="group" aria-label="Six facets of Stève on one ring">
-        <circle class="facets__ring" cx={CX} cy={CY} r={R} />
-        <circle class="facets__core" cx={CX} cy={CY} r="42" />
-        <text class="facets__core-eyebrow" x={CX} y={CY - 8} text-anchor="middle">WHO IS</text>
-        <text class="facets__core-name" x={CX} y={CY + 16} text-anchor="middle">Stève</text>
+<section class="facets" aria-label="Who is Stève – six facets" style={`--n: ${N}`}>
+  <div class="facets__track">
+    <div class="facets__pin">
+      <div class="container-wide facets__stage">
+        <div class="facets__ringwrap">
+          <svg class="facets__svg" viewBox="-60 40 720 520" role="group" aria-label="Six facets of Stève on one ring – the ring completes as you scroll">
+            <defs>
+              <filter id="facets-halo" x="-150%" y="-150%" width="400%" height="400%">
+                <feGaussianBlur stdDeviation="9" />
+              </filter>
+              <filter id="facets-arc-glow" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur stdDeviation="7" />
+              </filter>
+            </defs>
 
-        {nodes.map((n) => (
-          <g
-            class="facets__node"
-            data-i={n.i}
-            role="button"
-            tabindex="0"
-            aria-pressed={n.i === 0 ? 'true' : 'false'}
-            aria-label={n.name}
-          >
-            <circle class="facets__hit" cx={n.x} cy={n.y} r="38" />
-            <circle class="facets__dot" cx={n.x} cy={n.y} r="11" />
-            <text class="facets__label" x={n.lx} y={n.ly} text-anchor={n.anchor}>
-              {n.lines.map((ln, k) => (
-                <tspan x={n.lx} dy={`${k === 0 ? n.firstDy : 1.05}em`}>{ln}</tspan>
+            <!-- Ghost ring: the whole person, before you've met them -->
+            <circle class="facets__ghost" cx={CX} cy={CY} r={R} />
+
+            <!-- Lit ring: one segment per facet, drawn by scroll -->
+            <g class="facets__arcs-glow" filter="url(#facets-arc-glow)" aria-hidden="true">
+              {nodes.map((n) => (
+                <path class="facets__arc" data-arc={n.i} d={n.arc} pathLength="1" style={`stroke: ${n.color}`} />
               ))}
-            </text>
-          </g>
-        ))}
-      </svg>
-    </div>
+            </g>
+            <g class="facets__arcs" aria-hidden="true">
+              {nodes.map((n) => (
+                <path class="facets__arc" data-arc={n.i} d={n.arc} pathLength="1" style={`stroke: ${n.color}`} />
+              ))}
+            </g>
 
-    <div class="facets__panel" aria-live="polite">
-      {FACETS.map((f, i) => (
-        <div class="facets__view" data-panel={String(i)} hidden={i !== 0}>
-          <p class="facets__facet-eyebrow">Facet {String(i + 1).padStart(2, '0')}</p>
-          <h3 class="facets__facet-name">{f.name}</h3>
-          {f.voice.map((v) => <p class="facets__voice">{v}</p>)}
-          <p class="facets__proof-head">The proof underneath</p>
-          {f.proofs.map((p) => (
-            <div class="facets__proof">
-              <p class="facets__proof-l">{p.l}</p>
-              <p class="facets__proof-b">{p.b}</p>
+            {nodes.map((n) => (
+              <path class="facets__spoke" data-spoke={n.i} d={`M ${CX} ${CY} L ${n.x} ${n.y}`} pathLength="1" style={`stroke: ${n.color}`} />
+            ))}
+
+            <circle class="facets__core-glow" cx={CX} cy={CY} r="64" filter="url(#facets-halo)" />
+            <circle class="facets__core" cx={CX} cy={CY} r="46" />
+            <text class="facets__core-eyebrow" x={CX} y={CY - 8} text-anchor="middle">WHO IS</text>
+            <text class="facets__core-name" x={CX} y={CY + 17} text-anchor="middle">Stève</text>
+
+            {nodes.map((n) => (
+              <g
+                class="facets__node"
+                data-i={n.i}
+                role="button"
+                tabindex="0"
+                aria-label={`${n.name} – facet ${n.i + 1} of ${N}`}
+                aria-current={n.i === 0 ? 'step' : undefined}
+                style={`--seg: ${n.color}`}
+              >
+                <circle class="facets__halo" cx={n.x} cy={n.y} r="26" filter="url(#facets-halo)" />
+                <circle class="facets__hit" cx={n.x} cy={n.y} r="40" />
+                <circle class="facets__dot" cx={n.x} cy={n.y} r="9" />
+                <text class="facets__label" x={n.lx} y={n.ly} text-anchor={n.anchor}>
+                  {n.lines.map((ln, k) => (
+                    <tspan x={n.lx} dy={`${k === 0 ? n.firstDy : 1.1}em`} class={k === 0 ? 'facets__label-n' : ''}>{ln}</tspan>
+                  ))}
+                </text>
+              </g>
+            ))}
+          </svg>
+        </div>
+
+        <div class="facets__panel">
+          <div class="facets__mini" aria-hidden="true">
+            <div class="facets__mini-bar">
+              {nodes.map((n) => <span class="facets__mini-seg" style={`--seg: ${n.color}`}></span>)}
             </div>
+            <p class="facets__mini-name"><span class="facets__mini-n">01</span> <span class="facets__mini-t">{FACETS[0].ring}</span></p>
+          </div>
+          {FACETS.map((f, i) => (
+            <article class="facets__view" data-panel={String(i)} aria-labelledby={`facet-name-${i}`}>
+              <p class="facets__facet-eyebrow">Facet {String(i + 1).padStart(2, '0')} <span>/ {total}</span></p>
+              <h3 class="facets__facet-name" id={`facet-name-${i}`}>{f.name}</h3>
+              {f.voice.map((v) => <p class="facets__voice">{v}</p>)}
+              <p class="facets__proof-head">The proof underneath</p>
+              <ul class="facets__proofs">
+                {f.proofs.map((p) => (
+                  <li class="facets__proof">
+                    <p class="facets__proof-l">{p.l}</p>
+                    <p class="facets__proof-b">{p.b}</p>
+                  </li>
+                ))}
+              </ul>
+            </article>
           ))}
         </div>
-      ))}
+      </div>
     </div>
   </div>
 </section>
 
 <style>
-  .facets {
-    padding-top: var(--space-10);
-    padding-bottom: var(--space-24);
+  /* Two modes, chosen in the script:
+     - pinned  (default on desktop): the stage holds still while you scroll;
+       the ring fills segment by segment and the facets cross-fade in place.
+     - stacked (phones, short screens, reduced motion): facets scroll past
+       as a normal list while the ring sits sticky beside / above them. */
+  .facets { --nav-h: 64px; --step: 62vh; padding-block: var(--space-12) var(--space-16); }
+
+  .facets.is-pinned .facets__track { height: calc(100vh - var(--nav-h) + var(--n) * var(--step)); }
+  .facets.is-pinned .facets__pin {
+    position: sticky;
+    top: var(--nav-h);
+    height: calc(100vh - var(--nav-h));
+    display: flex;
+    align-items: center;
   }
 
-  /* -------- Stage: ring + panel -------- */
   .facets__stage {
     display: grid;
-    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
-    gap: var(--space-16);
-    align-items: start;
-  }
-
-  .facets__ringwrap {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: clamp(40px, 5vw, 88px);
+    align-items: center;
     width: 100%;
-    max-width: 540px;
-    margin-inline: auto;
   }
 
-  .facets__svg {
-    width: 100%;
-    height: auto;
-    display: block;
-    overflow: visible;
-  }
+  .facets__ringwrap { width: 100%; max-width: 500px; }
+  .facets.is-stacked .facets__ringwrap { position: sticky; top: calc(var(--nav-h) + 40px); align-self: start; }
 
-  .facets__ring {
+  .facets__svg { width: 100%; height: auto; display: block; overflow: visible; }
+
+  /* -------- Ring -------- */
+  .facets__ghost { fill: none; stroke: var(--color-ink); stroke-opacity: 0.14; stroke-width: 1.5; stroke-dasharray: 2 6; }
+
+  .facets__arc {
     fill: none;
-    stroke: var(--color-ink);
-    stroke-width: 2;
+    stroke-width: 4;
+    stroke-linecap: butt;
+    stroke-dasharray: 1;
+    stroke-dashoffset: var(--off, 1);
   }
+  .facets__arcs-glow .facets__arc { stroke-width: 10; opacity: 0.45; }
+
+  .facets__spoke {
+    fill: none;
+    stroke-width: 1.5;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    opacity: 0.9;
+    transition: stroke-dashoffset 500ms var(--ease-out);
+  }
+  .facets__spoke.is-on { stroke-dashoffset: 0; }
 
   .facets__core { fill: var(--color-ink); }
-
-  .facets__core-eyebrow {
-    fill: var(--color-paper);
-    font-family: var(--font-mono);
-    font-size: 10px;
-    letter-spacing: 0.22em;
-  }
-  .facets__core-name {
-    fill: var(--color-paper);
-    font-family: var(--font-display);
-    font-weight: 500;
-    font-size: 23px;
-  }
+  .facets__core-glow { fill: var(--color-glow-blue); opacity: 0; transition: opacity 900ms var(--ease-out); }
+  .facets.is-complete .facets__core-glow { opacity: 0.5; }
+  .facets__core-eyebrow { fill: var(--color-paper); font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.22em; }
+  .facets__core-name { fill: var(--color-paper); font-family: var(--font-display); font-weight: 500; font-size: 24px; }
 
   /* -------- Nodes -------- */
   .facets__node { cursor: pointer; }
   .facets__node:focus { outline: none; }
   .facets__hit { fill: transparent; }
-
+  .facets__halo { fill: var(--seg); opacity: 0; transition: opacity var(--dur-slow) var(--ease-out); }
   .facets__dot {
     fill: var(--color-paper);
     stroke: var(--color-ink);
-    stroke-width: 2;
+    stroke-opacity: 0.4;
+    stroke-width: 1.5;
     transition: fill var(--dur-med) var(--ease-out), stroke var(--dur-med) var(--ease-out);
   }
-
   .facets__label {
     fill: var(--color-graphite);
     font-family: var(--font-mono);
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    transition: fill var(--dur-med) var(--ease-out), opacity var(--dur-med) var(--ease-out);
-    opacity: 0.72;
+    transition: fill var(--dur-med) var(--ease-out);
   }
+  .facets__label-n { fill: var(--color-ash); }
 
-  /* hover affordance on pointer devices (selection still happens on click) */
+  /* passed: the dot takes its segment colour */
+  .facets__node.is-passed .facets__dot { fill: var(--seg); stroke: var(--seg); stroke-opacity: 1; }
+  .facets__node.is-passed .facets__label { fill: var(--color-ink); }
+  /* current */
+  .facets__node[aria-current='step'] .facets__dot { fill: var(--seg); stroke: var(--seg); stroke-opacity: 1; }
+  .facets__node[aria-current='step'] .facets__halo { opacity: 0.6; }
+  .facets__node[aria-current='step'] .facets__label,
+  .facets__node[aria-current='step'] .facets__label-n { fill: var(--seg); }
+
   @media (hover: hover) and (pointer: fine) {
-    .facets__node:hover .facets__dot { fill: var(--color-ink); }
-    .facets__node:hover .facets__label { opacity: 1; fill: var(--color-ink); }
+    .facets__node:hover .facets__label { fill: var(--color-ink); }
+    .facets__node:hover .facets__dot { stroke-opacity: 1; }
   }
+  .facets__node:focus-visible .facets__dot { stroke: var(--color-cobalt); stroke-width: 3; stroke-opacity: 1; }
 
-  /* keyboard focus ring */
-  .facets__node:focus-visible .facets__dot {
-    stroke: var(--color-cobalt);
-    stroke-width: 3;
-  }
-  .facets__node:focus-visible .facets__label { opacity: 1; fill: var(--color-cobalt); }
-
-  /* active state */
-  .facets__node[aria-pressed='true'] .facets__dot {
-    fill: var(--color-cobalt);
-    stroke: var(--color-cobalt);
-  }
-  .facets__node[aria-pressed='true'] .facets__label {
-    fill: var(--color-cobalt);
-    opacity: 1;
-  }
-  .facets__svg[data-active] .facets__node:not([aria-pressed='true']) .facets__dot { opacity: 0.4; }
-  .facets__svg[data-active] .facets__node:not([aria-pressed='true']) .facets__label { opacity: 0.32; }
-
-  /* idle breathing until a facet is chosen */
-  @keyframes facets-breathe { 0%, 100% { opacity: 0.5; } 50% { opacity: 0.92; } }
+  @keyframes facets-glow { 0%, 100% { opacity: 0.4; } 50% { opacity: 0.75; } }
   @media (prefers-reduced-motion: no-preference) {
-    .facets__svg:not([data-active]) .facets__dot { animation: facets-breathe 4.6s ease-in-out infinite; }
-    .facets__node:nth-child(5) .facets__dot { animation-delay: 0s; }
-    .facets__node:nth-child(6) .facets__dot { animation-delay: 0.4s; }
-    .facets__node:nth-child(7) .facets__dot { animation-delay: 0.8s; }
-    .facets__node:nth-child(8) .facets__dot { animation-delay: 1.2s; }
-    .facets__node:nth-child(9) .facets__dot { animation-delay: 1.6s; }
-    .facets__node:nth-child(10) .facets__dot { animation-delay: 2s; }
+    .facets__node[aria-current='step'] .facets__halo { animation: facets-glow 3.6s ease-in-out infinite; }
   }
 
   /* -------- Panel -------- */
-  .facets__panel { min-height: 420px; }
-  .facets__view[hidden] { display: none; }
+  .facets.is-pinned .facets__panel { display: grid; }
+  .facets.is-pinned .facets__view {
+    grid-area: 1 / 1;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(14px);
+    transition: opacity 420ms var(--ease-out), transform 420ms var(--ease-out), visibility 0s linear 420ms;
+  }
+  .facets.is-pinned .facets__view.is-on {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition: opacity 420ms var(--ease-out) 80ms, transform 420ms var(--ease-out) 80ms, visibility 0s;
+  }
+
+  .facets.is-stacked .facets__view { padding-block: var(--space-12); border-top: 1px solid var(--color-line); }
+  .facets.is-stacked .facets__view:first-child { border-top: 0; padding-top: 0; }
 
   .facets__facet-eyebrow {
     font-family: var(--font-mono);
@@ -287,20 +349,22 @@ const nodes = FACETS.map((f, i) => {
     font-weight: 500;
     margin: 0 0 var(--space-3);
   }
+  .facets__facet-eyebrow span { color: var(--color-ash); }
   .facets__facet-name {
     font-family: var(--font-display);
     font-weight: 500;
-    font-size: var(--text-3xl);
-    line-height: var(--lh-tight);
+    font-size: clamp(32px, 3.2vw, 46px);
+    line-height: 1.02;
     letter-spacing: var(--tracking-tight);
     color: var(--color-ink);
     margin: 0 0 var(--space-5);
   }
   .facets__voice {
-    font-size: var(--text-lg);
-    line-height: var(--lh-normal);
+    font-size: 17px;
+    line-height: 1.55;
     color: var(--color-ink);
-    margin: 0 0 var(--space-4);
+    margin: 0 0 var(--space-3);
+    max-width: 62ch;
   }
   .facets__proof-head {
     font-family: var(--font-mono);
@@ -308,71 +372,177 @@ const nodes = FACETS.map((f, i) => {
     text-transform: uppercase;
     letter-spacing: var(--tracking-wide);
     color: var(--color-ash);
-    margin: var(--space-8) 0 var(--space-5);
-    padding-top: var(--space-5);
+    margin: var(--space-6) 0 0;
+  }
+  .facets__proofs { list-style: none; margin: var(--space-3) 0 0; padding: 0; }
+  .facets__proof {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+    gap: var(--space-6);
+    padding-block: var(--space-3);
     border-top: 0.5px solid var(--color-line);
   }
-  .facets__proof { margin-bottom: var(--space-5); }
   .facets__proof-l {
     font-family: var(--font-display);
     font-weight: 500;
-    font-size: var(--text-base);
+    font-size: 17px;
+    line-height: 1.3;
     color: var(--color-ink);
     letter-spacing: -0.01em;
-    margin: 0 0 var(--space-1);
-  }
-  .facets__proof-b {
-    font-size: var(--text-base);
-    line-height: var(--lh-normal);
-    color: var(--color-graphite);
     margin: 0;
   }
-
-  .facets__view:not([hidden]) { animation: facets-fade var(--dur-med) var(--ease-out); }
-  @keyframes facets-fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
-  @media (prefers-reduced-motion: reduce) {
-    .facets__view:not([hidden]) { animation: none; }
-  }
+  .facets__proof-b { font-size: 15px; line-height: 1.5; color: var(--color-graphite); margin: 0; }
 
   /* -------- Responsive -------- */
-  @media (max-width: 880px) {
-    .facets__stage {
-      grid-template-columns: 1fr;
-      gap: var(--space-10);
+  /* Phone progress strip: six segments in the ring's colours + current name. */
+  .facets__mini { display: none; }
+  @media (max-width: 960px) {
+    .facets__stage { grid-template-columns: 1fr; gap: var(--space-8); }
+    .facets.is-stacked .facets__ringwrap { position: static; max-width: 340px; margin-inline: auto; }
+    .facets__label { font-size: 18px; }
+    .facets.is-stacked .facets__mini {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+      position: sticky;
+      top: var(--nav-h);
+      z-index: 2;
+      margin-inline: calc(-1 * var(--space-6));
+      padding: 12px var(--space-6);
+      background: color-mix(in srgb, var(--color-paper) 92%, transparent);
+      backdrop-filter: blur(8px);
+      border-bottom: 0.5px solid var(--color-line);
     }
-    .facets__ringwrap { max-width: 460px; }
-    .facets__panel { min-height: 0; }
-    .facets__label { font-size: 17px; }
+    .facets__mini-bar { display: flex; gap: 4px; flex: 0 0 auto; }
+    .facets__mini-seg { width: 18px; height: 4px; border-radius: 2px; background: color-mix(in srgb, var(--color-ink) 12%, transparent); transition: background var(--dur-med) var(--ease-out); }
+    .facets__mini-seg.is-passed, .facets__mini-seg.is-on { background: var(--seg); }
+    .facets__mini-name { margin: 0; font-family: var(--font-mono); font-size: var(--text-mono-sm); text-transform: uppercase; letter-spacing: var(--tracking-wide); color: var(--color-ink); white-space: nowrap; }
+    .facets__mini-n { color: var(--color-ash); }
   }
-
-  @media (max-width: 520px) {
-    .facets__ringwrap { max-width: 400px; }
-    .facets__label { font-size: 19px; }
+  @media (max-width: 640px) {
+    .facets.is-stacked .facets__ringwrap { max-width: 320px; }
+    .facets__label { font-size: 22px; }
+    .facets__proof { grid-template-columns: 1fr; gap: var(--space-1); }
   }
 </style>
 
 <script>
   function initFacets(root: HTMLElement) {
-    const svg = root.querySelector<SVGElement>('.facets__svg');
+    const track = root.querySelector<HTMLElement>('.facets__track')!;
+    const pin = root.querySelector<HTMLElement>('.facets__pin')!;
     const nodes = Array.from(root.querySelectorAll<SVGGElement>('.facets__node'));
+    const spokes = Array.from(root.querySelectorAll<SVGPathElement>('.facets__spoke'));
+    const arcs = Array.from(root.querySelectorAll<SVGPathElement>('.facets__arc'));
     const views = Array.from(root.querySelectorAll<HTMLElement>('.facets__view'));
-    if (!svg) return;
+    const n = views.length;
+    const miniSegs = Array.from(root.querySelectorAll<HTMLElement>('.facets__mini-seg'));
+    const miniN = root.querySelector<HTMLElement>('.facets__mini-n');
+    const miniT = root.querySelector<HTMLElement>('.facets__mini-t');
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const narrow = window.matchMedia('(max-width: 960px)');
+    let mode: 'pinned' | 'stacked' = 'stacked';
+    let cur = -1;
+    let ticking = false;
 
-    function select(i: number) {
-      svg!.setAttribute('data-active', '');
-      nodes.forEach((n) => n.setAttribute('aria-pressed', Number(n.dataset.i) === i ? 'true' : 'false'));
-      views.forEach((v) => { v.hidden = v.dataset.panel !== String(i); });
+    // Pinned only if every facet fits on one screen beside the ring.
+    function chooseMode() {
+      root.classList.remove('is-pinned');
+      root.classList.add('is-stacked');
+      if (reduce.matches || narrow.matches) { mode = 'stacked'; return; }
+      const avail = window.innerHeight - 64 - 48;
+      const tallest = Math.max(...views.map((v) => v.getBoundingClientRect().height));
+      const stackedPad = 96; // padding added in stacked mode
+      const fits = tallest - stackedPad <= avail;
+      mode = fits ? 'pinned' : 'stacked';
+      root.classList.toggle('is-pinned', fits);
+      root.classList.toggle('is-stacked', !fits);
+    }
+
+    function setActive(i: number) {
+      if (i === cur) return;
+      cur = i;
+      nodes.forEach((el, k) => {
+        if (k === i) el.setAttribute('aria-current', 'step'); else el.removeAttribute('aria-current');
+        el.classList.toggle('is-passed', k < i);
+      });
+      spokes.forEach((sp) => sp.classList.toggle('is-on', Number(sp.dataset.spoke) === i));
+      miniSegs.forEach((sg, k) => { sg.classList.toggle('is-passed', k < i); sg.classList.toggle('is-on', k === i); });
+      if (miniN) miniN.textContent = String(i + 1).padStart(2, '0');
+      if (miniT) miniT.textContent = nodes[i]?.getAttribute('aria-label')?.split(' – ')[0].replace(/^The /, '') ?? '';
+      if (mode === 'pinned') {
+        views.forEach((v, k) => {
+          const on = k === i;
+          v.classList.toggle('is-on', on);
+          v.setAttribute('aria-hidden', on ? 'false' : 'true');
+        });
+      }
+    }
+
+    function setArc(p: number) {
+      // p: 0..1 through the section. The ring closes just before the end.
+      const t = Math.min(1, Math.max(0, p / 0.94)) * n;
+      arcs.forEach((a) => {
+        const k = Number(a.dataset.arc);
+        const fill = Math.min(1, Math.max(0, t - k));
+        a.style.setProperty('--off', String(1 - fill));
+      });
+      root.classList.toggle('is-complete', t >= n - 0.001);
+    }
+
+    function progress() {
+      if (mode === 'pinned') {
+        const range = track.offsetHeight - pin.offsetHeight;
+        const top = track.getBoundingClientRect().top - 64;
+        return range > 0 ? Math.min(1, Math.max(0, -top / range)) : 0;
+      }
+      const rect = root.querySelector<HTMLElement>('.facets__panel')!.getBoundingClientRect();
+      const mid = window.innerHeight * 0.5;
+      return Math.min(1, Math.max(0, (mid - rect.top) / rect.height));
+    }
+
+    function update() {
+      ticking = false;
+      const p = progress();
+      setArc(p);
+      if (mode === 'pinned') {
+        setActive(Math.min(n - 1, Math.floor(p * n)));
+      } else {
+        const mid = window.innerHeight * 0.5;
+        let idx = 0;
+        views.forEach((v, k) => { if (v.getBoundingClientRect().top <= mid) idx = k; });
+        setActive(idx);
+      }
+    }
+
+    function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
+
+    function goTo(i: number) {
+      const smooth = reduce.matches ? 'auto' : 'smooth';
+      if (mode === 'pinned') {
+        const range = track.offsetHeight - pin.offsetHeight;
+        const trackTop = track.getBoundingClientRect().top + window.scrollY - 64;
+        window.scrollTo({ top: trackTop + ((i + 0.5) / n) * range, behavior: smooth as ScrollBehavior });
+      } else {
+        const top = views[i].getBoundingClientRect().top + window.scrollY - window.innerHeight * 0.3;
+        window.scrollTo({ top, behavior: smooth as ScrollBehavior });
+      }
     }
 
     nodes.forEach((node) => {
       const i = Number(node.dataset.i);
-      node.addEventListener('click', () => select(i));
+      node.addEventListener('click', () => goTo(i));
       node.addEventListener('keydown', (e: KeyboardEvent) => {
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); select(i); }
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goTo(i); }
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); const j = Math.min(n - 1, i + 1); goTo(j); nodes[j].focus(); }
+        if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); const j = Math.max(0, i - 1); goTo(j); nodes[j].focus(); }
       });
     });
 
-    select(0); // Operator active by default
+    function relayout() { cur = -1; chooseMode(); update(); }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', relayout);
+    reduce.addEventListener('change', relayout);
+    relayout();
   }
 
   document.querySelectorAll<HTMLElement>('.facets').forEach(initFacets);

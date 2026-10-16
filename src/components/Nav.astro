@@ -43,12 +43,22 @@ const isActive = (href: string) =>
   const hamburger = document.querySelector('.nav__hamburger') as HTMLButtonElement;
   const mobileMenu = document.querySelector('.nav__mobile-menu') as HTMLElement;
 
+  const setMenu = (open: boolean) => {
+    hamburger.setAttribute('aria-expanded', String(open));
+    hamburger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    mobileMenu.setAttribute('aria-hidden', String(!open));
+    mobileMenu.classList.toggle('is-open', open);
+    hamburger.classList.toggle('is-open', open);
+  };
+
   hamburger?.addEventListener('click', () => {
-    const isOpen = hamburger.getAttribute('aria-expanded') === 'true';
-    hamburger.setAttribute('aria-expanded', String(!isOpen));
-    mobileMenu.setAttribute('aria-hidden', String(isOpen));
-    mobileMenu.classList.toggle('is-open');
-    hamburger.classList.toggle('is-open');
+    setMenu(hamburger.getAttribute('aria-expanded') !== 'true');
+  });
+
+  // "Get in touch" opens the contact sheet – close the menu behind it, so
+  // closing the sheet brings you back to the page, not the open menu.
+  mobileMenu?.querySelector('[data-contact-trigger]')?.addEventListener('click', () => {
+    setMenu(false);
   });
 </script>
 
@@ -170,14 +180,16 @@ const isActive = (href: string) =>
     color: var(--color-paper);
   }
 
-  /* Hamburger — hidden on desktop */
+  /* Hamburger — hidden on desktop. 44px square: Apple's minimum tap
+     target. The lines sit at its left edge and it's centred in the bar,
+     so they don't move. */
   .nav__hamburger {
     display: none;
     flex-direction: column;
     justify-content: center;
     gap: 5px;
-    width: 32px;
-    height: 32px;
+    width: 44px;
+    height: 44px;
     background: none;
     border: none;
     cursor: pointer;

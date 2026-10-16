@@ -148,11 +148,35 @@ const {
     text-decoration-color: var(--color-paper);
   }
 
-  /* -------- Night variant (homepage closing band) -------- */
+  /* -------- Night variant (closing band) --------
+     Opens with a dusk instead of an edge: the first stretch of the band
+     is sky that starts as the page itself (masked to transparent, so the
+     page's light and grain run straight on) and darkens through the
+     night blues into navy. The copy sits on the navy, below it. Mirror
+     of the dawn that closes the AIMA night page. */
   .cta--night {
+    --dusk-sky: clamp(200px, 22vw, 320px);
     position: relative;
     overflow: hidden;
-    background: var(--color-night);
+    background: transparent;
+    padding-top: calc(var(--dusk-sky) + var(--space-16));
+    /* Anchor links (#book) land on the navy, not at the top of the sky. */
+    scroll-margin-top: calc(var(--nav-h, 64px) - var(--dusk-sky));
+  }
+
+  .night-bg {
+    background: linear-gradient(
+      to bottom,
+      var(--color-paper) 0,
+      var(--color-night-powder) calc(var(--dusk-sky) * 0.12),
+      var(--color-night-sky) calc(var(--dusk-sky) * 0.24),
+      var(--color-night-azure) calc(var(--dusk-sky) * 0.38),
+      var(--color-night-royal) calc(var(--dusk-sky) * 0.54),
+      var(--color-night-deep) calc(var(--dusk-sky) * 0.74),
+      var(--color-night) var(--dusk-sky)
+    );
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 calc(var(--dusk-sky) * 0.3));
+    mask-image: linear-gradient(to bottom, transparent 0, #000 calc(var(--dusk-sky) * 0.3));
   }
 
   .cta--night .cta__inner {
@@ -160,22 +184,29 @@ const {
     z-index: 1;
   }
 
+  /* The night band closes the page: it sits flush on the footer's
+     hairline, with or without the moving light around it. */
+  :global(main:has(.cta--night) + .footer) {
+    margin-top: 0;
+  }
+
+  /* Lights sit where they always did on the navy – moved down by the sky. */
   .cta__blob--1 {
-    width: 760px; height: 760px; top: -260px; left: 53%;
+    width: 760px; height: 760px; top: calc(var(--dusk-sky) - 260px); left: 53%;
     background: radial-gradient(circle at 60% 40%, var(--color-night-azure), var(--color-night-royal));
     filter: blur(182px);
     opacity: 0.7;
   }
 
   .cta__blob--2 {
-    width: 620px; height: 620px; top: 120px; left: -120px;
+    width: 620px; height: 620px; top: calc(var(--dusk-sky) + 120px); left: -120px;
     background: radial-gradient(circle at 30% 70%, var(--color-night-royal), var(--color-night-deep));
     filter: blur(148px);
     opacity: 0.7;
   }
 
   .cta__blob--3 {
-    width: 300px; height: 300px; top: 43%; left: 62%;
+    width: 300px; height: 300px; top: calc(var(--dusk-sky) + (100% - var(--dusk-sky)) * 0.43); left: 62%;
     background: radial-gradient(circle at 40% 40%, var(--color-night-coral-soft), var(--color-night-coral));
     filter: blur(72px);
     opacity: 0.7;

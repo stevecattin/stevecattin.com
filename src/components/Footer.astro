@@ -89,6 +89,18 @@ const year = new Date().getFullYear();
   }
   .footer__reach-out:hover { color: var(--color-cobalt); }
 
+  /* Touch screens: a little more air between the links, and an invisible
+     12px above and below each, so every one is a comfortable tap (~44px).
+     The negative margin keeps the button's box where it was. */
+  @media (pointer: coarse) {
+    .footer__links { gap: var(--space-4); }
+    .footer__links a,
+    .footer__reach-out {
+      padding-block: var(--space-3);
+      margin-block: calc(-1 * var(--space-3));
+    }
+  }
+
   .footer__base {
     display: flex;
     justify-content: space-between;

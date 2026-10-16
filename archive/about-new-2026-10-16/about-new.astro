@@ -1,0 +1,615 @@
+---
+/**
+ * About – rebuilt Oct 2, 2026 (previous version: archive/about-2026-10-02/).
+ * The vetting page: who Stève is now, one story, the four moments lighting
+ * the facet ring, other people's voices, how he works, the path.
+ * Order: Hero → Now → The story → Ring + moments → Voices → How I work →
+ * The path → Night band.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CTABlock from '../components/CTABlock.astro';
+import FacetMoments from '../components/FacetMoments.astro';
+import Testimonials from '../components/Testimonials.astro';
+import GlowBackground from '../components/GlowBackground.astro';
+
+// The portrait slot. Set this to the new photo when it arrives, e.g.
+// { src: '/portrait-about.webp', alt: 'Stève Cattin …', width: 1200, height: 1500 }
+// Until then the hero shows a quiet placeholder of the same size.
+const portrait: { src: string; alt: string; width: number; height: number } | null = null;
+
+// The four moments – titles match the homepage and Work with me.
+const moments = [
+  {
+    title: 'Grown by instinct. Now, by design.',
+    body: "I joined Locatee after its Series A to build the marketing function it didn't have yet – and the narrative system Sales took to market. I worked with Verdantix and Forrester as they drew the lines of a new category. At FELFEL, we went from 175 customers to 500 in two years.",
+    facets: ['storyteller', 'demand'],
+  },
+  {
+    title: 'Growth has stalled, and no one can say why.',
+    body: 'At Tango I rebuilt the marketing team and helped turn the go-to-market around, with the board: root causes first, then fixes across teams, then the measurement to see what worked. My team sourced a large share of pipeline at a fraction of its cost.',
+    facets: ['operator', 'demand', 'culture'],
+  },
+  {
+    title: "You're taking something new to market.",
+    body: "I opened Locatee's first US office from Zürich and hired the first team in New York. At Tango I led a team spread across New York, Toronto, Boston, Florida and LA. Earlier, I rolled out marketing programs across 32 Parker Hannifin country divisions.",
+    facets: ['connector', 'storyteller'],
+  },
+  {
+    title: 'Something big is coming.',
+    body: 'Two exits: Aspediens to CSC, and Locatee to Tango – the second from the deal team. I built the story behind the fundraise and the sale, and kept the team steady in between.',
+    facets: ['human', 'operator', 'storyteller'],
+  },
+] as const;
+
+const principles = [
+  {
+    title: 'Clarity before cleverness.',
+    body: "Most leaders are drowning in clever. I'd rather say the obvious thing first, out loud.",
+  },
+  {
+    title: 'Curiosity over ego.',
+    body: 'The best answer is rarely in one head, so I hold my ideas loosely and let the room find it.',
+  },
+  {
+    title: 'Less, but fully.',
+    body: 'Find the lever that moves everything else, then pull it with full attention.',
+  },
+];
+
+const press = {
+  locatee: 'https://www.venturelab.swiss/Locatee-acquired-by-Tango-creating-industrys-first-holistic-workplace-analytics-solution',
+  aspediens: 'https://www.consultancy.uk/news/12313/csc-acquires-european-cloud-services-firm-aspediens',
+};
+
+// One line per role, one fact per line.
+const path = [
+  { year: '2026', role: 'Fractional CMO & executive advisor', where: 'Independent', note: 'A few companies at a time – in the seat, beside it, or one to one.' },
+  { year: '2025', role: 'SVP Marketing', where: 'Tango', note: 'Came in through the acquisition, took over marketing, joined the executive team.' },
+  { year: '2024', role: 'Second exit', where: 'Locatee → Tango', note: "On the deal team, then VP Operations for Tango's international business, leading the integration.", link: press.locatee },
+  { year: '2022', role: 'Head of People, then VP Operations', where: 'Locatee', note: 'The company needed someone to hold the team and the operating model together.' },
+  { year: '2020', role: 'Head of Marketing', where: 'Locatee', note: 'Joined after the Series A to build the marketing function.' },
+  { year: '2017', role: 'Growth Lead', where: 'FELFEL', note: 'A physical product – good food at work – taken into offices across Switzerland.' },
+  { year: '2016', role: 'First exit', where: 'Aspediens → CSC/DXC', note: 'Acquired by CSC. Suddenly, colleagues on every continent.', link: press.aspediens },
+  { year: '2013', role: 'Head of Marketing', where: 'Aspediens', note: '30 people on my first day. 100+ the day we were acquired.' },
+  { year: '2012', role: 'Digital marketing, 25 countries', where: 'Parker Hannifin', note: 'A first look at how a Fortune 500 moves – and where HQ and the field drift apart.' },
+  { year: '2005', role: 'First job', where: 'École hôtelière de Lausanne', note: "The world's leading hospitality school taught me to read a room. The origin is here." },
+];
+
+const opening = 'In 2022, Locatee lost its largest customer. We downsized hard, twice.';
+const words = (t: string) => t.split(' ');
+
+const personLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Stève Cattin',
+  url: 'https://stevecattin.com/about',
+  jobTitle: 'Fractional CMO & Executive Advisor',
+  description: 'Fractional CMO and executive advisor based in Zürich, working with CEOs and founders of scaling companies.',
+  address: { '@type': 'PostalAddress', addressLocality: 'Zürich', addressCountry: 'CH' },
+  knowsLanguage: ['fr', 'en', 'de', 'it'],
+  knowsAbout: ['Go-to-market strategy', 'Marketing leadership', 'Scaling teams', 'Mergers and acquisitions', 'North American expansion'],
+  image: portrait ? `https://stevecattin.com${portrait.src}` : 'https://stevecattin.com/portrait-street.webp',
+  sameAs: ['https://www.linkedin.com/in/stevecattin'],
+};
+---
+
+<BaseLayout
+  title="About Stève Cattin – Fractional CMO & Executive Advisor, Zürich"
+  description="Fractional CMO and executive advisor in Zürich. Fifteen years building marketing inside scaling tech companies, two exits, a US team built from Europe."
+>
+  <script type="application/ld+json" set:html={JSON.stringify(personLd)} />
+
+  <div class="glow-scope">
+  <GlowBackground strength={0.3} />
+
+  <!-- Hero: the person first – photo left, the question and who's asking it right -->
+  <section class="about-hero">
+    <div class="container-wide about-hero__grid">
+      {portrait ? (
+        <figure class="about-photo">
+          <img src={portrait.src} alt={portrait.alt} width={portrait.width} height={portrait.height} loading="eager" decoding="async" />
+        </figure>
+      ) : (
+        <figure class="about-photo about-photo--placeholder" aria-hidden="true">
+          <svg class="about-photo__glyph" viewBox="0 0 120 120">
+            <circle class="about-photo__org" cx="60" cy="60" r="40" />
+            <circle class="about-photo__halo" cx="60" cy="60" r="16" />
+            <circle class="about-photo__me" cx="60" cy="60" r="6.5" />
+          </svg>
+          <figcaption class="about-photo__note">Portrait – to come</figcaption>
+        </figure>
+      )}
+
+      <div class="about-hero__copy">
+        <p class="section-eyebrow">About</p>
+        <h1 class="about-hero__title">
+          The obvious question is usually the <span class="accent">right</span> one.
+        </h1>
+        <p class="about-hero__lede">
+          I'm Stève, a fractional CMO and executive advisor in Zürich. I've spent
+          fifteen years building marketing inside scaling tech companies – and kept
+          getting pulled into the room above it: People, Operations, the executive
+          team, the deal table.
+        </p>
+        <div class="about-hero__actions">
+          <button class="btn-primary" data-contact-trigger>Tell me your story →</button>
+          <a href="/practice" class="ink-link">When to work with me</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Now: what I do today, and why fractional -->
+  <section class="v2-section about-now" aria-labelledby="now-title">
+    <div class="container-wide v2-split">
+      <header class="v2-sticky">
+        <p class="section-eyebrow">Now</p>
+        <h2 id="now-title" class="section-title">Portfolio shape.</h2>
+      </header>
+      <div>
+        <p class="about-lead">
+          Today I work with a few companies at a time – in the seat as a fractional
+          executive, beside the team as an advisor, or one to one.
+          <a href="/practice" class="ink-link about-lead__link">How that works</a>
+        </p>
+        <p class="about-p">
+          Why fractional? Inside a company, the hardest calls are the ones you're too
+          close to make cleanly. I've been that close, twice. I know what it costs. Now
+          I can stand close to it without being consumed by it.
+        </p>
+        <p class="about-p">
+          I grew up in the Jura countryside and live in Zürich now. Weekends go to the
+          mountains; most trips end up being about architecture.
+        </p>
+      </div>
+    </div>
+
+    <div class="container-wide about-promise">
+      <p class="about-promise__line">
+        Fewer companies than I could take. More <span class="accent">depth</span> with each.
+      </p>
+      <div class="about-promise__sign">
+        <img src="/signature.svg" alt="Stève" width="783" height="302" class="about-sig" decoding="async" />
+      </div>
+    </div>
+  </section>
+
+  <!-- The story: one scene, told plainly -->
+  <section class="v2-section about-story" aria-labelledby="story-title">
+    <div class="container-wide v2-split">
+      <header class="v2-sticky">
+        <p class="section-eyebrow">The story</p>
+        <h2 id="story-title" class="section-title">The year marketing was the smallest part of my job.</h2>
+      </header>
+      <div>
+        <p class="about-statement lit">
+          {words(opening).map((w) => <span>{w} </span>)}
+        </p>
+        <p class="about-p">
+          I'd joined two years earlier as Head of Marketing. Now the job was walks around
+          the block, coffee downstairs, and keeping a small team focused while the company
+          found its footing. I became Head of People, then VP Operations – because that's
+          what the company needed.
+        </p>
+        <p class="about-p">
+          Then we ran a sale process, under pressure. I sat on the four-person deal team
+          with our co-CEOs, our CFO and the board. Tango acquired Locatee in 2024. I led
+          the integration of our teams, then took over marketing and joined the executive
+          team of a PE-backed, US-headquartered company – and helped turn its
+          go-to-market around while the leadership above it was rebuilt.
+        </p>
+        <p class="about-coda">I come in for one thing and end up in the room for all of it.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Signature object: the four moments light the facet ring -->
+  <FacetMoments
+    eyebrow="Where I've been"
+    title="I've lived each of these moments."
+    moments={moments.map((m) => ({ ...m, facets: [...m.facets] }))}
+    coda="In practice, most moments end up calling on all six."
+  />
+
+  <!-- Someone else says it -->
+  <Testimonials
+    featuredId="kristin-johnsen"
+    rowIds={['nicolette-brenden', 'berin-sadikovic']}
+    eyebrow="In their words"
+    title=""
+    lead
+  />
+  <p class="container-wide about-refs">References from the CEOs and board members I've worked with, on request.</p>
+
+  <!-- Principles: three, one sentence each -->
+  <section class="v2-section about-principles" aria-labelledby="principles-title">
+    <div class="container-wide">
+      <p class="section-eyebrow">Principles</p>
+      <h2 id="principles-title" class="section-title about-principles__title">How I work.</h2>
+
+      <ol class="about-principles__list">
+        {principles.map((p, i) => (
+          <li class="about-principles__item">
+            <div class="about-principles__name">
+              <span class="about-num">№ {String(i + 1).padStart(2, '0')}</span>
+              <h3>{p.title}</h3>
+            </div>
+            <p class="about-principles__body">{p.body}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- The path: one line per role, so the facts can be checked -->
+  <section class="v2-section about-path" aria-labelledby="path-title">
+    <div class="container-wide">
+      <p class="section-eyebrow">The path</p>
+      <h2 id="path-title" class="section-title about-path__title">Twenty years, compressed.</h2>
+
+      <ol class="about-path__list">
+        {path.map((r) => (
+          <li class="about-path__item">
+            <div class="about-path__left">
+              <span class="about-path__year">{r.year}</span>
+              <div class="about-path__what">
+                <span class="about-path__role">{r.role}</span>
+                <span class="about-path__where">{r.where}</span>
+              </div>
+            </div>
+            <p class="about-path__note">
+              {r.note}
+              {r.link && (
+                <>
+                  {' '}<a href={r.link} class="about-path__press" target="_blank" rel="noopener noreferrer">The announcement ↗</a>
+                </>
+              )}
+            </p>
+          </li>
+        ))}
+      </ol>
+
+      <p class="about-path__more">The full CV is on <a href="https://www.linkedin.com/in/stevecattin" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</p>
+    </div>
+  </section>
+
+  <CTABlock
+    id="book"
+    wide
+    night
+    eyebrow="Are we a match?"
+    headline="Let's have the conversation before anything else."
+    body="A forty-five-minute intro conversation. No deck, no pre-work. I'll ask what's actually going on. If the fit is real, we'll both know by the end."
+    ctaLabel="Tell me your story →"
+    ctaModal={true}
+    secondaryLabel="When to work with me →"
+    secondaryHref="/practice"
+  />
+  </div>
+</BaseLayout>
+
+<script>
+  // Sign it when it's seen: the signature writes itself left to right.
+  const sig = document.querySelector<HTMLElement>('.about-sig');
+  if (sig) {
+    const io = new IntersectionObserver((entries) => {
+      if (entries.some((e) => e.isIntersecting)) {
+        sig.classList.add('is-signed');
+        io.disconnect();
+      }
+    }, { threshold: 0.6 });
+    // Observe the unclipped wrapper – a fully clipped element never "intersects".
+    io.observe(sig.parentElement ?? sig);
+  }
+</script>
+
+<style>
+  .about-num {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: var(--text-mono-sm);
+    letter-spacing: var(--tracking-wide);
+    color: var(--color-cobalt);
+    font-weight: 500;
+    margin-bottom: var(--space-3);
+  }
+
+  .about-p {
+    font-size: 17px;
+    line-height: var(--lh-prose);
+    color: var(--color-graphite);
+    margin: 0 0 var(--space-5);
+    max-width: 62ch;
+  }
+
+  /* -------- Hero -------- */
+  .about-hero {
+    padding-top: clamp(40px, 4vw, 72px);
+    padding-bottom: var(--space-20);
+  }
+
+  /* Mirror of the homepage hero: here the person comes first. */
+  .about-hero__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: clamp(40px, 6vw, 96px);
+    align-items: center;
+  }
+
+  .about-photo {
+    margin: 0;
+    width: 100%;
+    max-width: 460px;
+    aspect-ratio: 4 / 5;
+    max-height: 580px;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+  .about-photo img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+  }
+
+  /* Placeholder until the new photo arrives: the site's own motif –
+     the circle is the whole, the cobalt dot is me. */
+  .about-photo--placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-5);
+    border: 1px dashed color-mix(in srgb, var(--color-ink) 22%, transparent);
+  }
+  .about-photo__glyph { width: 112px; height: 112px; }
+  .about-photo__org { fill: none; stroke: var(--color-ink); stroke-width: 1.25; }
+  .about-photo__halo { fill: var(--color-glow-blue); opacity: 0.35; filter: blur(6px); }
+  .about-photo__me { fill: var(--color-cobalt); }
+  .about-photo__note {
+    font-family: var(--font-mono);
+    font-size: var(--text-mono-sm);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-ash);
+  }
+
+  .about-hero__title {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(44px, 5.6vw, 88px);
+    line-height: 0.98;
+    letter-spacing: var(--tracking-tighter);
+    color: var(--color-ink);
+    margin: 0 0 var(--space-8);
+    text-wrap: balance;
+  }
+  .about-hero__title .accent { color: var(--color-cobalt); }
+
+  .about-hero__lede {
+    font-size: var(--text-lg);
+    line-height: var(--lh-normal);
+    color: var(--color-graphite);
+    margin: 0 0 var(--space-10);
+    max-width: 56ch;
+  }
+
+  .about-hero__actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-7);
+    flex-wrap: wrap;
+  }
+
+  /* -------- Now -------- */
+  /* No hairline directly under the hero – the light flows on. */
+  .about-now { border-top: 0; }
+
+  .about-lead {
+    font-size: clamp(19px, 1.6vw, 22px);
+    line-height: 1.55;
+    color: var(--color-ink);
+    margin: 0 0 var(--space-6);
+    max-width: 52ch;
+  }
+  .about-lead__link { font-size: inherit; white-space: nowrap; }
+
+  /* The promise – set big, then signed. */
+  .about-promise {
+    margin-top: var(--space-20);
+    display: grid;
+    grid-template-columns: minmax(0, 8fr) minmax(0, 4fr);
+    gap: clamp(40px, 6vw, 96px);
+    align-items: end;
+  }
+  .about-promise__line {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(40px, 5.4vw, 80px);
+    line-height: 1;
+    letter-spacing: var(--tracking-tighter);
+    color: var(--color-ink);
+    margin: 0;
+    text-wrap: balance;
+  }
+  .about-promise__line .accent { font-weight: inherit; }
+
+  .about-sig {
+    display: block;
+    width: clamp(140px, 14vw, 190px);
+    height: auto;
+    clip-path: inset(-10% 100% -10% -10%);
+  }
+  .about-sig.is-signed {
+    animation: about-sign 1.8s cubic-bezier(.55, 0, .3, 1) forwards;
+  }
+  @keyframes about-sign {
+    to { clip-path: inset(-10% -10% -10% -10%); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .about-sig { clip-path: none; animation: none !important; }
+  }
+
+  /* -------- The story -------- */
+  .about-statement {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(28px, 3vw, 42px);
+    line-height: 1.16;
+    letter-spacing: -0.02em;
+    color: var(--color-ink);
+    margin: 0 0 var(--space-8);
+    text-wrap: pretty;
+  }
+
+  .about-coda {
+    margin: var(--space-10) 0 0;
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--color-line);
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(22px, 2vw, 28px);
+    line-height: 1.25;
+    letter-spacing: -0.015em;
+    color: var(--color-ink);
+    max-width: 30ch;
+    text-wrap: balance;
+  }
+
+  .about-refs {
+    margin-top: calc(-1 * var(--space-8));
+    margin-bottom: var(--space-16);
+    font-size: var(--text-sm);
+    color: var(--color-ash);
+  }
+
+  /* -------- Principles -------- */
+  .about-principles__title { margin-bottom: var(--space-12); }
+
+  .about-principles__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-bottom: 1px solid var(--color-line);
+  }
+  .about-principles__item {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: clamp(40px, 6vw, 96px);
+    padding-block: var(--space-10);
+    border-top: 1px solid var(--color-line);
+    align-items: baseline;
+  }
+  .about-principles__name h3 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(30px, 3.4vw, 50px);
+    line-height: 1;
+    letter-spacing: var(--tracking-tighter);
+    color: var(--color-ink);
+    margin: 0;
+    text-wrap: balance;
+  }
+  .about-principles__body {
+    font-size: clamp(18px, 1.5vw, 21px);
+    line-height: 1.5;
+    color: var(--color-graphite);
+    margin: 0;
+    max-width: 44ch;
+  }
+
+  /* -------- The path -------- */
+  .about-path__title { margin-bottom: var(--space-12); }
+
+  .about-path__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-bottom: 1px solid var(--color-line);
+  }
+  /* Same 5:7 spine as the principles above. */
+  .about-path__item {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: clamp(40px, 6vw, 96px);
+    padding-block: var(--space-5);
+    border-top: 1px solid var(--color-line);
+    align-items: baseline;
+  }
+  .about-path__left {
+    display: grid;
+    grid-template-columns: 80px minmax(0, 1fr);
+    gap: var(--space-4);
+    align-items: baseline;
+  }
+  .about-path__year {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(22px, 1.8vw, 28px);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: var(--color-ink);
+  }
+  .about-path__what { display: flex; flex-direction: column; gap: var(--space-2); }
+  .about-path__role {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 1.25;
+    color: var(--color-ink);
+  }
+  .about-path__where {
+    font-family: var(--font-mono);
+    font-size: var(--text-mono-xs);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-mono);
+    color: var(--color-ash);
+  }
+  .about-path__note {
+    font-size: 16px;
+    line-height: var(--lh-normal);
+    color: var(--color-graphite);
+    margin: 0;
+    max-width: 58ch;
+  }
+  .about-path__press {
+    font-weight: 500;
+    color: var(--color-cobalt);
+    white-space: nowrap;
+  }
+  .about-path__press:hover { color: var(--color-ink); }
+
+  .about-path__more {
+    margin: var(--space-8) 0 0;
+    font-size: var(--text-sm);
+    color: var(--color-ash);
+  }
+  .about-path__more a {
+    color: var(--color-graphite);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: color-mix(in srgb, var(--color-ink) 30%, transparent);
+  }
+  .about-path__more a:hover { text-decoration-color: var(--color-cobalt); }
+
+  /* -------- Responsive -------- */
+  @media (max-width: 960px) {
+    .about-promise { grid-template-columns: 1fr; gap: var(--space-8); }
+    .about-principles__item,
+    .about-path__item { grid-template-columns: 1fr; gap: var(--space-3); }
+  }
+
+  @media (max-width: 860px) {
+    /* Phones and tablets: the question first, then the face. */
+    .about-hero__grid { grid-template-columns: 1fr; gap: var(--space-10); }
+    .about-hero__copy { order: -1; }
+    .about-photo { max-width: 360px; }
+  }
+
+  @media (max-width: 640px) {
+    .about-hero { padding-top: var(--space-10); padding-bottom: var(--space-12); }
+    .about-promise { margin-top: var(--space-14); }
+    .about-path__left { grid-template-columns: 64px minmax(0, 1fr); }
+  }
+</style>

@@ -103,3 +103,12 @@
   --dur-med:  240ms;
   --dur-slow: 480ms;
 }
+
+/* Phones: the mono labels (eyebrows, roles, dates, card numbers) go up a
+   point – 10–11px uppercase mono is hard to read on a small screen. */
+@media (max-width: 640px) {
+  :root {
+    --text-mono-xs: 11px;
+    --text-mono-sm: 12px;
+  }
+}

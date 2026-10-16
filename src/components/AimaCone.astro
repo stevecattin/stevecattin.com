@@ -5,7 +5,10 @@
  * cobalt to coral, with the background's white grain.
  *
  * Modes
- *  - loop  (homepage): draws itself when seen, rests, fades, starts again (8s).
+ *  - scroll (homepage): sits a fifth full, then fills slowly as you scroll
+ *    it up the screen – full a little above the middle – and empties back
+ *    to a fifth as you scroll down again. Browsers without scroll-driven
+ *    animations draw it once instead (from a fifth to full).
  *  - once  (AIMA hero): draws itself once when seen and stays.
  *  - scrub (AIMA maturity model): an instrument. The full cone shows as a
  *    faint ghost – where you could get to – and the lit part runs up to the
@@ -17,12 +20,12 @@
  */
 interface Props {
   uid: string;
-  mode?: 'loop' | 'once' | 'scrub';
+  mode?: 'scroll' | 'once' | 'scrub';
   /** viewBox size – the shape is generated for any aspect ratio. */
   w?: number;
   h?: number;
   stages?: string[];
-  /** Accessible description of the graphic (loop/once). */
+  /** Accessible description of the graphic (scroll/once). */
   label?: string;
   /** scrub: the stage it settles on when first seen (0-based). */
   start?: number;
@@ -30,7 +33,7 @@ interface Props {
 
 const {
   uid,
-  mode = 'loop',
+  mode = 'scroll',
   w = 580,
   h = 200,
   stages = ['Aware', 'Experimenting', 'Equipped', 'Operational', 'Strategic'],
@@ -44,7 +47,8 @@ const d = `M 0 ${r(cy - 3)} C ${r(0.45 * w)} ${r(cy - 8)}, ${r(0.7 * w)} ${r(0.3
 const blur = r(14 * (h / 200));
 const guides = [0.25, 0.5, 0.75].map((f) => r(f * w));
 const last = stages.length - 1;
-const hidden = 'clip-path: inset(-40px 100% -40px -40px)';
+// Before it plays: empty, or a fifth full in scroll mode (its resting start).
+const hidden = `clip-path: inset(-40px ${mode === 'scroll' ? '80%' : '100%'} -40px -40px)`;
 ---
 
 <div
@@ -151,25 +155,37 @@ const hidden = 'clip-path: inset(-40px 100% -40px -40px)';
   .aima-cone__grain { opacity: 0.55; }
   .aima-cone__guides line { stroke: rgba(255, 255, 255, 0.55); stroke-width: 1; }
 
-  /* loop – draw, rest, fade, again */
-  .aima-cone--loop .aima-cone__beam.is-playing {
-    animation: aima-reveal 8s cubic-bezier(.55, 0, .25, 1) infinite;
+  /* scroll – the fill follows the scroll. It rests a fifth full, starts
+     filling as soon as the cone enters the screen and is full a little
+     above the middle (cover 0% → 60%: about 470px of scrolling on a phone,
+     600px on a laptop). Scroll back and it empties to a fifth.
+     (`animation-timeline` has to come after the `animation` shorthand,
+     which resets it.) */
+  @supports (animation-timeline: view()) {
+    .aima-cone--scroll .aima-cone__beam {
+      animation: aima-fill linear both;
+      animation-timeline: view();
+      animation-range: cover 0% cover 60%;
+    }
   }
-  @keyframes aima-reveal {
-    0%   { clip-path: inset(-40px 100% -40px -40px); opacity: 1; }
-    55%  { clip-path: inset(-40px -40px -40px -40px); }
-    85%  { clip-path: inset(-40px -40px -40px -40px); opacity: 1; }
-    97%  { opacity: 0; }
-    100% { clip-path: inset(-40px 100% -40px -40px); opacity: 0; }
+  @keyframes aima-fill {
+    from { clip-path: inset(-40px 80% -40px -40px); }
+    to   { clip-path: inset(-40px -40px -40px -40px); }
   }
 
-  /* once – draw and stay */
+  /* once – draw and stay. */
   .aima-cone--once .aima-cone__beam.is-playing {
     animation: aima-draw 4.4s cubic-bezier(.55, 0, .25, 1) forwards;
   }
   @keyframes aima-draw {
     from { clip-path: inset(-40px 100% -40px -40px); }
     to   { clip-path: inset(-40px -40px -40px -40px); }
+  }
+
+  /* scroll without scroll-driven animations (the script adds .is-playing):
+     draws once, from a fifth to full. */
+  .aima-cone--scroll .aima-cone__beam.is-playing {
+    animation: aima-fill 3.6s cubic-bezier(.55, 0, .25, 1) forwards;
   }
 
   /* scrub – ghost of the whole path, lit up to the chosen stage */
@@ -202,7 +218,7 @@ const hidden = 'clip-path: inset(-40px 100% -40px -40px)';
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .aima-cone--loop .aima-cone__beam,
+    .aima-cone--scroll .aima-cone__beam,
     .aima-cone--once .aima-cone__beam { animation: none !important; clip-path: none !important; }
     .aima-cone--scrub .aima-cone__beam,
     .aima-cone__marker { transition: none; }
@@ -358,8 +374,12 @@ const hidden = 'clip-path: inset(-40px 100% -40px -40px)';
       return;
     }
 
-    // loop / once: start drawing only once the visual is on screen.
-    // Observe the unclipped wrapper – the beam itself starts fully clipped.
+    // scroll: the CSS scroll timeline does the work where it's supported.
+    if (mode === 'scroll' && CSS.supports('animation-timeline', 'view()')) return;
+
+    // once (and scroll without support): start drawing only once the
+    // visual is on screen, then stay. Observe the unclipped wrapper – the
+    // beam itself starts fully clipped.
     const io = new IntersectionObserver((entries) => {
       if (entries.some((e) => e.isIntersecting)) {
         beam.classList.add('is-playing');

@@ -12,7 +12,7 @@
 >
   <div class="modal__backdrop"></div>
 
-  <div class="modal__panel">
+  <div class="modal__panel" tabindex="-1">
     <div class="modal__header">
       <div class="modal__heading">
         <h2 class="modal__title" id="modal-title">Everything starts with a story.</h2>
@@ -95,6 +95,8 @@
   const successEl = document.getElementById('contact-success') as HTMLElement;
   const submitBtn = form.querySelector('.form-submit') as HTMLButtonElement;
   const successCloseBtn = modal.querySelector('.success-close') as HTMLButtonElement;
+  const panel    = modal.querySelector('.modal__panel') as HTMLElement;
+  const touch    = window.matchMedia('(pointer: coarse)');
 
   // Focusable elements for focus trap
   const focusableSelectors = 'button, [href], input, textarea, [tabindex]:not([tabindex="-1"])';
@@ -103,8 +105,15 @@
     modal.removeAttribute('aria-hidden');
     modal.classList.add('is-open');
     document.body.style.overflow = 'hidden';
-    // Focus first input after transition starts
+    // Focus moves into the sheet after the transition starts. Mouse and
+    // keyboard users land in the first field. On touch screens a focused
+    // field pops the keyboard over half the sheet before anyone has read it,
+    // so focus goes to the sheet itself and the keyboard waits for a tap.
     setTimeout(() => {
+      if (touch.matches) {
+        panel.focus({ preventScroll: true });
+        return;
+      }
       const first = modal.querySelector<HTMLElement>('input, textarea');
       first?.focus();
     }, 60);
@@ -226,6 +235,12 @@
 
   .modal.is-open .modal__panel {
     transform: translateY(0);
+  }
+
+  /* The sheet takes focus on touch screens (see openModal) – it isn't a
+     control, so no focus ring. */
+  .modal__panel:focus {
+    outline: none;
   }
 
   /* Mobile: bottom sheet */

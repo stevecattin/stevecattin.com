@@ -118,17 +118,20 @@ const { strength = 0.4, dimTo = 0.4, coral = true } = Astro.props;
     padding-top: var(--nav-h, 0px); /* content starts below the floating nav */
   }
 
-  /* One viewport tall, sticky, and taking no space (negative margin). */
+  /* One viewport tall, sticky, and taking no space (negative margin).
+     Sized to the *large* viewport (lvh): on phones the browser toolbar
+     slides away as you scroll and the screen grows; sized to the small one
+     (svh), the light stopped short and left a hard edge at the bottom. */
   .glow-stage {
     position: sticky;
     top: 0;
     height: 100vh;
-    height: 100svh;
+    height: 100lvh;
     /* Pull the light up behind the (transparent) nav bar, and let the
        content start right after the bar. */
     margin-top: calc(-1 * var(--nav-h, 0px));
     margin-bottom: calc(-100vh + var(--nav-h, 0px));
-    margin-bottom: calc(-100svh + var(--nav-h, 0px));
+    margin-bottom: calc(-100lvh + var(--nav-h, 0px));
     overflow: hidden;
     pointer-events: none;
     z-index: 0;
@@ -204,6 +207,16 @@ const { strength = 0.4, dimTo = 0.4, coral = true } = Astro.props;
     width: 380px; height: 380px; top: 410px; left: 37%;
     background: radial-gradient(circle at 40% 40%, var(--color-night-coral-soft), var(--color-night-coral));
     filter: blur(84px);
+  }
+
+  /* Phones: the lights hold still. Re-blurring four big drifting lights on
+     every frame made scrolling stutter, and the drift (a minute-plus cycle)
+     is barely visible on a small screen. Same breakpoint as the hero. */
+  @media (max-width: 760px) {
+    .glow .glow__blob {
+      animation: none;
+      will-change: auto;
+    }
   }
 
   /* Grain stays full-bleed, centred on the (centred) light layer. */
