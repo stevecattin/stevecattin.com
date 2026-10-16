@@ -5,8 +5,20 @@ import GlowBackground from '../components/GlowBackground.astro';
 import AimaCone from '../components/AimaCone.astro';
 
 /* ---------------------------------------------------------------
+   AIMA night – the framework in its own style within the brand: the
+   closing band's navy, lights and grain carried across the whole page,
+   with the site's type, layout and hairlines. It closes on a dawn –
+   navy sky brightening into paper, a coral sun on the horizon – before
+   the usual paper footer.
+
+   Everything night lives in the global style block at the bottom: it
+   remaps the color tokens and flips the shared pieces (nav, light,
+   cone, closing band, footer), only on a page that has .aima--night,
+   so the rest of the site is untouched.
+   --------------------------------------------------------------- */
+/* ---------------------------------------------------------------
    The AI Marketing Ascendancy Framework – flagship page.
-   Design principles v2: one paper ground with hairlines, type-led
+   Design principles v2: hairlines between sections, type-led
    tables instead of cards, and the cone as the page's instrument –
    drawn once in the hero, then used to walk the five stages in the
    maturity model (blue is where you are, coral where you're going).
@@ -231,8 +243,8 @@ const toc = [
   title="The AI Marketing Ascendancy Framework"
   description="A practical framework for moving marketing teams from AI-curious to AI-confident: the challenges, a use-case library, and a maturity model across people, processes, and technology."
 >
-  <div class="glow-scope">
-  <GlowBackground strength={0.3} dimTo={0.3} coral={false} />
+  <div class="glow-scope aima--night">
+  <GlowBackground strength={0.6} dimTo={0.45} coral={false} />
 
   <!-- Hero: the name, the why, and the cone drawing itself once -->
   <section class="aima-hero" id="intro">
@@ -1179,6 +1191,185 @@ const toc = [
   @media (prefers-reduced-motion: reduce) {
     .aima-stage:not([hidden]) { animation: none; }
   }
+</style>
+
+<style is:global>
+  /* ============================================================
+     AIMA night – the closing band's ground, carried across the page.
+     Scoped to a page that contains .aima--night, so nothing else on
+     the site changes.
+
+     The night covers the nav, the hero and the body. The closing band
+     is the dawn – the sky brightens into paper, a coral sun on the
+     horizon – and the footer is the site's usual paper again. The
+     band, the footer and the contact sheet keep the day tokens.
+
+     Text ramp: haze (headlines, strong copy) → powder mix (sub copy)
+     → darker powder mix (metadata), all from the night tokens.
+     Accent: night sky stands in for cobalt – cobalt on navy is about
+     2:1 and disappears. Buttons are paper on navy (principle §8).
+     Coral stays light only: the end of the cone, the sun at dawn.
+     ============================================================ */
+  html:has(.aima--night) { color-scheme: dark; }
+  body:has(.aima--night) { background: var(--color-night); }
+
+  body:has(.aima--night) :is(.aima--night > :not(.cta), .nav) {
+    --color-ink:         var(--color-night-haze);
+    --color-graphite:    color-mix(in srgb, var(--color-night-powder) 80%, var(--color-night));
+    --color-ash:         color-mix(in srgb, var(--color-night-powder) 62%, var(--color-night));
+    --color-line:        color-mix(in srgb, var(--color-night-haze) 14%, transparent);
+    --color-line-subtle: color-mix(in srgb, var(--color-night-haze) 9%, transparent);
+    --color-cobalt:      var(--color-night-sky);
+    --color-cobalt-deep: var(--color-night-powder);
+    --color-cobalt-tint: color-mix(in srgb, var(--color-night-sky) 14%, transparent);
+    color: var(--color-ink);
+  }
+
+  /* ---------- The light: night blues and overlay grain ---------- */
+  body:has(.aima--night) .glow__blob--1 {
+    background: radial-gradient(circle at 50% 50%, var(--color-night-azure), var(--color-night-royal));
+  }
+  body:has(.aima--night) .glow__blob--2 {
+    background: radial-gradient(circle at 50% 50%, var(--color-night-royal), var(--color-night-deep));
+  }
+  body:has(.aima--night) .glow__blob--3 {
+    background: radial-gradient(circle at 50% 50%, var(--color-night-azure), var(--color-night-deep));
+  }
+  /* Overlay grain needs navy to blend with inside the light layer (its
+     own stacking context) – without it the noise shows raw, as grey
+     static. The spread shadow carries the navy past the layer's capped
+     width; the stage clips it. */
+  body:has(.aima--night) .glow {
+    background: var(--color-night);
+    box-shadow: 0 0 0 100vmax var(--color-night);
+  }
+  body:has(.aima--night) .glow__grain {
+    background-image: url("/images/noise.png");
+    mix-blend-mode: overlay;
+    opacity: 0.36;
+  }
+
+  /* ---------- Nav: light type, dark glass ---------- */
+  body:has(.aima--night) .nav.is-scrolled,
+  body:has(.aima--night) .nav:has(.nav__mobile-menu.is-open) {
+    background: color-mix(in srgb, var(--color-night) 62%, transparent);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.08),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.05),
+      0 12px 32px -20px rgba(0, 0, 0, 0.6);
+  }
+  @media (prefers-reduced-transparency: reduce) {
+    body:has(.aima--night) .nav.is-scrolled,
+    body:has(.aima--night) .nav:has(.nav__mobile-menu.is-open) { background: var(--color-night); }
+  }
+  body:has(.aima--night) .nav__mobile-menu { background: var(--color-night); }
+  body:has(.aima--night) .nav__cta,
+  body:has(.aima--night) .nav__mobile-cta {
+    background: var(--color-paper);
+    color: var(--color-night);
+  }
+  body:has(.aima--night) .nav__cta:hover {
+    background: var(--color-night-powder);
+    color: var(--color-night);
+  }
+
+  /* ---------- The cone: a beam of light in the dark ---------- */
+  /* Start the beam from the glow blue, a touch brighter than cobalt,
+     so the line at Aware still reads on navy. */
+  body:has(.aima--night) .aima-cone stop:first-child { stop-color: var(--color-glow-blue) !important; }
+  body:has(.aima--night) .aima-cone__halo { opacity: 0.8; }
+  body:has(.aima--night) .aima-cone__ghost path { fill: color-mix(in srgb, var(--color-night-haze) 7%, transparent); }
+  /* The "you are here" dot: bright blue, ringed in navy, with its halo. */
+  body:has(.aima--night) .aima-cone__marker {
+    background: var(--color-glow-blue);
+    border-color: var(--color-night);
+  }
+
+  /* ---------- Dawn: the closing band ----------
+     The band opens with a stretch of sky that starts at the page's
+     navy and brightens through the night blues into paper. The copy
+     sits on the paper, lit like the homepage hero: soft blue lights
+     and one coral sun on the horizon line. Overlay grain works on both
+     – texture in the sky, gone on the paper. Day tokens throughout. */
+  body:has(.aima--night) .cta.cta--night {
+    background: transparent; /* the band's own navy would show at the seam */
+    --dawn-sky: clamp(220px, 24vw, 340px);
+    padding-top: calc(var(--dawn-sky) + var(--space-12));
+    margin-top: var(--space-10);
+  }
+  /* The sky fades in from nothing at the top (a mask on the whole
+     layer – gradient, lights and grain), so the page's own light runs
+     into the band with no seam and no clipped glow. */
+  body:has(.aima--night) .cta--night .night-bg {
+    background: linear-gradient(
+      to bottom,
+      var(--color-night) 0,
+      var(--color-night-deep) calc(var(--dawn-sky) * 0.36),
+      var(--color-night-royal) calc(var(--dawn-sky) * 0.52),
+      var(--color-night-azure) calc(var(--dawn-sky) * 0.66),
+      var(--color-night-sky) calc(var(--dawn-sky) * 0.79),
+      var(--color-night-powder) calc(var(--dawn-sky) * 0.9),
+      var(--color-paper) var(--dawn-sky)
+    );
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 calc(var(--dawn-sky) * 0.42));
+    mask-image: linear-gradient(to bottom, transparent 0, #000 calc(var(--dawn-sky) * 0.42));
+  }
+
+  /* The sun: coral, centred on the horizon, right of the copy. Its slow
+     drift lifts it into the sky and lets it sink back. */
+  body:has(.aima--night) .cta--night .cta__blob--3 {
+    --sun: clamp(300px, 32vw, 440px);
+    width: var(--sun); height: var(--sun);
+    top: calc(var(--dawn-sky) - var(--sun) / 2);
+    left: 60%;
+    background: radial-gradient(circle at 50% 50%, var(--color-night-coral-soft), var(--color-night-coral));
+    filter: blur(96px);
+    opacity: 0.75;
+    mix-blend-mode: normal;
+  }
+  /* Morning blues on the paper: one low left, one far right. */
+  body:has(.aima--night) .cta--night .cta__blob--1 {
+    width: 620px; height: 620px;
+    top: calc(var(--dawn-sky) + 40px);
+    left: -260px;
+    background: radial-gradient(circle at 50% 50%, var(--color-glow-blue-soft), var(--color-glow-blue));
+    filter: blur(170px);
+    opacity: 0.32;
+  }
+  body:has(.aima--night) .cta--night .cta__blob--2 {
+    width: 560px; height: 560px;
+    top: calc(var(--dawn-sky) + 120px);
+    left: 82%;
+    background: radial-gradient(circle at 50% 50%, var(--color-glow-blue-soft), var(--color-glow-cobalt-soft));
+    filter: blur(170px);
+    opacity: 0.28;
+  }
+
+  /* Copy and actions back on paper: cobalt eyebrow, ink headline,
+     cobalt button (as in a hero), quiet ink link. (.cta.cta--night:
+     one class more than CTABlock's own scoped night rules.) */
+  body:has(.aima--night) .cta.cta--night .cta__eyebrow { color: var(--color-cobalt); }
+  body:has(.aima--night) .cta.cta--night .cta__headline { color: var(--color-ink); }
+  body:has(.aima--night) .cta.cta--night .cta__body { color: var(--color-graphite); }
+  body:has(.aima--night) .cta.cta--night .cta__btn.cta__btn--primary {
+    background: var(--color-cobalt);
+    color: var(--color-paper);
+  }
+  body:has(.aima--night) .cta.cta--night .cta__btn.cta__btn--primary:hover {
+    background: var(--color-ink);
+    color: var(--color-paper);
+  }
+  body:has(.aima--night) .cta.cta--night .cta__btn.cta__btn--secondary {
+    color: var(--color-ink);
+    text-decoration-color: color-mix(in srgb, var(--color-ink) 30%, transparent);
+  }
+  body:has(.aima--night) .cta.cta--night .cta__btn.cta__btn--secondary:hover {
+    color: var(--color-ink);
+    text-decoration-color: var(--color-cobalt);
+  }
+
+  /* The day continues into the footer: plain paper, as on every page. */
+  body:has(.aima--night) main + .footer { background: var(--color-paper); }
 </style>
 
 <script>
