@@ -1,0 +1,345 @@
+---
+/**
+ * Hero portrait: formal and casual Stève in one disc, divided by a diagonal
+ * cut. Drag the handle (or use the arrow keys) to move from one to the other.
+ * Both images share the same 720×859 canvas (disc + head pop-out baked in),
+ * so the only thing that changes across the cut is the person.
+ *
+ * Geometry lives in percent of the image width/height; --p is where the cut
+ * crosses mid-height, SKEW is how far the line leans (top edge sits SKEW to
+ * the right of --p, bottom edge SKEW to the left).
+ */
+const START = 75;
+const SKEW = 10;
+const VB_W = 720;
+const VB_H = 859;
+const x1 = ((START + SKEW) * VB_W) / 100;
+const x2 = ((START - SKEW) * VB_W) / 100;
+---
+
+<div
+  class="split"
+  data-split
+  data-start={START}
+  data-skew={SKEW}
+  style={`--p:${START}; --skew:${SKEW}%;`}
+>
+  <div class="split__stage" data-stage>
+    <img
+      class="split__img"
+      src="/portrait-hero.webp"
+      alt="Portrait of Stève Cattin"
+      width="720"
+      height="859"
+      loading="eager"
+      decoding="async"
+    />
+    <img
+      class="split__img split__img--casual"
+      src="/portrait-hero-casual.webp"
+      alt=""
+      aria-hidden="true"
+      width="720"
+      height="859"
+      loading="eager"
+      decoding="async"
+    />
+
+    <svg
+      class="split__svg"
+      viewBox={`0 0 ${VB_W} ${VB_H}`}
+      preserveAspectRatio="none"
+      aria-hidden="true"
+    >
+      <line
+          class="split__line"
+          data-line
+          x1={x1}
+          y1="0"
+          x2={x2}
+          y2={VB_H}
+          vector-effect="non-scaling-stroke"></line>
+    </svg>
+
+    <button
+      type="button"
+      class="split__handle"
+      data-handle
+      role="slider"
+      aria-label="Switch between the formal and the casual portrait"
+      aria-orientation="horizontal"
+      aria-valuemin="0"
+      aria-valuemax="100"
+      aria-valuenow={100 - START}
+      aria-valuetext="Mostly formal"
+    >
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false">
+        <path
+          d="M9 7l-5 5 5 5M15 7l5 5-5 5"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"></path>
+      </svg>
+    </button>
+  </div>
+
+  <div class="split__labels" data-labels>
+    <button type="button" class="split__label is-active" data-go="formal">Formal</button>
+    <button type="button" class="split__label" data-go="casual">Casual</button>
+  </div>
+</div>
+
+<style>
+  .split {
+    position: relative;
+    width: 100%;
+  }
+
+  .split__stage {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 720 / 859;
+    touch-action: pan-y; /* vertical scroll still works on touch */
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  .split__img {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  /* The casual layer sits on top and is revealed to the right of the cut. */
+  .split__img--casual {
+    clip-path: polygon(
+      calc(var(--p) * 1% + var(--skew)) 0,
+      100% 0,
+      100% 100%,
+      calc(var(--p) * 1% - var(--skew)) 100%
+    );
+  }
+
+  .split__svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: visible;
+  }
+
+  .split__line {
+    stroke: var(--color-cobalt);
+    stroke-width: 1.5;
+    opacity: 0.9;
+  }
+
+  /* Handle rides the cut at 58% height (the disc's centre line). */
+  .split__handle {
+    position: absolute;
+    top: 58%;
+    left: clamp(7%, calc(var(--p) * 1% - 0.16 * var(--skew)), 93%);
+    transform: translate(-50%, -50%);
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--color-line);
+    border-radius: 50%;
+    background: var(--color-white);
+    color: var(--color-cobalt);
+    box-shadow: 0 6px 18px rgb(11 16 32 / 0.18);
+    cursor: grab;
+    touch-action: none;
+    transition: box-shadow var(--dur-fast) var(--ease-out);
+  }
+
+  .split__handle:hover {
+    box-shadow: 0 8px 22px rgb(11 16 32 / 0.26);
+  }
+
+  .split.is-dragging .split__handle {
+    cursor: grabbing;
+  }
+
+  /* Without JS the cut is a static split and the controls stay out of the way. */
+  .split:not([data-ready]) .split__handle,
+  .split:not([data-ready]) .split__labels {
+    display: none;
+  }
+
+  .split__labels {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    margin-top: var(--space-3);
+    display: flex;
+    justify-content: space-between;
+    padding-inline: var(--space-4);
+  }
+
+  .split__label {
+    padding: var(--space-1) 0;
+    border: 0;
+    border-bottom: 1px solid transparent;
+    background: none;
+    font-family: var(--font-mono);
+    font-size: var(--text-mono-sm);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-ash);
+    cursor: pointer;
+    transition: color var(--dur-fast) var(--ease-out),
+      border-color var(--dur-fast) var(--ease-out);
+  }
+
+  .split__label:hover,
+  .split__label.is-active {
+    color: var(--color-cobalt);
+  }
+
+  .split__label.is-active {
+    border-bottom-color: var(--color-cobalt);
+  }
+
+  @media (max-width: 760px) {
+    .split__handle {
+      width: 40px;
+      height: 40px;
+    }
+  }
+</style>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-split]');
+
+  if (root) {
+    const stage = root.querySelector<HTMLElement>('[data-stage]')!;
+    const handle = root.querySelector<HTMLElement>('[data-handle]')!;
+    const line = root.querySelector<SVGLineElement>('[data-line]')!;
+    const labels = root.querySelectorAll<HTMLButtonElement>('[data-go]');
+
+    const SKEW = Number(root.dataset.skew);
+    const START = Number(root.dataset.start);
+    const VB_W = 720;
+    const MIN = 2;
+    const MAX = 98;
+    const HANDLE_Y = 0.58; // handle height as a fraction of the stage
+    const OFFSET = SKEW * (1 - 2 * HANDLE_Y); // handle x = p + OFFSET
+
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let p = START;
+    let raf = 0;
+
+    const clamp = (v: number) => Math.min(MAX, Math.max(MIN, v));
+
+    const render = () => {
+      root.style.setProperty('--p', p.toFixed(2));
+      line.setAttribute('x1', String(((p + SKEW) * VB_W) / 100));
+      line.setAttribute('x2', String(((p - SKEW) * VB_W) / 100));
+
+      const casual = Math.round(100 - p);
+      handle.setAttribute('aria-valuenow', String(casual));
+      handle.setAttribute(
+        'aria-valuetext',
+        casual < 35 ? 'Mostly formal' : casual > 65 ? 'Mostly casual' : 'A mix of formal and casual',
+      );
+      labels.forEach((btn) => {
+        const formalActive = p >= 50;
+        btn.classList.toggle('is-active', (btn.dataset.go === 'formal') === formalActive);
+      });
+    };
+
+    const stop = () => {
+      if (raf) cancelAnimationFrame(raf);
+      raf = 0;
+    };
+
+    const tween = (to: number, ms = 600, done?: () => void) => {
+      stop();
+      if (reduceMotion) {
+        p = clamp(to);
+        render();
+        done?.();
+        return;
+      }
+      const from = p;
+      const t0 = performance.now();
+      const step = (now: number) => {
+        const k = Math.min(1, (now - t0) / ms);
+        const eased = 1 - Math.pow(1 - k, 3);
+        p = from + (clamp(to) - from) * eased;
+        render();
+        if (k < 1) raf = requestAnimationFrame(step);
+        else {
+          raf = 0;
+          done?.();
+        }
+      };
+      raf = requestAnimationFrame(step);
+    };
+
+    const fromPointer = (clientX: number) => {
+      const rect = stage.getBoundingClientRect();
+      const pct = ((clientX - rect.left) / rect.width) * 100;
+      p = clamp(pct - OFFSET);
+      render();
+    };
+
+    let dragging = false;
+    stage.addEventListener('pointerdown', (e) => {
+      dragging = true;
+      stop();
+      root.classList.add('is-dragging');
+      stage.setPointerCapture(e.pointerId);
+      fromPointer(e.clientX);
+    });
+    stage.addEventListener('pointermove', (e) => {
+      if (dragging) fromPointer(e.clientX);
+    });
+    const end = () => {
+      dragging = false;
+      root.classList.remove('is-dragging');
+    };
+    stage.addEventListener('pointerup', end);
+    stage.addEventListener('pointercancel', end);
+
+    handle.addEventListener('keydown', (e) => {
+      const step = e.shiftKey ? 10 : 4;
+      let next: number | null = null;
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') next = p - step;
+      if (e.key === 'ArrowRight' || e.key === 'ArrowUp') next = p + step;
+      if (e.key === 'Home') next = MAX;
+      if (e.key === 'End') next = MIN;
+      if (next === null) return;
+      e.preventDefault();
+      stop();
+      p = clamp(next);
+      render();
+    });
+
+    labels.forEach((btn) =>
+      btn.addEventListener('click', () => tween(btn.dataset.go === 'formal' ? MAX : MIN, 700)),
+    );
+
+    root.setAttribute('data-ready', '');
+    render();
+
+    // One small nudge so visitors notice the cut moves. Skipped for reduced
+    // motion, and cancelled the moment someone touches it.
+    if (!reduceMotion) {
+      window.setTimeout(() => {
+        if (dragging || raf) return;
+        tween(START - 14, 500, () => tween(START, 700));
+      }, 1100);
+    }
+  }
+</script>

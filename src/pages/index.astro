@@ -4,6 +4,7 @@ import Testimonials from '../components/Testimonials.astro';
 import CTABlock from '../components/CTABlock.astro';
 import GlowBackground from '../components/GlowBackground.astro';
 import AimaCone from '../components/AimaCone.astro';
+import PortraitSplit from '../components/PortraitSplit.astro';
 import { getCollection, type CollectionEntry } from 'astro:content';
 
 const allPosts = await getCollection('blog', ({ data }) => !data.draft);
@@ -80,14 +81,7 @@ const moments = [
         </div>
 
         <figure class="hero__portrait" data-glow-focus>
-          <img
-            src="/portrait-hero.webp"
-            alt="Portrait of Stève Cattin"
-            width="720"
-            height="859"
-            loading="eager"
-            decoding="async"
-          />
+          <PortraitSplit />
         </figure>
       </div>
     </div>
