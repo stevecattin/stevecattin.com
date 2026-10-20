@@ -2,7 +2,8 @@
  * Open Graph card generator — stevecattin.com
  *
  * Renders 1200x630 social cards into public/og/ :
- *   • og-default.png        – homepage + any page without its own card
+ *   • og-default.png        – homepage + any page without its own card,
+ *                             in the homepage's look (light, portrait disc)
  *   • og/<post-slug>.png    – one per published blog post
  *
  * Runs automatically before every build (see package.json "prebuild"), so a
@@ -55,16 +56,77 @@ async function loadFonts() {
   ];
 }
 
-/* Satori can't decode webp, so the portrait goes through sharp first. */
+/* Satori can't decode webp, so the portrait goes through sharp first.
+   The homepage portrait: head breaking out of a cool-paper disc, on a
+   transparent background – the same file the hero uses. */
+const PORTRAIT_W = 436;
+const PORTRAIT_H = 520;
+
 async function portraitDataUri() {
-  const buf = await sharp(path.join(ROOT, 'public', 'portrait-street.webp'))
-    .resize(500, HEIGHT, { fit: 'cover', position: 'top' })
-    .jpeg({ quality: 88 })
+  const buf = await sharp(path.join(ROOT, 'public', 'portrait-hero.webp'))
+    .resize(PORTRAIT_W * 2, PORTRAIT_H * 2, { fit: 'inside' })
+    .png()
     .toBuffer();
-  return `data:image/jpeg;base64,${buf.toString('base64')}`;
+  return `data:image/png;base64,${buf.toString('base64')}`;
+}
+
+/* The homepage light, frozen on one frame: soft blue lights and one coral
+   spark on paper, with the site's white grain on top. Mirrors
+   GlowBackground.astro (colors, blur, 0.4 strength), scaled to the card.
+   Satori can't blur, so this is drawn as its own SVG and laid under the
+   card as a background image. (Opacity sits on each light, as on the site –
+   resvg drops filtered shapes inside a group with opacity.) */
+const GLOW_STRENGTH = 0.4;
+
+async function glowDataUri() {
+  const grain = await readFile(path.join(ROOT, 'public', 'images', 'grain-light.png'));
+  const grainUri = `data:image/png;base64,${grain.toString('base64')}`;
+
+  // [cx, cy, diameter, blur, inner, outer, gradient centre]
+  const lights = [
+    [10, -60, 560, 150, '#7FA0FF', '#3D5BFF', '50%'], // small bright blue, top-left corner
+    [918, 315, 680, 135, '#7FA0FF', '#3D5BFF', '50%'], // big blue, parked behind the portrait
+    [30, 720, 480, 125, '#4D6BFF', COBALT, '50%'], // cobalt, low left, mostly off-card
+    [600, 600, 320, 75, '#FBB39F', '#F96B54', '40%'], // the coral spark
+  ];
+
+  const defs = lights
+    .map(([, , , blur, inner, outer, c], i) => `
+      <radialGradient id="g${i}" cx="${c}" cy="${c}" r="71%">
+        <stop offset="0" stop-color="${inner}"/><stop offset="1" stop-color="${outer}"/>
+      </radialGradient>
+      <filter id="b${i}" x="-300%" y="-300%" width="700%" height="700%">
+        <feGaussianBlur stdDeviation="${blur}"/>
+      </filter>`)
+    .join('');
+
+  const circles = lights
+    .map(([cx, cy, d], i) =>
+      `<circle cx="${cx}" cy="${cy}" r="${d / 2}" fill="url(#g${i})" filter="url(#b${i})" opacity="${GLOW_STRENGTH}"/>`)
+    .join('');
+
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${WIDTH}" height="${HEIGHT}">
+    <defs>${defs}
+      <pattern id="grain" width="256" height="256" patternUnits="userSpaceOnUse">
+        <image href="${grainUri}" xlink:href="${grainUri}" width="256" height="256"/>
+      </pattern>
+    </defs>
+    <rect width="100%" height="100%" fill="${PAPER}"/>
+    ${circles}
+    <rect width="100%" height="100%" fill="url(#grain)" opacity="0.6"/>
+  </svg>`;
+
+  const png = new Resvg(svg).render().asPng();
+  return `data:image/png;base64,${Buffer.from(png).toString('base64')}`;
 }
 
 /* ---------- shared pieces ---------- */
+
+const ARROW = `data:image/svg+xml;base64,${Buffer.from(
+  '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">' +
+    '<path d="M3 10h13.5M11 4.5l5.5 5.5-5.5 5.5" fill="none" stroke="#FFFFFF" ' +
+    'stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+).toString('base64')}`;
 
 const eyebrow = (text, color = COBALT) => ({
   type: 'div',
@@ -110,7 +172,7 @@ const signature = () => ({
 
 /* ---------- card layouts ---------- */
 
-function defaultCard(portrait) {
+function defaultCard({ glow, portrait }) {
   return {
     type: 'div',
     props: {
@@ -118,9 +180,19 @@ function defaultCard(portrait) {
         width: WIDTH,
         height: HEIGHT,
         display: 'flex',
+        position: 'relative',
         background: PAPER,
       },
       children: [
+        {
+          type: 'img',
+          props: {
+            src: glow,
+            width: WIDTH,
+            height: HEIGHT,
+            style: { position: 'absolute', top: 0, left: 0 },
+          },
+        },
         {
           type: 'div',
           props: {
@@ -128,38 +200,103 @@ function defaultCard(portrait) {
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-between',
-              padding: '72px 64px',
+              padding: '60px 0 64px 72px',
               width: 700,
             },
             children: [
-              eyebrow('Fractional Executive. Advisor. Sparring Partner.'),
+              /* The nav lockup: name, hairline, role. */
+              {
+                type: 'div',
+                props: {
+                  style: { display: 'flex', alignItems: 'center', whiteSpace: 'nowrap' },
+                  children: [
+                    {
+                      type: 'div',
+                      props: {
+                        style: { fontFamily: DISPLAY, fontSize: 25, fontWeight: 500, color: INK },
+                        children: 'Stève Cattin',
+                      },
+                    },
+                    {
+                      type: 'div',
+                      props: {
+                        style: {
+                          fontFamily: BODY,
+                          fontSize: 21,
+                          fontWeight: 400,
+                          color: GRAPHITE,
+                          marginLeft: 16,
+                          paddingLeft: 16,
+                          borderLeft: '1px solid rgba(16, 17, 20, 0.2)',
+                        },
+                        children: 'Fractional CMO & GTM Advisor',
+                      },
+                    },
+                  ],
+                },
+              },
               {
                 type: 'div',
                 props: {
                   style: {
                     /* Two explicit lines, breaking where the homepage hero
-                       breaks – left to wrap on its own, "of" ends up
-                       stranded on a line by itself. */
+                       breaks. The accent word keeps the headline's weight –
+                       the color marks it, not a heavier cut. */
                     display: 'flex',
                     flexDirection: 'column',
                     whiteSpace: 'nowrap',
                     fontFamily: DISPLAY,
-                    fontSize: 64,
+                    fontSize: 80,
                     fontWeight: 500,
-                    letterSpacing: '-0.025em',
-                    lineHeight: 1.02,
+                    letterSpacing: '-0.03em',
+                    lineHeight: 0.98,
                     color: INK,
                   },
                   children: [
-                    { type: 'div', props: { children: "We're all made of" } },
+                    { type: 'div', props: { children: 'When growth gets' } },
+                    { type: 'div', props: { style: { color: COBALT }, children: 'complicated' } },
+                  ],
+                },
+              },
+              /* The hero's one button, then the address. */
+              {
+                type: 'div',
+                props: {
+                  style: { display: 'flex', alignItems: 'center', gap: 28 },
+                  children: [
                     {
                       type: 'div',
-                      props: { style: { color: COBALT, fontWeight: 700 }, children: 'stories.' },
+                      props: {
+                        style: {
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 10,
+                          fontFamily: BODY,
+                          fontSize: 20,
+                          fontWeight: 500,
+                          letterSpacing: '0.01em',
+                          color: '#FFFFFF',
+                          background: COBALT,
+                          padding: '16px 26px 16px 28px',
+                          borderRadius: 3,
+                        },
+                        /* The site's fonts have no → glyph, so the arrow is drawn. */
+                        children: [
+                          { type: 'div', props: { children: 'Tell me your story' } },
+                          { type: 'img', props: { src: ARROW, width: 20, height: 20 } },
+                        ],
+                      },
+                    },
+                    {
+                      type: 'div',
+                      props: {
+                        style: { fontFamily: BODY, fontSize: 20, fontWeight: 500, color: GRAPHITE },
+                        children: 'stevecattin.com',
+                      },
                     },
                   ],
                 },
               },
-              signature(),
             ],
           },
         },
@@ -167,9 +304,9 @@ function defaultCard(portrait) {
           type: 'img',
           props: {
             src: portrait,
-            width: 500,
-            height: HEIGHT,
-            style: { objectFit: 'cover' },
+            width: PORTRAIT_W,
+            height: PORTRAIT_H,
+            style: { position: 'absolute', right: 64, top: (HEIGHT - PORTRAIT_H) / 2 },
           },
         },
       ],
@@ -265,7 +402,7 @@ async function main() {
 
   written.push(
     await render(
-      defaultCard(await portraitDataUri()),
+      defaultCard({ glow: await glowDataUri(), portrait: await portraitDataUri() }),
       fonts,
       path.join(ROOT, 'public', 'og-default.png')
     )
