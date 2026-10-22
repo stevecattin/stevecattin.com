@@ -85,9 +85,10 @@ const x2 = ((START - SKEW) * VB_W) / 100;
     </button>
   </div>
 
-  <div class="split__labels" data-labels>
-    <button type="button" class="split__label is-active" data-go="formal">Formal</button>
-    <button type="button" class="split__label" data-go="casual">Casual</button>
+  <div class="split__labels" data-labels role="group" aria-label="Portrait">
+    <span class="split__thumb" aria-hidden="true"></span>
+    <button type="button" class="split__label is-active" data-go="formal">Monday</button>
+    <button type="button" class="split__label" data-go="casual">Saturday</button>
   </div>
 </div>
 
@@ -177,19 +178,36 @@ const x2 = ((START - SKEW) * VB_W) / 100;
 
   .split__labels {
     position: absolute;
-    left: 0;
-    right: 0;
+    left: 50%;
     top: 100%;
+    transform: translateX(-50%);
     margin-top: var(--space-3);
-    display: flex;
-    justify-content: space-between;
-    padding-inline: var(--space-4);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 3px;
+    border: 1px solid color-mix(in srgb, var(--color-ash) 35%, transparent);
+    border-radius: 999px;
+  }
+
+  .split__thumb {
+    position: absolute;
+    top: 3px;
+    bottom: 3px;
+    left: 3px;
+    width: calc(50% - 3px);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--color-cobalt) 10%, transparent);
+    transition: transform var(--dur-fast) var(--ease-out);
+  }
+
+  .split__labels:has(.split__label[data-go='casual'].is-active) .split__thumb {
+    transform: translateX(100%);
   }
 
   .split__label {
-    padding: var(--space-1) 0;
+    position: relative;
+    padding: var(--space-1) var(--space-4);
     border: 0;
-    border-bottom: 1px solid transparent;
     background: none;
     font-family: var(--font-mono);
     font-size: var(--text-mono-sm);
@@ -197,17 +215,12 @@ const x2 = ((START - SKEW) * VB_W) / 100;
     text-transform: uppercase;
     color: var(--color-ash);
     cursor: pointer;
-    transition: color var(--dur-fast) var(--ease-out),
-      border-color var(--dur-fast) var(--ease-out);
+    transition: color var(--dur-fast) var(--ease-out);
   }
 
   .split__label:hover,
   .split__label.is-active {
     color: var(--color-cobalt);
-  }
-
-  .split__label.is-active {
-    border-bottom-color: var(--color-cobalt);
   }
 
   @media (max-width: 760px) {
