@@ -211,6 +211,26 @@ const { strength = 0.4, dimTo = 0.4, coral = true } = Astro.props;
     filter: blur(150px);
   }
 
+  /* These two lights are tighter than the others (blur ≈ 0.4 × radius,
+     not 0.5), so their filter-free falloff (global.css) is tighter too:
+     brighter at the heart, a shorter fade. */
+  .glow .glow__blob--focus::before,
+  .glow .glow__blob--4::before {
+    inset: -60%;
+    background: radial-gradient(closest-side,
+      color-mix(in srgb, color-mix(in srgb, var(--blob-in) 70%, var(--blob-out)) 96%, transparent) 0%,
+      color-mix(in srgb, color-mix(in srgb, var(--blob-in) 67%, var(--blob-out)) 93%, transparent) 10%,
+      color-mix(in srgb, color-mix(in srgb, var(--blob-in) 62%, var(--blob-out)) 86%, transparent) 20%,
+      color-mix(in srgb, color-mix(in srgb, var(--blob-in) 57%, var(--blob-out)) 72%, transparent) 30%,
+      color-mix(in srgb, color-mix(in srgb, var(--blob-in) 52%, var(--blob-out)) 53%, transparent) 40%,
+      color-mix(in srgb, color-mix(in srgb, var(--blob-in) 48%, var(--blob-out)) 33%, transparent) 50%,
+      color-mix(in srgb, color-mix(in srgb, var(--blob-in) 45%, var(--blob-out)) 16%, transparent) 60%,
+      color-mix(in srgb, color-mix(in srgb, var(--blob-in) 45%, var(--blob-out)) 7%, transparent) 70%,
+      color-mix(in srgb, color-mix(in srgb, var(--blob-in) 45%, var(--blob-out)) 2%, transparent) 80%,
+      transparent 90%
+    );
+  }
+
   .glow__blob--4 {
     width: 380px; height: 380px; top: 410px; left: 37%;
     background: radial-gradient(circle at 40% 40%, var(--color-night-coral-soft), var(--color-night-coral));

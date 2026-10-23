@@ -309,37 +309,37 @@ em { font-style: italic; }
    .is-idle while it is off screen. */
 .is-idle .night-bg__blob { animation-play-state: paused; }
 
-/* Touch screens: the same soft lights, drawn without the blur filter.
-   A 70–210px CSS blur is re-rendered by Safari on iPhone whenever
-   something moves near it (the scroll, the glass nav, the glass cards),
-   and that is what made phones stutter. Each light keeps its box and
-   motion; a ::before 2.5× its size paints the falloff of a blurred disc
-   (σ ≈ half its radius) as a gradient, which costs nothing to keep on
-   screen. Colours come from --blob-in / --blob-out, the two ends of the
-   light's own gradient, set next to each light. */
-@media (max-width: 760px), (hover: none) and (pointer: coarse) {
-  .night-bg__blob {
-    filter: none !important;
-    background: none !important;
-  }
-  .night-bg__blob::before {
-    content: "";
-    position: absolute;
-    inset: -75%;
-    border-radius: 50%;
-    background: radial-gradient(closest-side,
-      color-mix(in srgb, color-mix(in srgb, var(--blob-in) 65%, var(--blob-out)) 86%, transparent) 0%,
-      color-mix(in srgb, color-mix(in srgb, var(--blob-in) 62%, var(--blob-out)) 83%, transparent) 10%,
-      color-mix(in srgb, color-mix(in srgb, var(--blob-in) 58%, var(--blob-out)) 73%, transparent) 20%,
-      color-mix(in srgb, color-mix(in srgb, var(--blob-in) 54%, var(--blob-out)) 58%, transparent) 30%,
-      color-mix(in srgb, color-mix(in srgb, var(--blob-in) 50%, var(--blob-out)) 40%, transparent) 40%,
-      color-mix(in srgb, color-mix(in srgb, var(--blob-in) 47%, var(--blob-out)) 23%, transparent) 50%,
-      color-mix(in srgb, color-mix(in srgb, var(--blob-in) 45%, var(--blob-out)) 11%, transparent) 60%,
-      color-mix(in srgb, color-mix(in srgb, var(--blob-in) 45%, var(--blob-out)) 5%, transparent) 70%,
-      color-mix(in srgb, color-mix(in srgb, var(--blob-in) 45%, var(--blob-out)) 1%, transparent) 80%,
-      transparent 90%
-    );
-  }
+/* The soft lights, drawn without a blur filter. A 70–210px CSS blur is
+   re-rendered by Safari (Mac and iPhone) whenever the light drifts or
+   something moves near it – the scroll, the glass nav, the glass cards –
+   which made the site heavy in Safari while Chrome stayed smooth. Each
+   light keeps its box and motion; a ::before 2.5× its size paints the
+   falloff of a blurred disc (σ ≈ half its radius) as a gradient, which
+   costs nothing to keep on screen or to move. Colours come from
+   --blob-in / --blob-out, the two ends of the light's own gradient, set
+   next to each light. (The filter values next to each light stay as the
+   reference for its softness.) */
+.night-bg__blob {
+  filter: none !important;
+  background: none !important;
+}
+.night-bg__blob::before {
+  content: "";
+  position: absolute;
+  inset: -75%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side,
+    color-mix(in srgb, color-mix(in srgb, var(--blob-in) 65%, var(--blob-out)) 86%, transparent) 0%,
+    color-mix(in srgb, color-mix(in srgb, var(--blob-in) 62%, var(--blob-out)) 83%, transparent) 10%,
+    color-mix(in srgb, color-mix(in srgb, var(--blob-in) 58%, var(--blob-out)) 73%, transparent) 20%,
+    color-mix(in srgb, color-mix(in srgb, var(--blob-in) 54%, var(--blob-out)) 58%, transparent) 30%,
+    color-mix(in srgb, color-mix(in srgb, var(--blob-in) 50%, var(--blob-out)) 40%, transparent) 40%,
+    color-mix(in srgb, color-mix(in srgb, var(--blob-in) 47%, var(--blob-out)) 23%, transparent) 50%,
+    color-mix(in srgb, color-mix(in srgb, var(--blob-in) 45%, var(--blob-out)) 11%, transparent) 60%,
+    color-mix(in srgb, color-mix(in srgb, var(--blob-in) 45%, var(--blob-out)) 5%, transparent) 70%,
+    color-mix(in srgb, color-mix(in srgb, var(--blob-in) 45%, var(--blob-out)) 1%, transparent) 80%,
+    transparent 90%
+  );
 }
 
 
