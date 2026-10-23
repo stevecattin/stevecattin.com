@@ -465,7 +465,10 @@ const steps = [
     filter: blur(6px);
   }
   @keyframes mode-glow { 0%, 100% { opacity: 0.16; } 50% { opacity: 0.34; } }
-  @media (prefers-reduced-motion: no-preference) {
+  /* The pulse is desktop-only: a blurred SVG circle that keeps changing
+     is redrawn on every frame, and on phones that cost scroll smoothness.
+     Touch screens show the halo steady. */
+  @media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
     .mode-glyph__halo { animation: mode-glow 3.6s ease-in-out infinite; }
     .practice-modes__item:nth-child(2) .mode-glyph__halo { animation-delay: 1.2s; }
     .practice-modes__item:nth-child(3) .mode-glyph__halo { animation-delay: 2.4s; }

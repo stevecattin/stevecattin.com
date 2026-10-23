@@ -17,5 +17,8 @@ export default defineConfig({
   },
   build: {
     format: 'directory',
+    // Every page's CSS is small (~10–20 KB): inline it, so the first paint
+    // doesn't wait on 3–5 extra stylesheet requests over a mobile network.
+    inlineStylesheets: 'always',
   },
 });

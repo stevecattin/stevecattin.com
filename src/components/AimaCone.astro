@@ -163,6 +163,7 @@ const hidden = `clip-path: inset(-40px ${mode === 'scroll' ? '80%' : '100%'} -40
      which resets it.) */
   @supports (animation-timeline: view()) {
     .aima-cone--scroll .aima-cone__beam {
+      will-change: transform, clip-path; /* own layer: the clip moves, the blurred SVG isn't redrawn */
       animation: aima-fill linear both;
       animation-timeline: view();
       animation-range: cover 0% cover 60%;

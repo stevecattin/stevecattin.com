@@ -75,5 +75,15 @@ const fullTitle = title.includes('Stève') ? title : `${title} – Stève Cattin
     </main>
     <Footer />
     <ContactModal />
+
+    <script>
+      // Drifting lights keep animating off screen unless told otherwise:
+      // pause each light layer while it is out of view.
+      const idle = new IntersectionObserver(
+        (entries) => entries.forEach((e) => e.target.classList.toggle('is-idle', !e.isIntersecting)),
+        { rootMargin: '120px 0px' },
+      );
+      document.querySelectorAll('.night-bg, .glow-stage').forEach((el) => idle.observe(el));
+    </script>
   </body>
 </html>

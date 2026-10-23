@@ -91,16 +91,21 @@ const { strength = 0.4, dimTo = 0.4, coral = true } = Astro.props;
   }
 
   // Full strength at the top, easing down once ~70% of a screen is scrolled.
+  // Sets the layer's opacity directly, and only when it changes: once past
+  // the first screen, scrolling costs nothing here.
   const stage = document.querySelector<HTMLElement>('.glow-stage');
-  if (stage) {
+  const layer = stage?.querySelector<HTMLElement>('.glow');
+  if (stage && layer) {
     const min = parseFloat(stage.dataset.glowDim ?? '0.4');
     let ticking = false;
+    let level = '';
     const update = () => {
+      ticking = false;
       const range = window.innerHeight * 0.7;
       const t = Math.min(1, Math.max(0, window.scrollY / range));
       const eased = t * t * (3 - 2 * t); // smoothstep
-      stage.style.setProperty('--glow-level', (1 - (1 - min) * eased).toFixed(3));
-      ticking = false;
+      const next = (1 - (1 - min) * eased).toFixed(2);
+      if (next !== level) { level = next; layer.style.opacity = next; }
     };
     window.addEventListener('scroll', () => {
       if (!ticking) { ticking = true; requestAnimationFrame(update); }
@@ -182,18 +187,21 @@ const { strength = 0.4, dimTo = 0.4, coral = true } = Astro.props;
     width: 640px; height: 640px; top: -360px; left: -300px;
     background: radial-gradient(circle at 50% 50%, var(--color-glow-blue-soft), var(--color-glow-blue));
     filter: blur(170px);
+    --blob-in: var(--color-glow-blue-soft); --blob-out: var(--color-glow-blue);
   }
 
   .glow__blob--2 {
     width: 820px; height: 820px; top: 360px; left: 67%;
     background: radial-gradient(circle at 50% 50%, var(--color-glow-blue-soft), var(--color-glow-blue));
     filter: blur(213px);
+    --blob-in: var(--color-glow-blue-soft); --blob-out: var(--color-glow-blue);
   }
 
   .glow__blob--3 {
     width: 540px; height: 540px; top: 600px; left: -240px;
     background: radial-gradient(circle at 50% 50%, var(--color-glow-cobalt-soft), var(--color-cobalt));
     filter: blur(140px);
+    --blob-in: var(--color-glow-cobalt-soft); --blob-out: var(--color-cobalt);
   }
 
   /* The big blue light when it is parked behind a focus element (JS sets
@@ -207,6 +215,7 @@ const { strength = 0.4, dimTo = 0.4, coral = true } = Astro.props;
     width: 380px; height: 380px; top: 410px; left: 37%;
     background: radial-gradient(circle at 40% 40%, var(--color-night-coral-soft), var(--color-night-coral));
     filter: blur(84px);
+    --blob-in: var(--color-night-coral-soft); --blob-out: var(--color-night-coral);
   }
 
   /* Phones: the lights hold still. Re-blurring four big drifting lights on

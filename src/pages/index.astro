@@ -405,6 +405,17 @@ const moments = [
       box-shadow var(--dur-med) var(--ease-out);
   }
 
+  /* Touch screens: no live blur behind the cards. Over the already-soft
+     light it hardly showed, and Safari re-blurred all four cards on every
+     scroll frame. A denser paper keeps the glass read. */
+  @media (max-width: 760px), (hover: none) and (pointer: coarse) {
+    .moments__item {
+      background: color-mix(in srgb, var(--color-paper) 74%, transparent);
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+    }
+  }
+
   .moments__item:hover,
   .moments__item:has(.moments__go:focus-visible) {
     transform: translateY(-6px);

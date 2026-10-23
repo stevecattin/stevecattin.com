@@ -195,6 +195,7 @@ const {
     width: 760px; height: 760px; top: calc(var(--dusk-sky) - 260px); left: 53%;
     background: radial-gradient(circle at 60% 40%, var(--color-night-azure), var(--color-night-royal));
     filter: blur(182px);
+    --blob-in: var(--color-night-azure); --blob-out: var(--color-night-royal);
     opacity: 0.7;
   }
 
@@ -202,6 +203,7 @@ const {
     width: 620px; height: 620px; top: calc(var(--dusk-sky) + 120px); left: -120px;
     background: radial-gradient(circle at 30% 70%, var(--color-night-royal), var(--color-night-deep));
     filter: blur(148px);
+    --blob-in: var(--color-night-royal); --blob-out: var(--color-night-deep);
     opacity: 0.7;
   }
 
@@ -209,6 +211,7 @@ const {
     width: 300px; height: 300px; top: calc(var(--dusk-sky) + (100% - var(--dusk-sky)) * 0.43); left: 62%;
     background: radial-gradient(circle at 40% 40%, var(--color-night-coral-soft), var(--color-night-coral));
     filter: blur(72px);
+    --blob-in: var(--color-night-coral-soft); --blob-out: var(--color-night-coral);
     opacity: 0.7;
   }
 

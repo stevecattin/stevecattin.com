@@ -1230,12 +1230,15 @@ const toc = [
   /* ---------- The light: night blues and overlay grain ---------- */
   body:has(.aima--night) .glow__blob--1 {
     background: radial-gradient(circle at 50% 50%, var(--color-night-azure), var(--color-night-royal));
+    --blob-in: var(--color-night-azure); --blob-out: var(--color-night-royal);
   }
   body:has(.aima--night) .glow__blob--2 {
     background: radial-gradient(circle at 50% 50%, var(--color-night-royal), var(--color-night-deep));
+    --blob-in: var(--color-night-royal); --blob-out: var(--color-night-deep);
   }
   body:has(.aima--night) .glow__blob--3 {
     background: radial-gradient(circle at 50% 50%, var(--color-night-azure), var(--color-night-deep));
+    --blob-in: var(--color-night-azure); --blob-out: var(--color-night-deep);
   }
   /* Overlay grain needs navy to blend with inside the light layer (its
      own stacking context) – without it the noise shows raw, as grey
@@ -1326,6 +1329,7 @@ const toc = [
     left: 60%;
     background: radial-gradient(circle at 50% 50%, var(--color-night-coral-soft), var(--color-night-coral));
     filter: blur(96px);
+    --blob-in: var(--color-night-coral-soft); --blob-out: var(--color-night-coral);
     opacity: 0.75;
     mix-blend-mode: normal;
   }
@@ -1336,6 +1340,7 @@ const toc = [
     left: -260px;
     background: radial-gradient(circle at 50% 50%, var(--color-glow-blue-soft), var(--color-glow-blue));
     filter: blur(170px);
+    --blob-in: var(--color-glow-blue-soft); --blob-out: var(--color-glow-blue);
     opacity: 0.32;
   }
   body:has(.aima--night) .cta--night .cta__blob--2 {
@@ -1344,6 +1349,7 @@ const toc = [
     left: 82%;
     background: radial-gradient(circle at 50% 50%, var(--color-glow-blue-soft), var(--color-glow-cobalt-soft));
     filter: blur(170px);
+    --blob-in: var(--color-glow-blue-soft); --blob-out: var(--color-glow-cobalt-soft);
     opacity: 0.28;
   }
 

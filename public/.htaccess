@@ -1,3 +1,28 @@
 # Serve plain-text files (llms.txt, llms-full.txt) as UTF-8, so "Stève"
 # doesn't render as "StÃ¨ve" in browsers and AI tools.
 AddCharset UTF-8 .txt
+
+# Caching – the site had none, so phones re-checked every font and image
+# on each page. Hashed build files (/_astro/*.js) never change: one year.
+# Fonts: one year (a new family means a new file name). Images: one week,
+# since some get replaced under the same name (the hero portraits).
+# Pages: always revalidated, so a deploy shows immediately.
+<IfModule mod_headers.c>
+  <FilesMatch "\.(js|css)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  <FilesMatch "\.(woff2)$">
+    Header set Cache-Control "public, max-age=31536000"
+  </FilesMatch>
+  <FilesMatch "\.(webp|png|jpe?g|svg|ico|avif)$">
+    Header set Cache-Control "public, max-age=604800"
+  </FilesMatch>
+  <FilesMatch "\.(html|xml|txt)$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+</IfModule>
+
+# Compress text files (HTML already is; this covers the rest).
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml application/javascript text/javascript application/json application/xml application/rss+xml image/svg+xml
+</IfModule>
