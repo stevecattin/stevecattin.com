@@ -2,8 +2,13 @@
  * Open Graph card generator — stevecattin.com
  *
  * Renders 1200x630 social cards into public/og/ :
- *   • og-default.png        – homepage + any page without its own card,
- *                             in the homepage's look (light, portrait disc)
+ *   • og/home.jpg           – homepage + any page without its own card,
+ *                             in the homepage's look (light, portrait disc).
+ *                             JPEG, not PNG: the grain made the PNG 1.1 MB,
+ *                             and LinkedIn quietly drops heavy cards. The URL
+ *                             also had to change – LinkedIn had cached the old
+ *                             /og-default.png from back when it 404'd, and fell
+ *                             back to the hero portrait on the page.
  *   • og/<post-slug>.png    – one per published blog post
  *
  * Runs automatically before every build (see package.json "prebuild"), so a
@@ -389,7 +394,12 @@ async function render(tree, fonts, outPath) {
   const png = new Resvg(svg, { fitTo: { mode: 'width', value: WIDTH } })
     .render()
     .asPng();
-  await writeFile(outPath, png);
+  /* Photographic cards (portrait, light, grain) go out as JPEG; flat type
+     cards stay PNG, where they're already small and crisp. */
+  const out = outPath.endsWith('.jpg')
+    ? await sharp(png).flatten({ background: PAPER }).jpeg({ quality: 86, mozjpeg: true }).toBuffer()
+    : png;
+  await writeFile(outPath, out);
   return outPath;
 }
 
@@ -404,7 +414,7 @@ async function main() {
     await render(
       defaultCard({ glow: await glowDataUri(), portrait: await portraitDataUri() }),
       fonts,
-      path.join(ROOT, 'public', 'og-default.png')
+      path.join(outDir, 'home.jpg')
     )
   );
 
