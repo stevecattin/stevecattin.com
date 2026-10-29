@@ -5,22 +5,14 @@ import CTABlock from '../components/CTABlock.astro';
 import GlowBackground from '../components/GlowBackground.astro';
 import AimaCone from '../components/AimaCone.astro';
 import PortraitSplit from '../components/PortraitSplit.astro';
-import { getCollection, type CollectionEntry } from 'astro:content';
+import { getCollection } from 'astro:content';
 
 const allPosts = await getCollection('blog', ({ data }) => !data.draft);
 
-// Hand-picked for the homepage, in this order: the offer, how I run teams,
-// the personal one. Change the slugs here to re-curate. A slug that is missing
-// or set to draft simply drops out, so keep these three published.
-const featuredSlugs = [
-  'you-dont-need-an-agency-yet',
-  'rebuilding-the-5-15',
-  'a-long-table-in-the-south',
-];
-const bySlug = new Map(allPosts.map((post) => [post.slug, post]));
-const featuredPosts = featuredSlugs
-  .map((slug) => bySlug.get(slug))
-  .filter((post): post is CollectionEntry<'blog'> => post !== undefined);
+// The three most recent published posts, newest first.
+const latestPosts = allPosts
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
 
 const formatDate = (d: Date) =>
   d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
@@ -143,13 +135,13 @@ const moments = [
 
   <section class="writing" aria-labelledby="writing-title">
     <div class="container-wide">
-      <p class="section-eyebrow">Selected writing</p>
+      <p class="section-eyebrow">Latest writing</p>
       <h2 id="writing-title" class="section-title">
         Essays, field notes, and the occasional strong opinion.
       </h2>
 
       <ul class="writing__list">
-        {featuredPosts.map((post) => (
+        {latestPosts.map((post) => (
           <li>
             <a href={`/blog/${post.slug}/`} class="writing__row">
               <span class="writing__cat">{post.data.category}</span>
