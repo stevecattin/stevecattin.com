@@ -9,6 +9,11 @@
  * crosses mid-height, SKEW is how far the line leans (top edge sits SKEW to
  * the right of --p, bottom edge SKEW to the left).
  */
+interface Props {
+  /** Load the portraits first (hero). Pass false further down a page. */
+  priority?: boolean;
+}
+const { priority = true } = Astro.props;
 const START = 75;
 const SKEW = 10;
 const VB_W = 720;
@@ -31,8 +36,8 @@ const x2 = ((START - SKEW) * VB_W) / 100;
       alt="Portrait of Stève Cattin"
       width="720"
       height="859"
-      loading="eager"
-      fetchpriority="high"
+      loading={priority ? 'eager' : 'lazy'}
+      fetchpriority={priority ? 'high' : 'auto'}
       decoding="async"
     />
     <img
@@ -42,7 +47,7 @@ const x2 = ((START - SKEW) * VB_W) / 100;
       aria-hidden="true"
       width="720"
       height="859"
-      loading="eager"
+      loading={priority ? 'eager' : 'lazy'}
       decoding="async"
     />
 

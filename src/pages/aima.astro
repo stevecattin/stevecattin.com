@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import CTABlock from '../components/CTABlock.astro';
 import GlowBackground from '../components/GlowBackground.astro';
 import AimaCone from '../components/AimaCone.astro';
+import PortraitSplit from '../components/PortraitSplit.astro';
 
 /* ---------------------------------------------------------------
    AIMA night – the framework in its own style within the brand: the
@@ -29,16 +30,18 @@ const howToUse = [
   { title: `Take the use cases that fit.`, body: `The library shows where AI can help across strategy, planning, execution, and optimization. Keep what maps to your team and campaigns; ignore the rest.` },
   { title: `Place your team on the maturity model.`, body: `People, Processes, and Technology – so you can see where you stand and what the next step is.` },
   { title: `Use the growth framework for role clarity.`, body: `What AI fluency should look like from junior to lead.` },
-  { title: `Let it start the strategic conversations.`, body: `Ethics, tooling, governance, creative standards. That's where the real alignment gets done.` },
+  { title: `Let it start the strategic conversations.`, body: `Ethics, tooling, governance, creative standards – and the obvious questions no one dares to ask. That's where the real alignment gets done.` },
 ];
 
 const challengesInternal = [
-  { name: `Skill disparity`, desc: `Not everyone is equally comfortable with AI tools, so adoption is uneven.`, impact: `Rethink how you hire, onboard, and keep training people.` },
-  { name: `Quality risks`, desc: `GenAI generates fast, but not always well. Poor output erodes credibility.`, impact: `Define quality standards and reintroduce human curation as a checkpoint.` },
+  { name: `Two camps`, desc: `Some people don't use AI enough, when it could accelerate their work. Others use it so much they stop owning the output.`, impact: `Give each camp the other side of the equation: a culture of small experiments for the first, a review process for the second.` },
+  { name: `Fear of irrelevance`, desc: `For some, AI feels like a threat to their creative identity or role.`, impact: `Hear the fears – about creativity, about the data – and mitigate them. Sometimes they're right: some texts shouldn't be written by AI.` },
+  { name: `Ownership drift`, desc: `When AI wrote it, nobody feels it's theirs.`, impact: `Set one rule for everyone: if AI made it and you submit it, your name is on it.` },
+  { name: `Quality risks`, desc: `GenAI generates fast, but not always well. Poor output erodes credibility.`, impact: `Define quality standards and reintroduce human curation as a checkpoint. A wrong assumption scales: one hallucinated product capability can end up in every deck AI helped make – until a customer sees it.` },
+  { name: `The reviewer's burden`, desc: `AI writes 30 pages where 3 would do, and one person has to check them all.`, impact: `Fund enough human review, and train people to write shorter and validate the key points.` },
   { name: `Ethical concerns`, desc: `Using GenAI without understanding its provenance can backfire.`, impact: `Educate teams on responsible use; know where human sensitivity still matters.` },
-  { name: `Tool chaos`, desc: `A growing stack fragments the work and creates decision fatigue.`, impact: `Centralize guidance, approve standard tools, embed them in workflows.` },
-  { name: `Fear of irrelevance`, desc: `For some, AI feels like a threat to their creative identity or role.`, impact: `Create safety to experiment; frame AI as an enhancer, not a replacement.` },
-  { name: `Lack of governance`, desc: `Without guidelines, AI use spirals into inconsistency and reputational risk.`, impact: `Document rules of engagement, approval flows, and content policies.` },
+  { name: `Tool chaos`, desc: `A growing stack fragments the work and creates decision fatigue.`, impact: `Approve a short list of tools, and build them into the workflows people already use.` },
+  { name: `Lack of governance`, desc: `Without guidelines, AI use spirals into inconsistency and reputational risk.`, impact: `Write down who can publish what, and who signs off.` },
   { name: `Autonomy vs standardization`, desc: `As more people generate content, tone and brand coherence get harder.`, impact: `Provide toolkits and brand playbooks that protect brand integrity.` },
 ];
 
@@ -48,7 +51,7 @@ const challengesExternal = [
   { name: `Lead-gen uncertainty`, desc: `Traditional funnels break when customers don't engage on your platforms.`, impact: `Shift to outcome-based measurement and new ways to capture intent.` },
   { name: `Search behavior shifts`, desc: `Keyword SEO fades as users rely on conversational queries.`, impact: `Focus on structured data and being the source of truth AI relies on.` },
   { name: `Signal dilution`, desc: `AI summarizing and remixing can homogenize your differentiated messaging.`, impact: `Sharpen brand voice and positioning so your point of view stays recognizable.` },
-  { name: `Mistrust of AI content`, desc: `Some audiences are skeptical of content not clearly authored by a human.`, impact: `Disclose and humanize; know when human storytelling is non-negotiable.` },
+  { name: `Mistrust of AI content`, desc: `People still want to do business with humans. The moment something reads as AI, it loses credibility – and the brand pays for it.`, impact: `Count the cost in reputation next to the cost of production. Where your audience can tell, have a human make it, or say clearly that AI did.` },
 ];
 
 const useCases = [
@@ -56,39 +59,40 @@ const useCases = [
   { name: `Campaign Planning`, chips: [`Journey mapping`, `Channel mix`, `Timelines`, `Workback plans`, `Forecasting`], worksWell: `Optimizing channel mix and suggesting schedules from historical patterns.`, caution: `May ignore brand timing, internal dependencies, or key market moments.` },
   { name: `Sales & Enablement`, chips: [`Battlecards`, `Deck co-creation`, `Objection scripts`, `Training`, `Enablement`], worksWell: `Drafting battlecards and objection handlers from call transcripts or FAQs.`, caution: `Tone and context get lost in high-stakes, nuanced conversations.` },
   { name: `Analytics & Optimization`, chips: [`Report summaries`, `Insight narratives`, `Ad-spend`, `Anomaly detection`], worksWell: `Summarizing performance data into plain-language insights.`, caution: `Anomalies flagged too late or misread without human validation.` },
-  { name: `Content & Creative`, chips: [`Copy drafting`, `Visual generation`, `Video editing`, `Repurposing`, `SEO`, `Tone`], worksWell: `Speeding up copy ideation and generating visual prototypes.`, caution: `Off-brand or generic output without proper curation.` },
+  { name: `Content & Creative`, chips: [`Copy drafting`, `Visual generation`, `Video editing`, `Repurposing`, `SEO`, `Tone`], worksWell: `Speeding up copy ideation and generating visual prototypes.`, caution: `Off-brand or generic output without proper curation. And running a good draft through AI five more times costs more than it's worth – and strips your personality out.` },
   { name: `CRM & Personalization`, chips: [`Subject-line tests`, `Personalized messages`, `Lead scoring`, `Journey tailoring`], worksWell: `Testing subject lines and generating personalized variants.`, caution: `Over-personalization can feel invasive and erode trust.` },
-  { name: `Personal Productivity`, chips: [`Meeting summaries`, `To-do generation`, `Brief writers`, `Prompt libraries`, `Time management`], worksWell: `Summarizing long meetings and turning action points into to-dos.`, caution: `Summaries drop emotional cues or strategic subtext.` },
+  { name: `Personal Productivity`, chips: [`Meeting summaries`, `To-do generation`, `Brief writers`, `Prompt libraries`, `Time management`], worksWell: `Summarizing long meetings and turning action points into to-dos.`, caution: `Summaries drop the things left unsaid – emotional cues, strategic subtext, who went quiet.` },
 ];
 
 const pillars = [
   {
     key: `people`,
     label: `People`,
-    intro: `AI runs on people, not just platforms. This pillar is about whether the team has the skills, the literacy, and the judgment to use it well – and the ethical compass to go with it.`,
+    intro: `AI runs on people. This pillar asks whether the team has the judgment to use it well, and the ethical compass to go with it.`,
     subdomains: [
       { name: `Skills Mapping & Training`, activity: `Inventory AI skill levels; plan upskilling paths.`, indicator: `A clear skill taxonomy (e.g. prompt design, tool fluency).`, metrics: `% of team assessed, % trained to target, AI fluency benchmarks.` },
       { name: `Hiring Standards`, activity: `Define AI expectations in job descriptions, like languages or software.`, indicator: `JD templates include AI proficiency levels per role.`, metrics: `% of new hires at target AI level.` },
       { name: `Ethical Awareness`, activity: `Literacy around AI, IP, inclusivity, and brand integrity.`, indicator: `Team-wide alignment on ethical content use.`, metrics: `% of team completing the AI ethics module.` },
       { name: `Creative Judgment`, activity: `When to value human creation, curation, or augmentation.`, indicator: `Case-based training on quality thresholds and context.`, metrics: `Internal audit: % of content hitting quality standards.` },
       { name: `Employee Governance`, activity: `Clear do's and don'ts for GenAI, in and outside Marketing.`, indicator: `Internal policy and training on creative responsibility.`, metrics: `# of reported violations; engagement in guidelines training.` },
+      { name: `Space to Challenge`, activity: `Make it safe to contradict – a colleague, the leader, the AI.`, indicator: `No one looks bad for asking the obvious question.`, metrics: `Pulse item: "I can challenge AI output, and my manager, without risk."` },
     ],
     stages: [
       { name: `Aware`, desc: `Teams hear about AI tools but don't engage. No skills mapping or training.` },
       { name: `Experimenting`, desc: `A few individuals use tools ad hoc, with mixed outcomes. Skepticism persists.` },
       { name: `Equipped`, desc: `Skills baseline established. Training and policies introduced. Roles updated.` },
       { name: `Operational`, desc: `Team-wide fluency. AI responsibilities part of onboarding and performance goals.` },
-      { name: `Strategic`, desc: `AI expertise is a competitive advantage. Clear mastery per role; built into recruitment and succession.` },
+      { name: `Strategic`, desc: `AI expertise is a competitive advantage. Clear mastery per role; built into recruitment and succession. People use AI where it makes sense, and not where it doesn't, without feeling the need to justify either way.` },
     ],
   },
   {
     key: `processes`,
     label: `Processes`,
-    intro: `AI changes how the work gets done, not just what gets produced. It runs through planning, workflows, reviews, and governance. Put it into those processes on purpose, instead of letting it seep in wherever someone happens to try it.`,
+    intro: `AI changes how the work gets done. It runs through planning, reviews and governance – so put it there on purpose, before it seeps in wherever someone happens to try it.`,
     subdomains: [
       { name: `Content Lifecycle`, activity: `Define when GenAI helps: ideation, drafting, polishing.`, indicator: `An AI decision tree built into the briefing/workflow.`, metrics: `% of content using GenAI appropriately; feedback scores.` },
       { name: `Quality Control`, activity: `Align internal vs external quality standards.`, indicator: `A quality review stage defined by content tier.`, metrics: `Rework ratio; external error rate.` },
-      { name: `Review & Curation`, activity: `Human checkpoints for brand, tone, facts, and legal.`, indicator: `A human checkpoint for curation and approval.`, metrics: `% of content human-reviewed; average approval cycle time.` },
+      { name: `Review & Curation`, activity: `Human checkpoints for brand, tone, facts, and legal.`, indicator: `A human checkpoint for curation and approval.`, metrics: `% of content human-reviewed; average approval cycle time; reviewer capacity vs AI output volume.` },
       { name: `AI Use Governance`, activity: `Policies for usage, disclaimers, citations, reuse.`, indicator: `An AI policy handbook rolled out.`, metrics: `Employee understanding score in a pulse survey.` },
       { name: `Feedback Loops`, activity: `Learn from wins and mistakes; refine playbooks.`, indicator: `Monthly AI retros or creative post-mortems.`, metrics: `# of insights actioned per quarter.` },
       { name: `Applied Learning`, activity: `"The Test Bench" – share use cases, demos, lessons openly.`, indicator: `Experimentation is normalized; failures shared openly.`, metrics: `# of contributions per quarter; % participation; # of pilots shipped.` },
@@ -104,20 +108,20 @@ const pillars = [
   {
     key: `technology`,
     label: `Technology`,
-    intro: `Tools should make the work faster, not messier. This pillar is about having the right ones, connected properly and safely, and being able to show they're actually paying off.`,
+    intro: `A tool earns its place when it makes the work faster, and you can show it. This pillar is about choosing the right ones and connecting them safely.`,
     subdomains: [
-      { name: `Tool Stack`, activity: `Right tool for the job – text, image, video.`, indicator: `A documented tool-to-task guide, reviewed regularly.`, metrics: `Tool adoption rate; tool-specific usage.` },
+      { name: `Tool Stack`, activity: `Right tool for the job – text, image, video.`, indicator: `A documented model-to-task guide, including cost, reviewed regularly.`, metrics: `Tool adoption rate; tool-specific usage.` },
       { name: `Integration`, activity: `Embed tools in core marketing workflows.`, indicator: `Templates, briefs, CMS, or DAM integrate AI.`, metrics: `% of briefs using AI templates.` },
-      { name: `Access Control`, activity: `Right access to the right people at the right time.`, indicator: `Admin roles and usage logs in place.`, metrics: `# of access misuses or unauthorized uploads.` },
+      { name: `Access Control`, activity: `Access for the people who need it, when they need it.`, indicator: `Admin roles and usage logs in place.`, metrics: `# of access misuses or unauthorized uploads.` },
       { name: `Security & IP`, activity: `Understand what goes into models; protect brand IP.`, indicator: `Vendor audits, legal review, NDA workflows.`, metrics: `% of tools reviewed and approved by legal/security.` },
-      { name: `Performance Tracking`, activity: `Measure output gains: speed, quality, engagement.`, indicator: `Side-by-side tests: with AI vs. without.`, metrics: `Time-to-publish, CTR uplift, engagement delta.` },
+      { name: `Performance Tracking`, activity: `Measure output gains: speed, quality, engagement.`, indicator: `Side-by-side tests: with AI, without, and by a person.`, metrics: `Time-to-publish, CTR uplift, engagement delta, cost per task by model.` },
     ],
     stages: [
       { name: `Aware`, desc: `Aware of GenAI tools but don't use them meaningfully. No official stack.` },
       { name: `Experimenting`, desc: `Individuals bring tools in without oversight. Security risks emerge.` },
       { name: `Equipped`, desc: `Tool selection begins. Approved vendors. Access managed. First guidelines.` },
       { name: `Operational`, desc: `Tools embedded in core systems (CMS, DAM, CRM). Usage monitored.` },
-      { name: `Strategic`, desc: `Stack optimized for ROI and adoption. Integrated across the stack; secure by design.` },
+      { name: `Strategic`, desc: `The stack pays for itself, and people actually use it. Security is built in from the start.` },
     ],
   },
 ];
@@ -146,7 +150,7 @@ const growthRoles = [
         ai: `You are beginning to explore how AI can support collaboration – for example, by generating meeting notes, drafting internal updates, or organizing shared information.`,
       },
       lead: {
-        base: `You respect and actively participate in team processes, offering constructive feedback to help improve how the company operates. You begin to recognize the strengths and development areas of your teammates and use available tools and rituals to support a healthy, inclusive work environment. You help identify blockers, and you're developing the emotional intelligence to navigate team dynamics with empathy and kindness.`,
+        base: `You respect and actively participate in team processes, offering constructive feedback to help improve how the company operates. You begin to recognize the strengths and development areas of your teammates and use available tools and rituals to support a healthy, inclusive work environment. You help identify blockers, and you're developing the emotional intelligence to handle team dynamics with empathy and kindness.`,
         ai: `You follow team guidance on ethical AI use and ensure your work aligns with brand standards and content quality expectations.`,
       },
     },
@@ -155,19 +159,19 @@ const growthRoles = [
     key: `intermediate`, label: `Intermediate`,
     lines: {
       build: {
-        base: `You have a solid understanding of core marketing concepts and are focused on deepening your expertise. You actively contribute to improving team tools, processes, and productivity, and bring hands-on experience across disciplines such as automation, analytics, lead generation, SEO, product marketing, social media, events, content and thought leadership, ABM, advertising, PR, and CRM.`,
+        base: `You have a solid understanding of core marketing concepts and are focused on deepening your expertise. You actively contribute to improving how the team works – its tools and its processes – and bring hands-on experience across disciplines such as automation, analytics, lead generation, SEO, product marketing, social media, events, content and thought leadership, ABM, advertising, PR, and CRM.`,
         ai: `You confidently use generative AI tools to enhance your efficiency – copywriting, image generation, content summarization – and apply prompt best practices to ensure relevance and quality.`,
       },
       deliver: {
         base: `You independently deliver high-quality marketing activities and know when to seek support to stay efficient and effective. You communicate clearly across the team, take initiative to improve workflows and processes, and approach challenges with resilience, viewing obstacles as learning opportunities.`,
-        ai: `You integrate AI into campaign planning and execution – using it to streamline asset creation timelines, increase speed, and support iteration without compromising quality.`,
+        ai: `You integrate AI into campaign planning and execution – using it to shorten asset timelines and iterate faster without compromising quality. You own what you ship: if AI made it and you submit it, your name is on it.`,
       },
       connect: {
         base: `You mentor junior team members by guiding them toward insights rather than offering ready-made answers. You actively participate in the hiring process, helping the team make thoughtful, inclusive decisions, and you foster a sense of belonging through tangible actions that contribute to an inclusive team culture.`,
-        ai: `You share effective AI prompts, tools, and workflows with peers, encouraging experimentation and knowledge exchange across the team.`,
+        ai: `You share the prompts and workflows that work with your peers, and encourage experiments across the team.`,
       },
       lead: {
-        base: `You actively support and advocate for junior team members, helping them navigate project challenges and build confidence. You identify opportunities to improve team processes and suggest thoughtful changes, and you support others with empathy, kindness, and professionalism – especially during moments of stress or challenge.`,
+        base: `You actively support and advocate for junior team members, helping them work through project challenges and build confidence. You identify opportunities to improve team processes and suggest thoughtful changes, and you support others with empathy and kindness – especially during moments of stress or challenge.`,
         ai: `You advocate for responsible AI use in team discussions, raising awareness of ethical considerations and reinforcing brand standards in how AI is applied.`,
       },
     },
@@ -177,19 +181,19 @@ const growthRoles = [
     lines: {
       build: {
         base: `You confidently manage large-scale campaigns and budgets, with a strong grasp of KPIs and performance targets. You understand your audience's pain points and craft messaging that lands. You can define multi-tactic strategies, allocate budget effectively, and incorporate best practices and emerging trends – and you proactively form your own point of view to guide decision-making.`,
-        ai: `You select the most appropriate AI tools for the task at hand, and tailor AI-generated outputs to align with brand tone, campaign objectives, and audience expectations.`,
+        ai: `You select the most appropriate AI tools for the task at hand, and tailor AI-generated outputs to fit the brand, the campaign and the audience.`,
       },
       deliver: {
         base: `You lead and contribute to the successful delivery of complex projects alongside your team. You proactively share information, seek and give feedback, and ensure clear communication across multiple stakeholders. You help others deliver high-quality work, set the tone and pace for execution, and model a resilient, solution-oriented mindset for junior team members.`,
-        ai: `You lead projects that strategically apply AI to accelerate execution, enhance personalization, or enable faster iteration – keeping outcomes aligned with brand and business goals.`,
+        ai: `You lead projects that apply AI to move faster or personalize at scale – keeping outcomes aligned with brand and business goals.`,
       },
       connect: {
-        base: `You actively share your expertise with other marketers and contribute to the company's internal knowledge base. You work to enhance the organization's reputation externally – attracting talent and positioning the company as a thought leader – and you foster a culture of openness, curiosity, and continuous learning.`,
+        base: `You actively share your expertise with other marketers and contribute to the company's internal knowledge base. You work to enhance the organization's reputation externally – attracting talent and positioning the company as a thought leader – and you foster a culture of curiosity and continuous learning.`,
         ai: `You help integrate AI tools into cross-functional workflows and act as a bridge – demystifying AI for non-experts and enabling more confident, effective adoption across teams.`,
       },
       lead: {
-        base: `You inspire and support a small group of teammates, encouraging them to grow beyond their comfort zones. You create repeatable processes and tools for ongoing challenges, actively promote psychological safety and open conversations about well-being, and help managers navigate performance challenges with courageous, constructive conversations. You consistently role-model empathy, compassion, and emotional intelligence.`,
-        ai: `You coach others on how to use AI responsibly – prompt design, ethical boundaries, real-world use cases – and help shape team norms around AI adoption, raising awareness of where human judgment and creative oversight are essential.`,
+        base: `You inspire and support a small group of teammates, encouraging them to grow beyond their comfort zones. You create repeatable processes and tools for ongoing challenges, actively promote psychological safety and open conversations about well-being, and help managers through performance challenges with courageous, constructive conversations. You consistently role-model empathy and emotional intelligence.`,
+        ai: `You coach others on how to use AI responsibly – prompt design, ethical boundaries, real-world use cases – and help shape team norms around AI adoption, raising awareness of where human judgment and creative oversight are essential – including where not to use AI at all.`,
       },
     },
   },
@@ -201,26 +205,28 @@ const growthRoles = [
         ai: `You guide others in the responsible use of AI and lead the development of AI-integrated workflows across the marketing stack, ensuring ethical standards are upheld and team adoption is well-supported.`,
       },
       deliver: {
-        base: `You effectively lead and deliver complex projects involving multiple stakeholders and high organizational impact. You communicate complex ideas with clarity, align diverse teams, and champion high-quality outcomes. You identify and address systemic challenges and drive change with confidence, helping others see obstacles as opportunities.`,
-        ai: `You define clear success metrics for AI-assisted marketing execution and mentor teams on when and how to apply AI responsibly, balancing speed and scale with creative and strategic integrity.`,
+        base: `You effectively lead and deliver complex projects involving multiple stakeholders and high organizational impact. You communicate complex ideas clearly and align diverse teams around high-quality outcomes. You identify and address systemic challenges and drive change with confidence, helping others see obstacles as opportunities.`,
+        ai: `You define clear success metrics for AI-assisted marketing execution and mentor teams on when and how to apply AI responsibly, balancing speed with quality. You decide, task by task, whether a person, a small model or a big one does the work – and what it's worth spending.`,
       },
       connect: {
         base: `You foster a culture of mentorship by enabling knowledge-sharing across the team. You actively position the company as an innovative, values-driven workplace, internally and externally, and play a leading role in hiring – from sourcing and interviewing to inclusive, strategic talent decisions. You recognize strengths in others and help them share their expertise.`,
-        ai: `You champion AI literacy across the organization, setting cultural norms around transparency, ethics, and confident experimentation. You frame AI not just as a tool, but as a mindset shift that requires openness, shared learning, and thoughtful integration.`,
+        ai: `You champion AI literacy across the organization and set the norms for open experimentation. You treat AI as a tool and the space as the premise: you build a culture where the unsaid – about AI and about the work – gets said and challenged.`,
       },
       lead: {
-        base: `You manage complex interactions across teams and functions, promoting best practices and modeling a high standard of leadership. You identify systemic issues and underlying dynamics that affect organizational health and take proactive steps to address them. You advocate for team and individual needs, mediate escalated situations with care, and support others in navigating emotional dynamics with compassion.`,
-        ai: `You shape policy and norms for AI use across the marketing organization – defining maturity expectations by role, mentoring others in prompt design and ethical boundaries, and representing Marketing's perspective in broader AI strategy. You champion AI literacy, promote transparency, and advance responsible adoption across the company.`,
+        base: `You manage complex interactions across teams and functions, promoting best practices and modeling a high standard of leadership. You identify systemic issues and underlying dynamics that affect organizational health and take proactive steps to address them. You advocate for team and individual needs, mediate escalated situations with care, and support others through emotional dynamics with compassion.`,
+        ai: `You shape policy and norms for AI use across the marketing organization – defining maturity expectations by role, mentoring others in prompt design and ethical boundaries, and representing Marketing's perspective in broader AI strategy.`,
       },
     },
   },
 ];
 
 const crossCutting = [
-  { name: `Ethics & Sensitivity`, body: `Built into training, tools, and workflows – e.g. flagging AI images that mimic artists without consent.` },
+  { name: `The space`, body: `AI is a tool. The premise is the space. Do we consciously create a culture where nothing is left unsaid, and no one looks bad for asking the obvious question – of a colleague, or of an AI?` },
+  { name: `Ownership`, body: `If AI made it and you submit it, your name is on it.` },
+  { name: `Ethics & Sensitivity`, body: `Built into the training and the tools – e.g. flagging AI images that mimic artists without consent.` },
   { name: `Content Quality Matrix`, body: `What's OK at each stage: a rough GenAI sketch for internal alignment is fine; a public post isn't, unless curated.` },
   { name: `Creative Role Taxonomy`, body: `When to use human-only, AI-assisted, or AI-only creation, based on purpose and audience.` },
-  { name: `Governance`, body: `Clear policies for internal and external content use, accountability models, and documentation.` },
+  { name: `Governance`, body: `Clear policies for internal and external content, and a named owner for each.` },
 ];
 
 // Where each of the "five ways in" leads on this page.
@@ -235,6 +241,7 @@ const toc = [
   { href: '#maturity', label: 'Maturity model' },
   { href: '#growth', label: 'Growth framework' },
   { href: '#cross-cutting', label: 'Cross-cutting' },
+  { href: '#about-the-author', label: 'About the author' },
   { href: '#how-this-was-made', label: 'How this was made' },
 ];
 ---
@@ -246,7 +253,7 @@ const toc = [
   ogImageAlt="The AI Marketing Ascendancy Framework – a beam of light that widens from Aware to Strategic."
   ogType="article"
   publishedTime="2025-06-04"
-  modifiedTime="2026-10-16"
+  modifiedTime="2026-11-03"
 >
   <div class="glow-scope aima--night">
   <GlowBackground strength={0.6} dimTo={0.45} coral={false} />
@@ -255,15 +262,21 @@ const toc = [
   <section class="aima-hero" id="intro">
     <div class="container-wide">
       <div class="aima-hero__top">
-        <p class="section-eyebrow">Framework <span class="aima-version">v2.0</span></p>
+        <p class="section-eyebrow">Framework <span class="aima-version">v2.1</span></p>
         <h1 class="aima-hero__title">The AI Marketing <span class="accent">Ascendancy</span> Framework.</h1>
+        <p class="aima-byline">By <a href="/about">Stève Cattin</a> · Updated November 2026</p>
         <p class="aima-hero__lede">
           I built this framework because I couldn't find one that met my needs – so I made what I
-          wished existed. It's here to help you and your team move from AI-curious to AI-confident.
+          wished existed, from first-hand work inside marketing teams at several companies. It's here to help you and your team move from AI-curious to AI-confident.
           It walks through the challenges (inside the team and outside it), maps practical use cases
           across the marketing value chain, and lays out a maturity model across People, Processes,
           and Technology. There's also a role-based growth framework – what AI fluency should look
           like as a marketer moves from junior to lead.
+        </p>
+        <p class="aima-hero__lede">
+          It rests on one belief: human + system. AI is part of the system, and a system only works
+          with the right humans around it. When both work well, big things can happen. If one side
+          fails – doesn't matter which one – it doesn't work.
         </p>
       </div>
 
@@ -293,20 +306,22 @@ const toc = [
     </header>
     <div class="aima-prose">
       <p>
-        AI changes what marketing actually is – not just how we do it. That's a bigger claim
+        AI changes what marketing actually is. That's a bigger claim
         than it sounds, and most teams feel it before they can name it.
       </p>
       <p>
         Content is suddenly cheap to produce, so producing more of it stops being an edge.
         Anyone can generate a decent-looking campaign in an afternoon, which means a
         decent-looking campaign is worth less than it used to be. The hard part moves – away
-        from making things, and toward judgment, taste, and knowing what's worth saying in the
-        first place.
+        from making things, and toward judgment: knowing what's worth saying in the first
+        place.
       </p>
       <p>
-        That asks something real of a team: new skills, new ways of working, and a clear line on
-        where the ethics sit. And it lands at the same time as a shift we don't control – how
-        people discover, trust, and engage with brands in an AI-mediated world.
+        That asks something real of a team: a clear line on where the ethics sit, and the safety
+        to contradict. AI doesn't challenge the leader. It can comfort them in their view, and
+        without a team that feels free to push back, it creates confirmation bias. And all of this
+        lands at the same time as a shift we don't control – how people find brands and decide to
+        trust them, now that an AI sits in between.
       </p>
     </div>
     <blockquote class="aima-pull">
@@ -344,8 +359,8 @@ const toc = [
 
     <div class="aima-switch" data-switch>
       <div class="aima-tabs" role="tablist" aria-label="Challenge scope">
-        <button type="button" role="tab" class="aima-tab" data-switch-btn="internal" aria-selected="true">Inside the team <span>7</span></button>
-        <button type="button" role="tab" class="aima-tab" data-switch-btn="external" aria-selected="false" tabindex="-1">Out in the market <span>6</span></button>
+        <button type="button" role="tab" class="aima-tab" data-switch-btn="internal" aria-selected="true">Inside the team <span>{challengesInternal.length}</span></button>
+        <button type="button" role="tab" class="aima-tab" data-switch-btn="external" aria-selected="false" tabindex="-1">Out in the market <span>{challengesExternal.length}</span></button>
       </div>
 
       {[{ key: 'internal', items: challengesInternal }, { key: 'external', items: challengesExternal }].map((set, k) => (
@@ -372,9 +387,9 @@ const toc = [
       <h2 class="section-title">Where AI actually helps.</h2>
       <div class="aima-sub">
         <p>
-          A working list of where AI actually helps, grouped by function. It's not exhaustive –
-          it's here to spark ideas about what's possible, and just as often to flag where a human
-          still has to make the call.
+          A working list of where AI actually helps, grouped by function. A starting point for
+          ideas – and just as often a flag for where a human still has to make the call, or where
+          AI shouldn't be used at all.
         </p>
         <p>
           One thing to keep in mind: models aren't interchangeable. Picking the right one for the
@@ -421,29 +436,37 @@ const toc = [
       <p>
         Cheap and fast is the first impression, and it's misleading. Every token costs something.
         Per prompt it's small enough that nobody notices – until a workflow runs ten thousand times
-        a month, or someone points the most expensive model at a job the cheapest one could have done.
+        a month, or someone points the biggest model at a job the smallest one could have done.
       </p>
       <p>
-        Replacing a person with AI isn't automatically cheaper, either. Quality aside, a human doing
-        a task well once can beat a model doing it badly three times – plus the review, plus the
-        rework. So there's a discipline forming that most teams don't have yet: knowing which model
-        to use for which job, and what each one costs. The frontier model for the thinking that needs
-        it; a small, cheap one for routine volume. Matching the tool to the task isn't only a quality
-        question anymore. It's a budget one.
+        But the token budget is the wrong first question. The right one: for this task, how much am
+        I ready to invest – and what's the cheapest way to do it <em>well</em>? The answer might be a
+        person, a small model, or a big one. It's a conscious decision, and most teams don't make it
+        yet.
+      </p>
+      <p>
+        And cheap isn't always cheaper. Rewriting a good email three times through AI costs more
+        than the email was worth – and it stops sounding like you. When imagery costs nothing to
+        produce and your audience can tell, you've saved on production and paid in brand
+        credibility.
       </p>
     </div>
-    <ol class="aima-cols aima-cols--3">
+    <ol class="aima-cols aima-cols--4 aima-cols--spaced">
       <li>
-        <h3 class="aima-cols__title">A token isn't free</h3>
-        <p>The per-use cost hides at small scale and shows up hard at volume. Know the unit cost before you automate something that runs thousands of times a month.</p>
+        <h3 class="aima-cols__title">Start with the task</h3>
+        <p>Small models for the routine work – summarizing, reformatting. Big ones for the reasoning. The biggest spend comes from defaulting to the biggest model for everything.</p>
       </li>
       <li>
-        <h3 class="aima-cols__title">Cheaper than a person? Do the math</h3>
-        <p>Sometimes AI wins on cost, sometimes a person does it right the first time. It's a calculation, not an assumption – and it changes per task.</p>
+        <h3 class="aima-cols__title">Count the brand, too</h3>
+        <p>There's the cost of tokens, and there's the cost in credibility. Work that's good enough but not great gets paid for later, by the brand.</p>
       </li>
       <li>
-        <h3 class="aima-cols__title">The budget is moving</h3>
-        <p>AI is shifting from a central experimentation budget to each function's P&amp;L. When it lands on your line, the cost is yours to own – so understand it now.</p>
+        <h3 class="aima-cols__title">Make the spend visible</h3>
+        <p>Share what experiments cost the way you share what they taught you – without guilt or shame attached. Could a different model, or a person, have done it better for less?</p>
+      </li>
+      <li>
+        <h3 class="aima-cols__title">The budget is the system</h3>
+        <p>Deciding where you spend it is human judgment. I've seen limits go from very generous, to spending too much, to too tight for some people – a constant adjustment. There's no perfect per-function formula yet, so experiment, look, adjust. And as AI moves from a central budget to each function's P&amp;L, own the number.</p>
       </li>
     </ol>
   </section>
@@ -453,7 +476,7 @@ const toc = [
     <header class="aima-head">
       <p class="section-eyebrow">Maturity model</p>
       <h2 class="section-title">Where you stand.</h2>
-      <p class="aima-sub">Five stages for people, processes and tech each.</p>
+      <p class="aima-sub">Five stages for people, processes and tech each. People is the human side. Processes and Technology are the system. Both matter as much – people come first in the sequence.</p>
     </header>
 
     <div class="aima-instrument">
@@ -513,7 +536,10 @@ const toc = [
         show-and-tell – what someone tried this week, what worked, what flopped. I'd run it
         through the same channel as everything else that matters: the
         <a href="/blog/rebuilding-the-5-15">5-15</a>. A line in a weekly 5-15 about an experiment
-        that saved an afternoon (or wasted one) does more for adoption than any policy doc.
+        that saved an afternoon (or wasted one) does more for adoption than any policy doc. When I
+        ran this with a marketing team, an “AI Insight of the Week” in the 5-15 fed a gallery of 30
+        experiments from 6 people, failures included. The team reached 100% on the company's AI
+        training before it was required – ahead of every other function.
       </p>
     </aside>
   </section>
@@ -563,7 +589,7 @@ const toc = [
       <h2 class="section-title">What runs across every pillar.</h2>
       <p class="aima-sub">A few things don't sit inside a single pillar – they run across all of them.</p>
     </header>
-    <ol class="aima-cols aima-cols--4">
+    <ol class="aima-cols aima-cols--3 aima-cols--flush">
       {crossCutting.map((c) => (
         <li>
           <h3 class="aima-cols__title">{c.name}</h3>
@@ -572,6 +598,30 @@ const toc = [
       ))}
     </ol>
   </section>
+
+    <aside class="aima-author" id="about-the-author">
+      <div class="aima-author__side">
+        <span class="aima-made__label">About the author</span>
+        <div class="aima-author__photo">
+          <PortraitSplit priority={false} />
+        </div>
+      </div>
+      <div class="aima-author__body">
+        <p>
+          Hi, I'm Stève, a fractional CMO and go-to-market advisor. With more than 20 years of
+          marketing leadership and a track record in people and operations – two exits included –
+          I'm known for using creativity and storytelling to build, innovate, and deeply transform.
+          From marketing campaigns and customer journeys to teams, culture, processes, and
+          performance.
+        </p>
+        <p>
+          On a private note, I'm an aspiring yoga teacher, which changes the way I look at work and
+          at how humans and systems interact. I'm also a huge fan of the outdoors – hiking, skiing.
+          That's where you'll find me in my free time.
+        </p>
+        <a class="aima-author__link" href="/about">More about me →</a>
+      </div>
+    </aside>
 
     <aside class="aima-made" id="how-this-was-made">
       <span class="aima-made__label">How this was made</span>
@@ -664,6 +714,8 @@ const toc = [
     max-width: 76ch;
   }
 
+  .aima-hero__lede + .aima-hero__lede { margin-top: var(--space-4); }
+
   .aima-hero__cone {
     margin-top: clamp(40px, 4.4vw, 64px);
   }
@@ -677,6 +729,37 @@ const toc = [
     border-top: 0.5px solid var(--color-line);
     scroll-margin-top: var(--space-16);
   }
+  .aima-byline {
+    margin: var(--space-5) 0 0;
+    font-family: var(--font-mono);
+    font-size: var(--text-mono-sm);
+    letter-spacing: var(--tracking-wide);
+    color: var(--color-ash);
+  }
+  .aima-byline a { color: var(--color-cobalt); text-decoration: none; }
+  .aima-byline a:hover { text-decoration: underline; }
+
+  .aima-author {
+    display: grid;
+    grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+    gap: var(--space-8);
+    padding-block: var(--space-10);
+    border-top: 0.5px solid var(--color-line);
+    scroll-margin-top: var(--space-16);
+  }
+  .aima-author__side { display: flex; flex-direction: column; gap: var(--space-5); }
+  /* The homepage's Monday/Saturday portrait, smaller; room below for its labels. */
+  .aima-author__photo { width: 220px; max-width: 100%; margin-bottom: var(--space-12); }
+  .aima-author__body p {
+    font-size: 17px;
+    line-height: var(--lh-prose);
+    color: var(--color-ink);
+    margin: 0 0 var(--space-4);
+    max-width: 66ch;
+  }
+  .aima-author__link { color: var(--color-cobalt); text-decoration: none; }
+  .aima-author__link:hover { text-decoration: underline; }
+
   .aima-made__label {
     font-family: var(--font-mono);
     font-size: var(--text-mono-sm);
@@ -1002,6 +1085,8 @@ const toc = [
   }
   .aima-cols--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .aima-cols--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top: 0; }
+  .aima-cols--spaced { margin-top: var(--space-12); }
+  .aima-cols--flush { margin-top: 0; }
   .aima-cols li {
     border-top: 1px solid var(--color-line);
     padding-top: var(--space-5);
@@ -1159,6 +1244,7 @@ const toc = [
 
   @media (max-width: 860px) {
     .aima-made { grid-template-columns: 1fr; gap: var(--space-3); }
+    .aima-author { grid-template-columns: 1fr; gap: var(--space-5); }
     .aima-ways__row { grid-template-columns: 48px minmax(0, 1fr) 20px; }
     .aima-ways__body { grid-column: 2; grid-row: 2; }
     .aima-ways__arrow { grid-column: 3; grid-row: 1; }
