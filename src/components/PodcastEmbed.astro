@@ -1,0 +1,104 @@
+---
+/* Click-to-load podcast player.
+   Shows a light card first; Spotify's player (and its cookies) only loads
+   after the reader asks for it. Keeps the site free of third-party requests
+   by default. */
+export interface Props {
+  spotifyId: string;   // episode id from the open.spotify.com/episode/<id> URL
+  show: string;
+  title: string;
+  duration?: string;   // e.g. "19 min"
+}
+
+const { spotifyId, show, title, duration } = Astro.props;
+const embedUrl = `https://open.spotify.com/embed/episode/${spotifyId}?utm_source=generator`;
+const openUrl = `https://open.spotify.com/episode/${spotifyId}`;
+---
+
+<div class="pod" data-pod data-embed={embedUrl}>
+  <div class="pod__card">
+    <button type="button" class="pod__play" data-pod-load aria-label={`Play “${title}” – loads the Spotify player`}>
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" /></svg>
+    </button>
+    <div class="pod__text">
+      <p class="pod__show">{show}{duration && <span> · {duration}</span>}</p>
+      <p class="pod__title">{title}</p>
+      <p class="pod__note">
+        Loads Spotify’s player, which sets its own cookies. Or
+        <a href={openUrl} target="_blank" rel="noopener">open it on Spotify</a>.
+      </p>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-pod]').forEach((pod) => {
+    pod.querySelector('[data-pod-load]')?.addEventListener('click', () => {
+      const iframe = document.createElement('iframe');
+      iframe.src = pod.dataset.embed + '&autoplay=1';
+      iframe.title = 'Spotify episode player';
+      iframe.width = '100%';
+      iframe.height = '152';
+      iframe.loading = 'lazy';
+      iframe.allow = 'autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture';
+      iframe.style.border = '0';
+      iframe.style.borderRadius = '12px';
+      pod.replaceChildren(iframe);
+    });
+  });
+</script>
+
+<style>
+  .pod {
+    margin: var(--space-10) 0;
+    min-height: 152px;
+  }
+  .pod__card {
+    display: flex;
+    align-items: center;
+    gap: var(--space-5);
+    padding: var(--space-5) var(--space-6);
+    min-height: 152px;
+    background: var(--color-white);
+    border: 0.5px solid var(--color-line);
+    border-radius: 12px;
+  }
+  .pod__play {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+    border: 0;
+    border-radius: 50%;
+    background: var(--color-cobalt);
+    color: var(--color-white);
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+  .pod__play:hover { background: var(--color-cobalt-deep); transform: scale(1.04); }
+  .pod__play:focus-visible { outline: 2px solid var(--color-cobalt); outline-offset: 3px; }
+  .pod__play svg { margin-left: 3px; }
+  .pod__text { min-width: 0; }
+  .pod .pod__show {
+    font-family: var(--font-mono);
+    font-size: var(--text-mono-sm);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+    color: var(--color-ash);
+    margin: 0 0 var(--space-1);
+  }
+  .pod .pod__title {
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    line-height: var(--lh-snug);
+    color: var(--color-ink);
+    margin: 0 0 var(--space-2);
+  }
+  .pod .pod__note {
+    font-size: var(--text-sm);
+    line-height: var(--lh-normal);
+    color: var(--color-graphite);
+    margin: 0;
+  }
+</style>
