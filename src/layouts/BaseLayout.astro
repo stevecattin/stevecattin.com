@@ -34,7 +34,7 @@ const site = Astro.site ?? 'https://stevecattin.com';
 const canonical = new URL(Astro.url.pathname, site);
 /* Scrapers won't resolve a relative path – og:image has to be absolute. */
 const ogImageUrl = new URL(ogImage, site).toString();
-const fullTitle = title.includes('Stève') ? title : `${title} – Stève Cattin`;
+const fullTitle = title.includes('Stève') ? title : `${title} • Stève Cattin`;
 
 const toIso = (d?: Date | string) => (d ? new Date(d).toISOString() : undefined);
 const isArticle = ogType === 'article';
