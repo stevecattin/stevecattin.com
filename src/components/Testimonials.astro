@@ -13,6 +13,8 @@ interface Props {
   /** Featured quote becomes the section headline: large display type on a
    *  hanging quote mark (homepage). Pair with title="" to drop the h2. */
   lead?: boolean;
+  /** Anchor id for deep links (e.g. /practice/#references). */
+  id?: string;
 }
 
 const TESTIMONIALS: Record<
@@ -72,6 +74,7 @@ const {
   rowIds = [],
   width = 'wide',
   lead = false,
+  id,
 } = Astro.props;
 
 const featured = featuredId ? TESTIMONIALS[featuredId] : null;
@@ -83,6 +86,7 @@ const showHead = Boolean(eyebrow || title);
 ---
 
 <section
+  id={id}
   class:list={['voices', { 'voices--bare': !showHead, 'voices--lead': lead }]}
   aria-labelledby={showHead && title ? 'voices-title' : undefined}
   aria-label={showHead && title ? undefined : (eyebrow || 'In their words')}
@@ -155,6 +159,7 @@ const showHead = Boolean(eyebrow || title);
     background: var(--color-paper);
     border-top: 0.5px solid var(--color-line);
     padding-block: var(--space-20);
+    scroll-margin-top: 64px;
   }
 
   /* Bare pull-quote variant – no heading, no top rule, sits inside a page's
