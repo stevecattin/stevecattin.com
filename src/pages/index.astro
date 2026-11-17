@@ -85,18 +85,14 @@ const moments = [
         When to work with <span class="accent">me</span>
       </h2>
 
-      <ol class="moments__list">
-        {moments.map((m, i) => (
+      <ul class="moments__list">
+        {moments.map((m) => (
           <li class="moments__item">
-            <span class="moments__num">№ {String(i + 1).padStart(2, '0')}</span>
-            <h3 class="moments__item-title" id={`moment-${i + 1}`}>{m.title}</h3>
+            <h3 class="moments__item-title">{m.title}</h3>
             <p class="moments__item-body" set:html={m.body} />
-            <button class="moments__go" data-contact-trigger aria-describedby={`moment-${i + 1}`}>
-              Tell me your story →
-            </button>
           </li>
         ))}
-      </ol>
+      </ul>
 
       <div class="moments__foot">
         <p class="moments__aside">Investor with a portfolio company in one of these moments? Same conversation.</p>
@@ -374,111 +370,20 @@ const moments = [
     padding: 0;
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: var(--space-5);
+    column-gap: var(--space-10);
+    row-gap: var(--space-12);
   }
 
-  /* Glass cards – same material as the scrolled nav bar. The whole card is
-     clickable (the button's ::after covers it) and opens the contact modal. */
-  .moments__item {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    padding: var(--space-8) var(--space-6) var(--space-6);
-    border-radius: var(--radius-lg);
-    background: color-mix(in srgb, var(--color-paper) 55%, transparent);
-    backdrop-filter: blur(22px) saturate(180%);
-    -webkit-backdrop-filter: blur(22px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.65);
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.8),
-      0 14px 34px -22px rgba(16, 17, 20, 0.3);
-    transition:
-      transform var(--dur-med) var(--ease-out),
-      box-shadow var(--dur-med) var(--ease-out);
-  }
-
-  /* Touch screens: no live blur behind the cards. Over the already-soft
-     light it hardly showed, and Safari re-blurred all four cards on every
-     scroll frame. A denser paper keeps the glass read. */
-  @media (max-width: 760px), (hover: none) and (pointer: coarse) {
-    .moments__item {
-      background: color-mix(in srgb, var(--color-paper) 74%, transparent);
-      -webkit-backdrop-filter: none;
-      backdrop-filter: none;
-    }
-  }
-
-  .moments__item:hover,
-  .moments__item:has(.moments__go:focus-visible) {
-    transform: translateY(-6px);
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.8),
-      0 28px 50px -26px color-mix(in srgb, var(--color-cobalt) 45%, transparent);
-  }
-
-  .moments__item:has(.moments__go:focus-visible) {
-    outline: 2px solid var(--color-cobalt);
-    outline-offset: 3px;
-  }
-
-  .moments__go {
-    margin-top: auto;
-    padding: var(--space-6) 0 0;
-    border: 0;
-    background: none;
-    font-family: var(--font-body);
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--color-cobalt);
-    text-align: left;
-    cursor: pointer;
-    transition:
-      opacity var(--dur-med) var(--ease-out),
-      transform var(--dur-med) var(--ease-out);
-  }
-  .moments__go::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-  }
-  .moments__go:focus-visible { outline: none; }
-
-  /* With a mouse, the link appears on hover; on touch screens it always shows. */
-  @media (hover: hover) and (pointer: fine) {
-    .moments__go { opacity: 0; transform: translateY(4px); }
-    .moments__item:hover .moments__go,
-    .moments__go:focus-visible { opacity: 1; transform: none; }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .moments__item,
-    .moments__go { transition: none; }
-    .moments__item:hover,
-    .moments__item:has(.moments__go:focus-visible) { transform: none; }
-  }
-
-  @media (prefers-reduced-transparency: reduce) {
-    .moments__item { background: var(--color-paper); }
-  }
-
-  .moments__num {
-    display: block;
-    font-family: var(--font-mono);
-    font-size: var(--text-mono-sm);
-    letter-spacing: var(--tracking-wide);
-    color: var(--color-cobalt);
-    margin-bottom: var(--space-4);
-  }
-
+  /* Editorial columns: no cards, no numbers, no rules – type only. */
   .moments__item-title {
     font-family: var(--font-display);
     font-weight: 500;
-    font-size: 22px;
-    line-height: 1.2;
-    letter-spacing: -0.01em;
+    font-size: 26px;
+    line-height: 1.12;
+    letter-spacing: -0.015em;
     color: var(--color-ink);
-    margin: 0 0 var(--space-3);
+    margin: 0 0 var(--space-4);
+    text-wrap: balance;
   }
 
   .moments__item-body {
@@ -508,9 +413,8 @@ const moments = [
   }
   @media (max-width: 640px) {
     .moments { padding-block: var(--space-16); }
-    .moments__list { grid-template-columns: 1fr; gap: var(--space-4); }
-    .moments__item { padding: var(--space-6); }
-    .moments__go { padding-top: var(--space-4); }
+    .moments__list { grid-template-columns: 1fr; row-gap: var(--space-10); }
+    .moments__item-title { font-size: 24px; }
   }
 
   /* -------- Framework: copy + AIMA at a glance -------- */
