@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import '../styles/v3.css';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import ContactModal from '../components/ContactModal.astro';
@@ -119,7 +120,7 @@ const articleJsonLd = isArticle
         (entries) => entries.forEach((e) => e.target.classList.toggle('is-idle', !e.isIntersecting)),
         { rootMargin: '120px 0px' },
       );
-      document.querySelectorAll('.night-bg, .glow-stage').forEach((el) => idle.observe(el));
+      document.querySelectorAll('.night-bg, .glow-stage, .v3-lights, .ring').forEach((el) => idle.observe(el));
     </script>
   </body>
 </html>

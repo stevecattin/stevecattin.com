@@ -34,7 +34,7 @@ Investors with a portfolio company in one of these moments: same conversation.
 
 ## Working with Stève
 
-- Fractional executive: one to three days a week, in the seat. Usually comes in on the most exposed function – often marketing or GTM – and works across the whole company from there.
+- Executive / Fractional: one to five days a week, in the seat – as part of the team, or fractional. Usually comes in on the most exposed function – often marketing or GTM – and works across the whole company from there.
 - Advisory: a regular cadence outside the org chart, for founders and execs who have a team and a plan and want a senior operator to pressure-test it.
 - Private sparring: confidential, off the org chart, for leaders whose hardest problem is the one they're carrying themselves.
 - First step: a forty-five-minute conversation, no deck – you tell him what's happening, he listens and shares what he sees. Email hello@stevecattin.com or use the contact form on any page.

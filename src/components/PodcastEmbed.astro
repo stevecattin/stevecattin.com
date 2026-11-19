@@ -59,9 +59,22 @@ const openUrl = `https://open.spotify.com/episode/${spotifyId}`;
     gap: var(--space-5);
     padding: var(--space-5) var(--space-6);
     min-height: 152px;
-    background: var(--color-white);
-    border: 0.5px solid var(--color-line);
-    border-radius: 12px;
+    /* v3: a small navy strip – the only dark element inside an essay */
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background: var(--color-night);
+    border-radius: var(--radius-lg);
+  }
+  .pod__card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image: url("/images/noise.png");
+    background-size: 256px 256px;
+    opacity: 0.22;
+    mix-blend-mode: overlay;
   }
   .pod__play {
     flex: none;
@@ -77,7 +90,7 @@ const openUrl = `https://open.spotify.com/episode/${spotifyId}`;
     transition: background 0.2s ease, transform 0.2s ease;
   }
   .pod__play:hover { background: var(--color-cobalt-deep); transform: scale(1.04); }
-  .pod__play:focus-visible { outline: 2px solid var(--color-cobalt); outline-offset: 3px; }
+  .pod__play:focus-visible { outline: 2px solid var(--color-night-sky); outline-offset: 3px; }
   .pod__play svg { margin-left: 3px; }
   .pod__text { min-width: 0; }
   .pod .pod__show {
@@ -85,20 +98,21 @@ const openUrl = `https://open.spotify.com/episode/${spotifyId}`;
     font-size: var(--text-mono-sm);
     text-transform: uppercase;
     letter-spacing: var(--tracking-wide);
-    color: var(--color-ash);
+    color: var(--color-night-sky);
     margin: 0 0 var(--space-1);
   }
   .pod .pod__title {
     font-family: var(--font-display);
     font-size: var(--text-lg);
     line-height: var(--lh-snug);
-    color: var(--color-ink);
+    color: var(--color-white);
     margin: 0 0 var(--space-2);
   }
   .pod .pod__note {
     font-size: var(--text-sm);
     line-height: var(--lh-normal);
-    color: var(--color-graphite);
+    color: var(--color-night-powder);
     margin: 0;
   }
+  .pod .pod__note a { color: var(--color-white); text-decoration: underline; text-underline-offset: 3px; }
 </style>

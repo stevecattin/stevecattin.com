@@ -1,0 +1,205 @@
+---
+// The glowing ring (v3): a blue, grainy disc with a thin pale ring line and
+// a soft glow. With `portrait`, Stève's cutout sits in it – head breaking out
+// above the ring, shoulders cropped by its curve. Without it, the ring is
+// empty (404) or holds a short label (About's "Who is Stève").
+//
+// Motion, all filter-free and transform/opacity only:
+//   the glow breathes (6s), a halo drifts around the ring (14s),
+//   a pale light wanders inside the disc under the fixed grain (18s).
+interface Props {
+  /** Disc diameter on large screens, in px. */
+  size?: number;
+  /** Smaller diameter used on phones. */
+  sizeSm?: number;
+  portrait?: boolean;
+  class?: string;
+}
+const { size = 360, sizeSm, portrait = false, class: className } = Astro.props;
+const sm = sizeSm ?? Math.round(size * 0.72);
+---
+
+<div
+  class:list={['ring', { 'ring--portrait': portrait }, className]}
+  style={`--d-lg: ${size}px; --d-sm: ${sm}px;`}
+>
+  <span class="ring__halo v3-anim" aria-hidden="true"></span>
+  <span class="ring__glow v3-anim" aria-hidden="true"></span>
+  <span class="ring__disc" aria-hidden="true">
+    <span class="ring__inner v3-anim"></span>
+    <span class="ring__grain"></span>
+  </span>
+  {portrait && (
+    <span class="ring__cut">
+      <img src="/images/portrait-ring.webp" alt="Stève Cattin" width="800" height="1002" fetchpriority="high" decoding="async" />
+    </span>
+  )}
+  {Astro.slots.has('default') && <span class="ring__label"><slot /></span>}
+</div>
+
+<style>
+  /* --d is the disc diameter. With a portrait the box is taller: the head
+     rises 0.194 × d above the top of the disc. */
+  .ring {
+    --d: var(--d-lg);
+    --top: 0px;
+    position: relative;
+    width: var(--d);
+    height: calc(var(--d) + var(--top));
+    flex: 0 0 auto;
+  }
+  .ring--portrait { --top: calc(var(--d) * 0.194); }
+  @media (max-width: 760px) {
+    .ring { --d: var(--d-sm); }
+  }
+
+  .ring__disc,
+  .ring__glow,
+  .ring__halo {
+    position: absolute;
+    border-radius: 50%;
+  }
+
+  /* The disc: its own small night sky, with a static thin ring line. */
+  .ring__disc {
+    left: 0;
+    top: var(--top);
+    width: var(--d);
+    height: var(--d);
+    overflow: hidden;
+    background: radial-gradient(circle at 50% 38%,
+      var(--color-night-azure) 0%,
+      var(--color-night-royal) 42%,
+      var(--color-night-deep) 78%,
+      var(--color-night) 100%);
+    box-shadow: 0 0 0 1px rgba(196, 214, 240, 0.7);
+    isolation: isolate;
+    /* Safari: overflow + border-radius doesn't clip children that sit on
+       their own layer (the animated light, the blended grain) – they showed
+       as a grainy square. A static clip-path does. */
+    -webkit-clip-path: circle(50%);
+            clip-path: circle(50%);
+  }
+  /* The clip-path also clips the box-shadow ring line, so draw it inside. */
+  .ring__disc::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 1px rgba(196, 214, 240, 0.7);
+    z-index: 2;
+    pointer-events: none;
+  }
+  .ring__inner {
+    position: absolute;
+    left: -30%;
+    top: -30%;
+    width: 160%;
+    height: 160%;
+    background: radial-gradient(circle at 45% 40%,
+      rgba(143, 176, 228, 0.7) 0%,
+      rgba(90, 127, 214, 0.32) 22%,
+      rgba(43, 76, 201, 0) 45%);
+    animation: ring-inner 18s ease-in-out infinite;
+    will-change: transform;
+  }
+  .ring__grain {
+    position: absolute;
+    inset: 0;
+    background-image: url("/images/noise.png");
+    background-size: 256px 256px;
+    opacity: 0.4;
+    mix-blend-mode: overlay;
+  }
+
+  /* The breathing glow – a gradient behind the disc whose opacity breathes
+     (never an animated box-shadow, which repaints every frame). */
+  .ring__glow {
+    left: calc(var(--d) * -0.35);
+    top: calc(var(--top) - var(--d) * 0.35);
+    width: calc(var(--d) * 1.7);
+    height: calc(var(--d) * 1.7);
+    background: radial-gradient(closest-side,
+      rgba(90, 127, 214, 0.62) 50%,
+      rgba(90, 127, 214, 0.22) 72%,
+      rgba(90, 127, 214, 0) 100%);
+    animation: ring-breathe 6s ease-in-out infinite;
+    will-change: opacity, transform;
+  }
+
+  /* A soft halo that drifts around the ring. */
+  .ring__halo {
+    left: calc(var(--d) * -0.17);
+    top: calc(var(--top) - var(--d) * 0.17);
+    width: calc(var(--d) * 1.34);
+    height: calc(var(--d) * 1.34);
+    background: radial-gradient(closest-side,
+      rgba(143, 176, 228, 0.55) 0%,
+      rgba(77, 107, 255, 0.28) 40%,
+      rgba(43, 76, 201, 0) 100%);
+    animation: ring-drift 14s ease-in-out infinite;
+    will-change: transform;
+  }
+
+  /* The cutout: shown inside the circle, plus everything above the disc's
+     upper third (the head). The mask is static. */
+  .ring__cut {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: var(--d);
+    height: calc(var(--d) + var(--top));
+    overflow: hidden;
+    -webkit-mask-image:
+      radial-gradient(circle calc(var(--d) / 2) at 50% calc(var(--top) + var(--d) / 2), #000 99.5%, transparent 100%),
+      linear-gradient(#000, #000);
+    -webkit-mask-size: 100% 100%, 100% calc(var(--d) * 0.588);
+    -webkit-mask-repeat: no-repeat;
+            mask-image:
+      radial-gradient(circle calc(var(--d) / 2) at 50% calc(var(--top) + var(--d) / 2), #000 99.5%, transparent 100%),
+      linear-gradient(#000, #000);
+            mask-size: 100% 100%, 100% calc(var(--d) * 0.588);
+            mask-repeat: no-repeat;
+  }
+  .ring__cut img {
+    position: absolute;
+    left: calc(var(--d) * -0.049);
+    top: 0;
+    width: calc(var(--d) * 1.098);
+    height: auto;
+    max-width: none;
+  }
+
+  .ring__label {
+    position: absolute;
+    left: 0;
+    top: var(--top);
+    width: var(--d);
+    height: var(--d);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    text-align: center;
+    color: var(--color-white);
+  }
+
+  @keyframes ring-breathe {
+    0%, 100% { opacity: 0.55; transform: scale(0.96); }
+    50%      { opacity: 1;    transform: scale(1.04); }
+  }
+  @keyframes ring-drift {
+    0%   { transform: translate(-5%, -3%) scale(1); }
+    25%  { transform: translate(4%, -5%) scale(1.06); }
+    50%  { transform: translate(5.5%, 3%) scale(0.98); }
+    75%  { transform: translate(-3%, 5%) scale(1.04); }
+    100% { transform: translate(-5%, -3%) scale(1); }
+  }
+  @keyframes ring-inner {
+    0%   { transform: translate(-14%, -10%); }
+    33%  { transform: translate(12%, -6%); }
+    66%  { transform: translate(4%, 14%); }
+    100% { transform: translate(-14%, -10%); }
+  }
+</style>

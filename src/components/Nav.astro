@@ -5,41 +5,37 @@ const isActive = (href: string) =>
 ---
 
 <header class="nav">
-  <div class="container-wide nav__inner">
-    <a href="/" class="nav__brand" aria-label="Stève Cattin – home">
-      <span class="nav__name">Stève Cattin</span>
-      <span class="nav__role">CMO &amp; GTM Advisor</span>
-    </a>
+  <div class="nav__shell">
+    <div class="nav__inner">
+      <a href="/" class="nav__brand" aria-label="Stève Cattin – home">
+        <span class="nav__name">Stève Cattin</span>
+        <span class="nav__role">CMO &amp; GTM Advisor</span>
+      </a>
 
-    <nav class="nav__links" aria-label="Primary">
-      <a href="/practice" class:list={['nav__link', { 'is-active': isActive('/practice') }]}>Work with me</a>
-      <a href="/about" class:list={['nav__link', { 'is-active': isActive('/about') }]}>About</a>
-      <a href="/blog" class:list={['nav__link', { 'is-active': isActive('/blog') }]}>Writing</a>
-      <button class="nav__cta" data-contact-trigger>Get in touch</button>
-    </nav>
+      <nav class="nav__links" aria-label="Primary">
+        <a href="/practice" class:list={['nav__link', { 'is-active': isActive('/practice') }]}>Work with me</a>
+        <a href="/about" class:list={['nav__link', { 'is-active': isActive('/about') }]}>About</a>
+        <a href="/blog" class:list={['nav__link', { 'is-active': isActive('/blog') }]}>Writing</a>
+        <button class="nav__cta" data-contact-trigger>Get in touch</button>
+      </nav>
 
-    <button class="nav__hamburger" aria-label="Open menu" aria-expanded="false">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
-  </div>
+      <button class="nav__hamburger" aria-label="Open menu" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
 
-  <div class="nav__mobile-menu" aria-hidden="true">
-    <a href="/practice" class:list={['nav__mobile-link', { 'is-active': isActive('/practice') }]}>Work with me</a>
-    <a href="/about" class:list={['nav__mobile-link', { 'is-active': isActive('/about') }]}>About</a>
-    <a href="/blog" class:list={['nav__mobile-link', { 'is-active': isActive('/blog') }]}>Writing</a>
-    <button class="nav__mobile-cta" data-contact-trigger>Get in touch</button>
+    <div class="nav__mobile-menu" aria-hidden="true">
+      <a href="/practice" class:list={['nav__mobile-link', { 'is-active': isActive('/practice') }]}>Work with me</a>
+      <a href="/about" class:list={['nav__mobile-link', { 'is-active': isActive('/about') }]}>About</a>
+      <a href="/blog" class:list={['nav__mobile-link', { 'is-active': isActive('/blog') }]}>Writing</a>
+      <button class="nav__mobile-cta" data-contact-trigger>Get in touch</button>
+    </div>
   </div>
 </header>
 
 <script>
-  // Transparent over the page at the top; glass once the page moves.
-  const navBar = document.querySelector<HTMLElement>('.nav');
-  const syncNav = () => navBar?.classList.toggle('is-scrolled', window.scrollY > 8);
-  window.addEventListener('scroll', syncNav, { passive: true });
-  syncNav();
-
   const hamburger = document.querySelector('.nav__hamburger') as HTMLButtonElement;
   const mobileMenu = document.querySelector('.nav__mobile-menu') as HTMLElement;
 
@@ -63,10 +59,11 @@ const isActive = (href: string) =>
 </script>
 
 <style>
-  /* The bar floats over the page: no fill and no hairline at the top, so
-     it sits in the hero's light; once the page scrolls it turns to liquid
-     glass – translucent paper, strong blur, a light top edge, a soft lift. */
-  :global(:root) { --nav-h: 64px; }
+  /* v3 (Nov 2026): a compact navy bar floating centered at the top – the
+     same on every page and every ground, opaque (no backdrop-filter, so
+     nothing re-blurs over the moving lights). The role stays in the bar:
+     the fastest answer to "what does he do". */
+  :global(:root) { --nav-h: 80px; }
 
   .nav {
     position: fixed;
@@ -74,187 +71,176 @@ const isActive = (href: string) =>
     left: 0;
     right: 0;
     z-index: 50;
-    background: transparent;
-    transition:
-      background-color 0.3s var(--ease-out),
-      box-shadow 0.3s var(--ease-out),
-      backdrop-filter 0.3s var(--ease-out),
-      -webkit-backdrop-filter 0.3s var(--ease-out);
+    display: flex;
+    justify-content: center;
+    padding: 20px 16px 0;
+    pointer-events: none; /* only the bar itself takes clicks */
   }
 
-  .nav.is-scrolled,
-  .nav:has(.nav__mobile-menu.is-open) {
-    background: color-mix(in srgb, var(--color-paper) 55%, transparent);
-    backdrop-filter: blur(22px) saturate(180%);
-    -webkit-backdrop-filter: blur(22px) saturate(180%);
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.75),
-      inset 0 -1px 0 rgba(255, 255, 255, 0.4),
-      0 12px 32px -20px rgba(16, 17, 20, 0.28);
-  }
-
-  @media (prefers-reduced-transparency: reduce) {
-    .nav.is-scrolled,
-    .nav:has(.nav__mobile-menu.is-open) {
-      background: var(--color-paper);
-    }
-  }
-
-  /* Pages without the moving light start below the bar. */
-  :global(main:not(:has(.glow-scope))) {
+  /* Pages without a full-bleed hero start below the bar. */
+  :global(main:not(:has(.glow-scope, .v3-dusk, .v3-night--top))) {
     padding-top: var(--nav-h);
+  }
+
+  /* The panel: navy, grain, lift. On phones it also holds the menu. */
+  .nav__shell {
+    position: relative;
+    pointer-events: auto;
+    background: var(--color-night);
+    border-radius: var(--radius-lg);
+    box-shadow:
+      0 18px 40px -18px rgba(15, 22, 51, 0.55),
+      inset 0 1px 0 rgba(196, 214, 240, 0.2),
+      0 0 0 1px rgba(196, 214, 240, 0.08);
+    isolation: isolate;
+    overflow: hidden;
+  }
+
+  /* Static overlay grain, like the night zones. */
+  .nav__shell::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image: url("/images/noise.png");
+    background-size: 256px 256px;
+    opacity: 0.2;
+    mix-blend-mode: overlay;
+    pointer-events: none;
   }
 
   .nav__inner {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    min-height: 64px;
-    gap: var(--space-6);
+    gap: var(--space-2);
+    padding: 8px 8px 8px 22px;
   }
 
   .nav__brand {
     display: inline-flex;
-    align-items: center;
-    gap: var(--space-3);
-    color: var(--color-ink);
+    align-items: baseline;
+    gap: 10px;
+    padding-right: 22px;
+    margin-right: 6px;
+    border-right: 1px solid rgba(196, 214, 240, 0.25);
+    color: var(--color-white);
   }
-
-  .nav__brand:hover { color: var(--color-ink); }
-
+  .nav__brand:hover { color: var(--color-white); }
 
   .nav__name {
     font-family: var(--font-display);
-    font-size: 0.95rem;
-    font-weight: 500;
+    font-size: 18px;
+    font-weight: 700;
     letter-spacing: -0.01em;
-  }
-
-  /* The role, quieter than the name, behind a thin rule. Shown only where
-     the bar has room for it. */
-  .nav__role {
-    font-family: var(--font-body);
-    font-size: 0.85rem;
-    font-weight: 400;
-    color: var(--color-graphite);
-    padding-left: var(--space-3);
-    border-left: 1px solid color-mix(in srgb, var(--color-ink) 20%, transparent);
-    line-height: 1.1;
     white-space: nowrap;
   }
 
-  @media (max-width: 960px) {
-    .nav__role { display: none; }
+  .nav__role {
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--color-night-sky);
+    white-space: nowrap;
   }
 
   .nav__links {
     display: flex;
     align-items: center;
-    gap: var(--space-6);
+    gap: var(--space-2);
   }
 
   .nav__link {
     font-family: var(--font-body);
-    font-size: 0.9rem;
-    color: var(--color-graphite);
+    font-size: 15px;
     font-weight: 500;
+    color: var(--color-night-powder);
+    padding: 10px 14px;
+    border-radius: var(--radius-sm);
+    transition: color var(--dur-fast) var(--ease-out), background var(--dur-fast) var(--ease-out);
   }
-
-  .nav__link:hover { color: var(--color-ink); }
-  .nav__link.is-active { color: var(--color-ink); }
+  .nav__link:hover { color: var(--color-white); }
+  .nav__link.is-active {
+    color: var(--color-white);
+    background: rgba(143, 176, 228, 0.16);
+  }
 
   .nav__cta {
+    margin-left: 6px;
     font-family: var(--font-body);
-    font-size: 13px;
-    font-weight: 500;
-    letter-spacing: 0.01em;
-    color: var(--color-paper);
-    background: var(--color-ink);
-    padding: 9px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-white);
+    background: var(--color-cobalt);
+    border: 0;
+    padding: 12px 18px;
     border-radius: var(--radius-sm);
+    cursor: pointer;
     transition: background var(--dur-fast) var(--ease-out);
   }
+  .nav__cta:hover { background: var(--color-cobalt-deep); color: var(--color-white); }
 
-  .nav__cta:hover {
-    background: var(--color-cobalt);
-    color: var(--color-paper);
+  @media (max-width: 900px) {
+    .nav__role { display: none; }
   }
 
-  /* Hamburger — hidden on desktop. 44px square: Apple's minimum tap
-     target. The lines sit at its left edge and it's centred in the bar,
-     so they don't move. */
+  /* Hamburger — phones only. 44px square: Apple's minimum tap target. */
   .nav__hamburger {
     display: none;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
     gap: 5px;
     width: 44px;
     height: 44px;
+    margin-left: auto;
     background: none;
     border: none;
     cursor: pointer;
     padding: 0;
   }
-
   .nav__hamburger span {
     display: block;
-    width: 22px;
+    width: 20px;
     height: 2px;
-    background: var(--color-ink);
+    background: var(--color-white);
     border-radius: 2px;
     transition: transform 0.2s ease, opacity 0.2s ease;
   }
+  .nav__hamburger.is-open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .nav__hamburger.is-open span:nth-child(2) { opacity: 0; }
+  .nav__hamburger.is-open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-  .nav__hamburger.is-open span:nth-child(1) {
-    transform: translateY(7px) rotate(45deg);
-  }
-  .nav__hamburger.is-open span:nth-child(2) {
-    opacity: 0;
-  }
-  .nav__hamburger.is-open span:nth-child(3) {
-    transform: translateY(-7px) rotate(-45deg);
-  }
-
-  /* Mobile menu — hidden by default, only shown on mobile */
+  /* Phone menu: opens under the bar, inside the same navy panel. */
   .nav__mobile-menu {
     display: none;
     flex-direction: column;
-    padding: var(--space-6) var(--space-6) var(--space-8);
-    gap: var(--space-2);
-    border-top: 1px solid var(--color-line);
-    background: var(--color-paper);
+    gap: var(--space-1);
+    padding: var(--space-2) var(--space-2) var(--space-4);
   }
-
-  .nav__mobile-menu.is-open {
-    display: flex;
-  }
+  .nav__mobile-menu.is-open { display: flex; }
 
   .nav__mobile-link {
     font-family: var(--font-display);
     font-size: var(--text-2xl);
     font-weight: 500;
     letter-spacing: var(--tracking-tight);
-    color: var(--color-graphite);
-    padding: var(--space-2) 0;
-    text-decoration: none;
+    color: var(--color-night-powder);
+    padding: var(--space-2) var(--space-3);
   }
-
   .nav__mobile-link:hover,
-  .nav__mobile-link.is-active {
-    color: var(--color-ink);
-  }
+  .nav__mobile-link.is-active { color: var(--color-white); }
 
   .nav__mobile-cta {
-    margin-top: var(--space-4);
+    margin-top: var(--space-3);
     font-family: var(--font-body);
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--color-paper);
-    background: var(--color-ink);
-    padding: 12px 20px;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--color-white);
+    background: var(--color-cobalt);
+    padding: 14px 20px;
+    border: 0;
     border-radius: var(--radius-sm);
     text-align: center;
-    text-decoration: none;
   }
 
   @media (min-width: 641px) {
@@ -263,18 +249,12 @@ const isActive = (href: string) =>
   }
 
   @media (max-width: 640px) {
+    :global(:root) { --nav-h: 76px; }
+    .nav { padding: 12px 12px 0; }
+    .nav__shell { width: 100%; }
+    .nav__inner { width: 100%; padding: 6px 6px 6px 18px; }
     .nav__links { display: none; }
     .nav__hamburger { display: flex; }
-
-    .nav__inner {
-      justify-content: space-between;
-    }
-
-    /* Center the name */
-    .nav__brand {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-    }
+    .nav__brand { border-right: 0; padding-right: 0; margin-right: 0; }
   }
 </style>

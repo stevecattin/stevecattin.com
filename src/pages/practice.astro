@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import CTABlock from '../components/CTABlock.astro';
 import GlowBackground from '../components/GlowBackground.astro';
+import NightLights from '../components/NightLights.astro';
 import Testimonials from '../components/Testimonials.astro';
 
 const moments = [
@@ -26,9 +27,9 @@ const moments = [
 const modes = [
   {
     glyph: 'seat',
-    meta: 'In the seat · 1–3 days a week',
-    title: 'Fractional executive.',
-    body: 'One to three days a week, in the seat. I usually come in on the function that\'s most exposed – for a company scaling past its structure, that\'s typically marketing or GTM. But it rarely stays in one box. I\'ve run People and Operations too, and sat on the executive team – so I hire who needs hiring, decide what needs deciding, free you to focus on what only you can do, and I\'m in the room for what fits no single function: vision, product, the calls only the leadership team can make.',
+    meta: 'In the seat · 1–5 days a week',
+    title: 'Executive / Fractional.',
+    body: 'One to five days a week, in the seat – as part of the team, or fractional. I usually come in on the function that\'s most exposed – for a company scaling past its structure, that\'s typically marketing or GTM. But it rarely stays in one box. I\'ve run People and Operations too, and sat on the executive team – so I hire who needs hiring, decide what needs deciding, free you to focus on what only you can do, and I\'m in the room for what fits no single function: vision, product, the calls only the leadership team can make.',
     fit: 'Right for you if you need someone who can hold a function and think about the whole company alongside you.',
   },
   {
@@ -89,22 +90,37 @@ const steps = [
     body: 'If the fit isn\'t right – timing, need, chemistry – I\'ll say so. And if I can point you somewhere better, I will.',
   },
 ];
+
+// How I work – moved from About (19.11.2026).
+const principles = [
+  {
+    title: 'Clarity before cleverness.',
+    body: 'I would rather say the obvious thing first and be useful than say the interesting thing first and be impressive. Most founders and CEOs are drowning in clever. What they need is a person who will tell them the obvious, out loud.',
+  },
+  {
+    title: 'Curiosity is the work.',
+    body: 'The best solutions don\'t live in any one person\'s head. Curiosity allows me to tap into the collective intelligence, and surface what no single perspective could see alone. It also implies the need for a low ego, that makes it possible to be genuinely open to someone else\'s point of view. It all travels together: when you stay curious, and hold your ideas loosely, you give everyone – including yourself – the best shot at the right answer.',
+  },
+  {
+    title: 'Less, but fully.',
+    body: 'Discipline, thoughtfulness and essentialism are some of the words you\'ll hear me use when describing how I work. Most problems don\'t need more – they need less, done better, repeatedly. It means finding the lever that moves everything else, and pulling it with full attention. Constant progress on the right problem beats frantic motion on the wrong ones every time.',
+  },
+];
 ---
 
 <BaseLayout
   title="Work with me • Stève Cattin"
   description="Who I work with, what I offer, and how to find out if we're a match."
 >
-  <div class="glow-scope">
-  <GlowBackground strength={0.3} />
-
-  <!-- Hero: one column – headline, then the story at reading width -->
-  <section class="practice-hero">
+  <!-- Hero: dusk (v3) – headline and the story on paper, the mode glyph
+       (the company, and me moving around it) on the right. -->
+  <section class="practice-hero v3-dusk">
+    <NightLights pale={false} />
     <div class="container-wide practice-hero__inner">
-      <h1 class="practice-hero__title">
-        Let's write <span class="accent">your</span> story.
-      </h1>
-      <div class="practice-hero__side">
+      <div class="practice-hero__copy">
+        <h1 class="practice-hero__title">
+          Let's write <span class="accent">your</span> story.
+        </h1>
         <p class="practice-hero__lede">
           <b>Every company wants to write its success story.</b>
           Some are stuck on the first chapter and can't get to the second.
@@ -117,23 +133,29 @@ const steps = [
           processes, and the quiet moments when nobody knows what to say.
         </p>
       </div>
+      <div class="orbit" aria-hidden="true">
+        <span class="orbit__ring"></span>
+        <span class="orbit__arm v3-anim">
+          <span class="orbit__halo v3-anim"></span>
+          <span class="orbit__dot"></span>
+        </span>
+      </div>
     </div>
   </section>
 
-  <!-- When to work with me: the heading holds its place while the four
-       moments scroll past on the right. -->
-  <section id="when" class="practice-section practice-moments" aria-labelledby="moments-title">
+  <!-- When to work with me, on night (v3): the heading holds its place
+       while the four moments scroll past on the right. -->
+  <section id="when" class="practice-moments v3-night" aria-labelledby="moments-title">
+    <NightLights coral />
     <div class="container-wide practice-split">
       <header class="practice-split__head practice-split__head--sticky">
-        <p class="section-eyebrow">When to work with me</p>
-        <h2 id="moments-title" class="section-title">If you recognize yourself here…</h2>
+        <h2 id="moments-title" class="section-title">If you recognize <span class="accent">yourself</span> here…</h2>
         <p class="practice-moments__aside">Investor with a portfolio company in one of these moments? Same conversation.</p>
       </header>
 
       <ol class="practice-moments__list">
-        {moments.map((m, i) => (
+        {moments.map((m) => (
           <li class="practice-moments__item">
-            <span class="num">№ {String(i + 1).padStart(2, '0')}</span>
             <h3 class="practice-moments__title">{m.title}</h3>
             <p class="practice-moments__body">{m.body}</p>
           </li>
@@ -141,6 +163,9 @@ const steps = [
       </ol>
     </div>
   </section>
+
+  <div class="glow-scope glow-scope--below">
+  <GlowBackground strength={0.3} />
 
   <Testimonials featuredId="kristin-johnsen" eyebrow="" title="" />
 
@@ -196,11 +221,26 @@ const steps = [
     </div>
   </section>
 
+  <!-- How I work – the three principles (moved from About) -->
+  <section class="practice-section practice-principles" aria-labelledby="principles-title">
+    <div class="container-wide">
+      <h2 id="principles-title" class="section-title practice-head">How I work.</h2>
+      <div class="practice-principles__grid">
+        {principles.map((p, i) => (
+          <article class:list={['practice-principles__item', { 'is-coral': i === principles.length - 1 }]}>
+            <span class="practice-principles__n" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+            <h3>{p.title}</h3>
+            <p>{p.body}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
   <!-- Why me – what I bring to the room; the depth is on About -->
   <section class="practice-section practice-why" aria-labelledby="why-title">
     <div class="container-wide v2-split">
       <header class="practice-why__head">
-        <p class="section-eyebrow">Why me</p>
         <h2 id="why-title" class="section-title">What I bring to the room.</h2>
       </header>
       <div>
@@ -217,7 +257,6 @@ const steps = [
             </li>
           ))}
         </ul>
-        <a href="/about" class="text-link practice-why__link">Learn more about me on the About page →</a>
       </div>
     </div>
   </section>
@@ -226,6 +265,7 @@ const steps = [
     id="references"
     featuredId="nicolette-brenden"
     rowIds={["karen-clarke", "christina-nahal", "berin-sadikovic", "benedikt-koppel"]}
+    eyebrow=""
     title=""
     lead
   />
@@ -234,21 +274,12 @@ const steps = [
     id="book"
     wide
     night
-    eyebrow="How it starts"
-    headline="The best way to know is a conversation."
+    eyebrow=""
+    headline="Everything starts with a story."
+    body="A simple first chat: you tell me what's happening, I listen and share what I see."
     ctaLabel="Tell me your story →"
-    ctaModal={true}
-  >
-    <ol class="night-steps">
-      {steps.map((st) => (
-        <li class="night-steps__item">
-          <span class="night-steps__num">{st.num}</span>
-          <h3 class="night-steps__title">{st.title}</h3>
-          <p class="night-steps__body">{st.body}</p>
-        </li>
-      ))}
-    </ol>
-  </CTABlock>
+    ctaModal
+  />
   </div>
 </BaseLayout>
 
@@ -306,26 +337,28 @@ const steps = [
     text-underline-offset: 3px;
   }
 
-  /* -------- Hero -------- */
+  /* -------- Hero: dusk (v3) -------- */
   .practice-hero {
-    padding-block: clamp(4rem, 4vw + 3rem, 7rem) var(--space-24);
+    --s: 62%; /* the story is long: paper holds longer here */
+    min-height: 870px;
+    box-sizing: border-box;
+    padding-top: calc(var(--nav-h) + 120px);
+    padding-bottom: 200px;
   }
 
   .practice-hero__inner {
-    display: flex;
-    flex-direction: column;
-    gap: clamp(32px, 4vw, 56px);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: clamp(40px, 6vw, 120px);
+    align-items: start;
   }
-
-  /* Story text at a comfortable reading width under the headline. */
-  .practice-hero__side { max-width: 64ch; }
 
   .practice-hero__title {
     font-family: var(--font-display);
-    font-weight: 500;
-    font-size: clamp(52px, 7vw, 104px);
+    font-weight: 700;
+    font-size: clamp(48px, 6.6vw, 96px);
     line-height: 0.96;
-    letter-spacing: var(--tracking-tighter);
+    letter-spacing: -0.04em;
     color: var(--color-ink);
     margin: 0;
     text-wrap: balance;
@@ -333,32 +366,89 @@ const steps = [
 
   .practice-hero__title .accent { color: var(--color-cobalt); }
 
-  .practice-hero__lead {
-    font-family: var(--font-display);
-    font-weight: 500;
-    font-size: clamp(22px, 2vw, 28px);
-    line-height: 1.25;
-    letter-spacing: -0.015em;
-    color: var(--color-ink);
-    margin: 0 0 var(--space-4);
-  }
-
   .practice-hero__lede {
-    font-size: var(--text-lg);
+    margin: 36px 0 0;
+    max-width: 700px;
+    font-size: 19px;
+    font-weight: 500;
     line-height: var(--lh-normal);
     color: var(--color-graphite);
-    margin: 0;
   }
   /* The opening line stands out; the rest reads as plain text. */
-  .practice-hero__lede b { color: var(--color-ink); font-weight: 500; }
+  .practice-hero__lede b { color: var(--color-ink); font-weight: 600; }
 
+  /* The mode glyph at hero scale: a thin ink circle (the company) and the
+     cobalt dot (me) travelling around it. Transform/opacity only. */
+  .orbit {
+    position: relative;
+    width: 340px;
+    height: 340px;
+    margin-top: 30px;
+    margin-right: 60px;
+  }
+  .orbit__ring {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--color-ink) 75%, transparent);
+  }
+  .orbit__arm {
+    position: absolute;
+    inset: 0;
+    animation: orbit-turn 48s linear infinite;
+    will-change: transform;
+  }
+  .orbit__halo {
+    position: absolute;
+    left: 50%;
+    top: -60px;
+    width: 120px;
+    height: 120px;
+    margin-left: -60px;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, rgba(77, 107, 255, 0.55), rgba(77, 107, 255, 0) 100%);
+    animation: orbit-breathe 6s ease-in-out infinite;
+    will-change: opacity, transform;
+  }
+  .orbit__dot {
+    position: absolute;
+    left: 50%;
+    top: -11px;
+    width: 22px;
+    height: 22px;
+    margin-left: -11px;
+    border-radius: 50%;
+    background: var(--color-cobalt);
+    box-shadow: 0 0 0 4px rgba(250, 250, 248, 0.9);
+  }
+  @keyframes orbit-turn { from { transform: rotate(-40deg); } to { transform: rotate(320deg); } }
+  @keyframes orbit-breathe {
+    0%, 100% { opacity: 0.55; transform: scale(1); }
+    50%      { opacity: 1;    transform: scale(1.15); }
+  }
 
-  /* -------- The four moments -------- */
+  @media (max-width: 960px) {
+    .practice-hero { --s: 72%; min-height: 0; padding-bottom: 160px; }
+    .practice-hero__inner { grid-template-columns: 1fr; }
+    .orbit { display: none; }
+  }
+  @media (max-width: 640px) {
+    .practice-hero { --s: 78%; padding-top: calc(var(--nav-h) + 64px); padding-bottom: 120px; }
+  }
+
+  /* -------- The four moments, on night (v3) -------- */
+  .practice-moments {
+    padding-block: 90px calc(var(--dawn) + 40px);
+    scroll-margin-top: 0;
+  }
+  .practice-moments .section-title { color: var(--color-white); }
+  .practice-moments .accent { color: var(--color-night-sky); }
+
   .practice-moments__aside {
     margin: var(--space-6) 0 0;
-    font-size: 16px;
+    font-size: 17px;
     line-height: var(--lh-normal);
-    color: var(--color-graphite);
+    color: var(--color-night-powder);
     max-width: 36ch;
   }
 
@@ -366,31 +456,34 @@ const steps = [
     list-style: none;
     margin: 0;
     padding: 0;
-    border-bottom: 1px solid var(--color-line);
   }
 
   .practice-moments__item {
-    padding-block: var(--space-8);
-    border-top: 1px solid var(--color-line);
+    padding-block: 32px 36px;
+    border-top: 1px solid rgba(196, 214, 240, 0.18);
   }
 
   .practice-moments__title {
     font-family: var(--font-display);
     font-weight: 500;
     font-size: clamp(22px, 2.2vw, 28px);
-    line-height: 1.18;
+    line-height: 1.15;
     letter-spacing: -0.015em;
-    color: var(--color-ink);
-    margin: 0 0 var(--space-3);
+    color: var(--color-white);
+    margin: 0 0 14px;
     text-wrap: balance;
   }
 
   .practice-moments__body {
     font-size: 17px;
-    line-height: var(--lh-normal);
-    color: var(--color-graphite);
+    line-height: 1.65;
+    color: var(--color-night-powder);
     margin: 0;
     max-width: 62ch;
+  }
+
+  @media (max-width: 640px) {
+    .practice-moments { --dawn: 260px; padding-top: 64px; }
   }
 
   /* -------- Typographic grid (pillars, modes) -------- */
@@ -606,5 +699,34 @@ const steps = [
     .practice-grid { grid-template-columns: 1fr; }
     .practice-modes__item { display: flex; }
     .mode-glyph { width: 128px; height: 90px; margin-left: -27px; }
+  }
+
+  /* -------- How I work: three columns, big numerals --------- */
+  .practice-principles__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 56px; }
+  .practice-principles__item { border-top: 2px solid var(--color-ink); padding-top: 24px; }
+  .practice-principles__n {
+    display: block;
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: 88px;
+    line-height: 0.85;
+    letter-spacing: -0.04em;
+    color: var(--color-cobalt);
+    margin-bottom: 24px;
+  }
+  .practice-principles__item.is-coral .practice-principles__n { color: var(--color-night-coral); }
+  .practice-principles__item h3 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 28px;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--color-ink);
+    margin: 0 0 16px;
+  }
+  .practice-principles__item p { font-size: 16px; line-height: 1.6; color: var(--color-graphite); margin: 0; }
+  @media (max-width: 960px) {
+    .practice-principles__grid { grid-template-columns: 1fr; gap: 40px; }
+    .practice-principles__n { font-size: 64px; }
   }
 </style>

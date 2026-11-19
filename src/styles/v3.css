@@ -1,0 +1,303 @@
+/* ============================================================
+   v3 "Dusk to night" (Nov 2026)
+   Reference: claude/design-system.md (project doc) and the locked
+   artboards on the "menu bar & hero options" canvas.
+
+   Pages breathe light → dusk → night → light:
+     .v3-dusk   a hero that runs from paper to night
+     .v3-night  a night section that fades back to paper at its bottom
+   Both carry the same filter-free moving lights (.v3-lights) and grain.
+
+   Performance (Safari lessons, Oct 2026 – see 610272f):
+   - no CSS blur filters: every light is a radial-gradient that fades to
+     transparent inside its own box
+   - only transform and opacity are animated
+   - lights pause while off screen (.is-idle, set by BaseLayout) and stop
+     under prefers-reduced-motion
+   ============================================================ */
+
+/* ---------- Dusk hero: paper → night ---------- */
+.v3-dusk {
+  --s: 41%; /* where the paper starts turning blue */
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  overflow: clip;
+  background: linear-gradient(180deg,
+    var(--color-paper) 0%,
+    var(--color-paper) var(--s),
+    var(--color-night-haze) calc(var(--s) + (100% - var(--s)) * 0.22),
+    var(--color-night-powder) calc(var(--s) + (100% - var(--s)) * 0.41),
+    var(--color-night-azure) calc(var(--s) + (100% - var(--s)) * 0.64),
+    var(--color-night-deep) calc(var(--s) + (100% - var(--s)) * 0.85),
+    var(--color-night) 100%);
+}
+
+/* ---------- Night section: night → paper at the bottom ---------- */
+.v3-night {
+  --dawn: 330px; /* height of the fade back to paper */
+  position: relative;
+  isolation: isolate;
+  /* clip, not hidden: hidden makes the section a scroll container, and
+     nothing inside can stay sticky (it broke the pinned About facets). */
+  overflow: hidden;
+  overflow: clip;
+  color: var(--color-night-haze);
+  background: linear-gradient(180deg,
+    var(--color-night) 0,
+    var(--color-night) calc(100% - var(--dawn)),
+    var(--color-night-deep) calc(100% - var(--dawn) * 0.7),
+    var(--color-night-azure) calc(100% - var(--dawn) * 0.45),
+    var(--color-night-powder) calc(100% - var(--dawn) * 0.27),
+    var(--color-night-haze) calc(100% - var(--dawn) * 0.15),
+    var(--color-paper) 100%);
+}
+
+/* Night that ends the page (essay ending, 404): no fade back. */
+.v3-night--end {
+  --dawn: 0px;
+  background: var(--color-night);
+}
+
+/* ---------- Moving lights + grain ---------- */
+.v3-lights {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+  /* Fade the lights out at the top and before the dawn, so no light is
+     ever cut by the section edge (that read as a straight line). */
+  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 140px, #000 calc(100% - var(--dawn, 0px) - 40px), transparent calc(100% - var(--dawn, 0px) * 0.4));
+          mask-image: linear-gradient(180deg, transparent 0, #000 140px, #000 calc(100% - var(--dawn, 0px) - 40px), transparent calc(100% - var(--dawn, 0px) * 0.4));
+}
+.v3-lights--open-top {
+  -webkit-mask-image: linear-gradient(180deg, #000 0, #000 calc(100% - var(--dawn, 0px) - 40px), transparent calc(100% - var(--dawn, 0px) * 0.4));
+          mask-image: linear-gradient(180deg, #000 0, #000 calc(100% - var(--dawn, 0px) - 40px), transparent calc(100% - var(--dawn, 0px) * 0.4));
+}
+/* In a dusk hero the lights only show where it has turned dark. */
+.v3-dusk > .v3-lights {
+  /* …and fade out again before the hero's bottom edge, so no light is cut
+     where the next section begins. */
+  -webkit-mask-image: linear-gradient(180deg, transparent 0, transparent calc(var(--s) + 20%), #000 calc(var(--s) + (100% - var(--s)) * 0.75), transparent 100%);
+          mask-image: linear-gradient(180deg, transparent 0, transparent calc(var(--s) + 20%), #000 calc(var(--s) + (100% - var(--s)) * 0.75), transparent 100%);
+}
+
+.v3-light {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, var(--c), transparent 100%);
+  will-change: transform;
+}
+/* deep cobalt, from the right */
+.v3-light--a { --c: rgba(43, 76, 201, 0.48); right: -8%; top: 4%;  width: min(760px, 75vw); aspect-ratio: 760 / 600; animation: v3-drift-a 24s ease-in-out infinite; }
+/* softer blue, from the left */
+.v3-light--b { --c: rgba(90, 127, 214, 0.32); left: -12%; top: 26%; width: min(820px, 80vw); aspect-ratio: 820 / 620; animation: v3-drift-b 30s ease-in-out infinite; }
+/* small pale light that wanders and swells */
+.v3-light--c { --c: rgba(143, 176, 228, 0.18); left: 32%; top: 14%; width: min(460px, 50vw); aspect-ratio: 460 / 380; animation: v3-drift-c 19s ease-in-out infinite; }
+/* the warm one – one coral per view */
+.v3-light--coral { --c: rgba(249, 107, 84, 0.16); left: -4%; top: 46%; width: min(620px, 65vw); aspect-ratio: 620 / 500; animation: v3-drift-d 26s ease-in-out infinite; }
+
+@keyframes v3-drift-a { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(-160px, 60px); } }
+@keyframes v3-drift-b { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(180px, -50px); } }
+@keyframes v3-drift-c { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(120px, 80px) scale(1.2); } }
+@keyframes v3-drift-d { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(150px, -100px); } }
+
+/* Dark overlay grain – navy only (design principles §4). One static layer
+   per zone. */
+.v3-grain {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: url("/images/noise.png");
+  background-size: 256px 256px;
+  opacity: 0.3;
+  mix-blend-mode: overlay;
+}
+.v3-dusk > .v3-grain {
+  -webkit-mask-image: linear-gradient(180deg, transparent 0, transparent calc(var(--s) + 15%), #000 100%);
+          mask-image: linear-gradient(180deg, transparent 0, transparent calc(var(--s) + 15%), #000 100%);
+}
+.v3-night > .v3-grain {
+  -webkit-mask-image: linear-gradient(180deg, #000 0, #000 calc(100% - var(--dawn) * 0.8), transparent calc(100% - var(--dawn) * 0.15));
+          mask-image: linear-gradient(180deg, #000 0, #000 calc(100% - var(--dawn) * 0.8), transparent calc(100% - var(--dawn) * 0.15));
+}
+
+/* Paused off screen, still for reduced motion. */
+.is-idle .v3-light,
+.is-idle .v3-anim { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) {
+  .v3-light,
+  .v3-anim { animation: none !important; }
+}
+
+/* Phones: lights stay put a little more (smaller travel, same feel). */
+@media (max-width: 760px) {
+  .v3-light--a, .v3-light--b, .v3-light--coral { animation-duration: 36s; }
+}
+
+/* ---------- Type on night ---------- */
+.v3-night .section-eyebrow,
+.v3-on-night .section-eyebrow { color: var(--color-night-sky); }
+.v3-night .accent,
+.v3-on-night .accent { color: var(--color-night-sky); }
+
+/* ---------- Buttons on dusk and night ---------- */
+/* White button, navy text – "Tell me your story" on dusk/night (§8). */
+.v3-btn {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 15px;
+  padding: 15px 22px;
+  border-radius: var(--radius-sm);
+  border: 0;
+  cursor: pointer;
+  background: var(--color-white);
+  color: var(--color-night);
+  box-shadow: 0 8px 24px -12px rgba(15, 22, 51, 0.35);
+  transition: background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+}
+.v3-btn:hover { background: var(--color-night-haze); color: var(--color-night); }
+
+/* Quiet white text link beside it. */
+.v3-link {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--color-white);
+  background: none;
+  border: 0;
+  padding: 0 0 2px;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.55);
+  transition: border-color var(--dur-fast) var(--ease-out);
+}
+.v3-link:hover { color: var(--color-white); border-color: var(--color-white); }
+
+@media (pointer: coarse) {
+  .v3-link { padding-block: var(--space-3); margin-block: calc(-1 * var(--space-3)); }
+}
+
+/* ---------- Typographic rows on night (essay lists) ---------- */
+.v3-rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.v3-row {
+  display: grid;
+  grid-template-columns: 160px minmax(0, 1fr) auto 24px;
+  align-items: baseline;
+  gap: var(--space-6);
+  padding-block: var(--space-6);
+  border-bottom: 1px solid rgba(196, 214, 240, 0.18);
+  color: var(--color-white);
+}
+.v3-row__cat,
+.v3-row__meta {
+  font-family: var(--font-mono);
+  font-size: var(--text-mono-sm);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-night-sky);
+}
+.v3-row__meta { white-space: nowrap; }
+.v3-row__title {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(20px, 2vw, 24px);
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+}
+.v3-row__arrow { font-size: 18px; transition: transform var(--dur-fast) var(--ease-out); }
+.v3-row:hover .v3-row__title { color: var(--color-night-sky); }
+.v3-row:hover .v3-row__arrow { transform: translateX(4px); }
+@media (max-width: 760px) {
+  .v3-row {
+    grid-template-columns: 1fr auto;
+    grid-template-areas: "cat arrow" "title title" "meta meta";
+    row-gap: var(--space-2);
+  }
+  .v3-row__cat { grid-area: cat; }
+  .v3-row__title { grid-area: title; }
+  .v3-row__meta { grid-area: meta; }
+  .v3-row__arrow { grid-area: arrow; }
+}
+
+/* GlowBackground scope that starts below a v3 night section: no nav
+   offset (the nav sits over the dusk hero, not over this scope). */
+.glow-scope--below { --nav-h: 0px; }
+/* The paper lights of the scope start at its top edge, right where the
+   night has faded to plain paper – that read as a hard line. A paper veil
+   over the first stretch lets them fade in instead. It sits above the
+   light layer and below the content. */
+.glow-scope--below::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 520px;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(180deg,
+    var(--color-paper) 0%,
+    color-mix(in srgb, var(--color-paper) 85%, transparent) 30%,
+    color-mix(in srgb, var(--color-paper) 45%, transparent) 65%,
+    transparent 100%);
+}
+/* No hairline right where the night has faded back to paper. */
+.glow-scope--below > .voices:first-of-type { border-top: 0; }
+
+/* ---------- Night that rises from paper (mid-page night, e.g. About's
+   twenty years): paper → night at the top, night → paper at the bottom. */
+.v3-night--rise {
+  --rise: 260px;
+  /* Both ends fade to transparent, not to paper: the glow scope's paper
+     lights sit behind this section, and an opaque paper edge read as a
+     line where they stopped. */
+  background: linear-gradient(180deg,
+    transparent 0,
+    color-mix(in srgb, var(--color-night-haze) 70%, transparent) calc(var(--rise) * 0.15),
+    var(--color-night-powder) calc(var(--rise) * 0.35),
+    var(--color-night-azure) calc(var(--rise) * 0.58),
+    var(--color-night-deep) calc(var(--rise) * 0.8),
+    var(--color-night) var(--rise),
+    var(--color-night) calc(100% - var(--dawn)),
+    var(--color-night-deep) calc(100% - var(--dawn) * 0.7),
+    var(--color-night-azure) calc(100% - var(--dawn) * 0.45),
+    var(--color-night-powder) calc(100% - var(--dawn) * 0.27),
+    color-mix(in srgb, var(--color-night-haze) 70%, transparent) calc(100% - var(--dawn) * 0.15),
+    transparent 100%);
+}
+.v3-night--rise > .v3-lights {
+  -webkit-mask-image: linear-gradient(180deg, transparent 0, transparent calc(var(--rise) * 0.5), #000 calc(var(--rise) + 80px), #000 calc(100% - var(--dawn) - 40px), transparent calc(100% - var(--dawn) * 0.4));
+          mask-image: linear-gradient(180deg, transparent 0, transparent calc(var(--rise) * 0.5), #000 calc(var(--rise) + 80px), #000 calc(100% - var(--dawn) - 40px), transparent calc(100% - var(--dawn) * 0.4));
+}
+.v3-night--rise > .v3-grain {
+  -webkit-mask-image: linear-gradient(180deg, transparent calc(var(--rise) * 0.15), #000 calc(var(--rise) * 0.8), #000 calc(100% - var(--dawn) * 0.8), transparent calc(100% - var(--dawn) * 0.15));
+          mask-image: linear-gradient(180deg, transparent calc(var(--rise) * 0.15), #000 calc(var(--rise) * 0.8), #000 calc(100% - var(--dawn) * 0.8), transparent calc(100% - var(--dawn) * 0.15));
+}
+
+/* A paper section right after a mid-page night, inside a glow scope: same
+   veil as .glow-scope--below, so the paper lights fade in instead of
+   starting on a line. Full-bleed even when the section is a container. */
+.v3-after-night { position: relative; }
+.v3-after-night::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 100vw;
+  height: 520px;
+  transform: translateX(-50%);
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(180deg,
+    var(--color-paper) 0%,
+    color-mix(in srgb, var(--color-paper) 85%, transparent) 30%,
+    color-mix(in srgb, var(--color-paper) 45%, transparent) 65%,
+    transparent 100%);
+}

@@ -1,0 +1,35 @@
+---
+// v3 moving lights + grain for a .v3-dusk or .v3-night zone (see v3.css).
+// Put it first inside the zone; it sits behind the content (z-index -1).
+// Filter-free gradients, transform-only drift, paused off screen.
+interface Props {
+  /** One soft coral light among the blue ones (one coral per view). */
+  coral?: boolean;
+  /** The small pale light that wanders and swells. */
+  pale?: boolean;
+  /** For a page that opens on night: no fade at the top. */
+  openTop?: boolean;
+  /** The overlay grain. Leave it to the zone itself when the lights sit
+   *  inside an isolated layer (it needs the navy beneath it to blend). */
+  grain?: boolean;
+}
+const { coral = false, pale = true, openTop = false, grain = true } = Astro.props;
+---
+
+<div class:list={['v3-lights', { 'v3-lights--open-top': openTop }]} aria-hidden="true">
+  <span class="v3-light v3-light--a"></span>
+  <span class="v3-light v3-light--b"></span>
+  {pale && <span class="v3-light v3-light--c"></span>}
+  {coral && <span class="v3-light v3-light--coral"></span>}
+</div>
+{grain && <span class="v3-grain" aria-hidden="true"></span>}
+
+<script>
+  // Start every light at a random point of its cycle, so no two visits
+  // open on the same frame.
+  document.querySelectorAll<HTMLElement>('.v3-light:not([data-seeded])').forEach((el) => {
+    el.dataset.seeded = '';
+    const d = parseFloat(getComputedStyle(el).animationDuration) || 0;
+    if (d) el.style.animationDelay = `-${(Math.random() * d).toFixed(1)}s`;
+  });
+</script>

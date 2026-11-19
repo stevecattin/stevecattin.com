@@ -1,4 +1,5 @@
 ---
+import NightLights from './NightLights.astro';
 /**
  * Facets – "Who is Stève", told by scroll.
  * A faint ring (the whole person) fills in, segment by segment, in the
@@ -104,6 +105,12 @@ const FACETS: Facet[] = [
   },
 ];
 
+interface Props {
+  /** v3: the ring and panel set on night (About). */
+  night?: boolean;
+}
+const { night = false } = Astro.props;
+
 const N = FACETS.length;
 const CX = 300, CY = 300, R = 200, RL = 238;
 // The lit ring runs the AIMA beam's colours: cobalt → violet → coral.
@@ -129,9 +136,10 @@ const nodes = FACETS.map((f, i) => {
 const total = String(N).padStart(2, '0');
 ---
 
-<section class="facets" aria-label="Who is Stève – six facets" style={`--n: ${N}`}>
+<section class:list={['facets', { 'facets--night': night }]} aria-label="Who is Stève – six facets" style={`--n: ${N}`}>
   <div class="facets__track">
     <div class="facets__pin">
+      {night && <NightLights coral grain={false} />}
       <div class="container-wide facets__stage">
         <div class="facets__ringwrap">
           <svg class="facets__svg" viewBox="-60 40 720 520" role="group" aria-label="Six facets of Stève on one ring – the ring completes as you scroll">
@@ -200,7 +208,7 @@ const total = String(N).padStart(2, '0');
           </div>
           {FACETS.map((f, i) => (
             <article class="facets__view" data-panel={String(i)} aria-labelledby={`facet-name-${i}`}>
-              <p class="facets__facet-eyebrow">Facet {String(i + 1).padStart(2, '0')} <span>/ {total}</span></p>
+              <p class="facets__facet-eyebrow">{String(i + 1).padStart(2, '0')} <span>/ {total}</span></p>
               <h3 class="facets__facet-name" id={`facet-name-${i}`}>{f.name}</h3>
               {f.voice.map((v) => <p class="facets__voice">{v}</p>)}
               <p class="facets__proof-head">The proof underneath</p>
@@ -435,6 +443,49 @@ const total = String(N).padStart(2, '0');
       -webkit-backdrop-filter: none;
       backdrop-filter: none;
     }
+  }
+
+  /* -------- v3: on night (About) -------- */
+  .facets--night { --nav-h: 80px; }
+  .facets--night .facets__pin { position: relative; isolation: isolate; }
+  .facets--night.is-pinned .facets__pin { position: sticky; }
+  .facets--night .facets__pin > :global(.v3-lights) { --dawn: 0px; }
+  .facets--night .facets__ghost { stroke: var(--color-night-powder); stroke-opacity: 0.32; }
+  .facets--night .facets__core { fill: var(--color-night-royal); stroke: rgba(196, 214, 240, 0.7); stroke-width: 1; }
+  .facets--night .facets__core-glow { fill: var(--color-night-azure); opacity: 0.45; }
+  .facets--night.is-complete .facets__core-glow { opacity: 0.7; }
+  .facets--night .facets__core-eyebrow { fill: var(--color-night-powder); }
+  .facets--night .facets__core-name { fill: var(--color-white); }
+  .facets--night .facets__dot { fill: var(--color-night); stroke: var(--color-night-powder); stroke-opacity: 0.6; }
+  .facets--night .facets__label { fill: var(--color-night-sky); }
+  .facets--night .facets__label-n { fill: var(--color-night-azure); }
+  .facets--night .facets__node.is-passed .facets__label { fill: var(--color-white); }
+  .facets--night .facets__node[aria-current='step'] .facets__label,
+  .facets--night .facets__node[aria-current='step'] .facets__label-n { fill: var(--color-white); }
+  .facets--night .facets__node:last-of-type .facets__label-n { fill: var(--color-night-coral); }
+  @media (hover: hover) and (pointer: fine) {
+    .facets--night .facets__node:hover .facets__label { fill: var(--color-white); }
+  }
+  .facets--night .facets__facet-eyebrow { color: var(--color-white); }
+  .facets--night .facets__facet-eyebrow span { color: var(--color-night-sky); }
+  .facets--night .facets__facet-name { color: var(--color-white); }
+  .facets--night .facets__voice { color: var(--color-night-haze); }
+  .facets--night .facets__proof-head { color: var(--color-night-azure); }
+  .facets--night .facets__proof { border-top-color: rgba(196, 214, 240, 0.18); border-top-width: 1px; }
+  .facets--night .facets__proof-l { color: var(--color-white); }
+  .facets--night .facets__proof-b { color: var(--color-night-powder); }
+  .facets--night.is-stacked .facets__view { border-top-color: rgba(196, 214, 240, 0.18); }
+  .facets--night.is-stacked .facets__mini + .facets__view { border-top: 0; padding-top: 0; }
+  @media (max-width: 960px) {
+    .facets--night.is-stacked .facets__mini {
+      background: color-mix(in srgb, var(--color-night) 94%, transparent);
+      border-bottom-color: rgba(196, 214, 240, 0.18);
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+    }
+    .facets--night .facets__mini-seg { background: rgba(196, 214, 240, 0.18); }
+    .facets--night .facets__mini-name { color: var(--color-white); }
+    .facets--night .facets__mini-n { color: var(--color-night-sky); }
   }
 </style>
 

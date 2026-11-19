@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import GlowBackground from '../components/GlowBackground.astro';
 import CTABlock from '../components/CTABlock.astro';
 import Facets from '../components/Facets.astro';
+import NightLights from '../components/NightLights.astro';
 
 const tango    = `<a href="https://tangoanalytics.com" target="_blank" rel="noopener noreferrer">Tango</a>`;
 const locatee  = `<a href="https://www.venturelab.swiss/Locatee-acquired-by-Tango-creating-industrys-first-holistic-workplace-analytics-solution" target="_blank" rel="noopener noreferrer">Locatee</a>`;
@@ -12,195 +13,185 @@ const dxc      = `<a href="https://dxc.com" target="_blank" rel="noopener norefe
 const parker   = `<a href="https://www.parker.com/us/en/home.html" target="_blank" rel="noopener noreferrer">Parker Hannifin</a>`;
 const ehl      = `<a href="https://www.ehl.edu" target="_blank" rel="noopener noreferrer">École hôtelière de Lausanne</a>`;
 
-const milestones = [
+const milestones: { year: string; note: string; exit?: boolean }[] = [
   { year: '2025', note: `SVP Marketing at ${tango}. Came in through the acquisition, took the team over, ended up on the executive leadership team of the company that bought us. PE-backed, US-headquartered.` },
-  { year: '2024', note: `Second exit: ${locatee} acquired by ${tango}. We restructured the company and ran a sale process under pressure. I sat at the table with our co-CEOs, CFO, board, and the acquirer – while holding the team together through it. Then carried Operations across the border: VP of Operations for ${tango}'s international business, leading the integration of the Locatee teams.` },
+  { year: '2024', exit: true, note: `Second exit: ${locatee} acquired by ${tango}. We restructured the company and ran a sale process under pressure. I sat at the table with our co-CEOs, CFO, board, and the acquirer – while holding the team together through it. Then carried Operations across the border: VP of Operations for ${tango}'s international business, leading the integration of the Locatee teams.` },
   { year: '2022', note: `At ${locatee}, my role widened past Marketing. First Head of People, then VP of Operations – the company needed someone to hold the team and the operating model together, not just tell the story.` },
   { year: '2020', note: `Joined ${locatee} post Series A as Head of Marketing – building the marketing function a scaling company hadn't built yet. From the inside, not from a deck.` },
   { year: '2017', note: `Bringing Good Food at Work to more employees, as Growth Lead at ${felfel}. A passion for a physical product, designed and shipped into real offices.` },
-  { year: '2016', note: `First exit. ${aspediens} acquired by CSC/${dxc}. Suddenly colleagues on every continent and a Fortune 500 brand to integrate. The work shifted to building bridges – between teams, countries, and two very different ways of doing business.` },
+  { year: '2016', exit: true, note: `First exit. ${aspediens} acquired by CSC/${dxc}. Suddenly colleagues on every continent and a Fortune 500 brand to integrate. The work shifted to building bridges – between teams, countries, and two very different ways of doing business.` },
   { year: '2013', note: `Joined ${aspediens} as Head of Marketing. 30 people on day one. 100+ the day we were acquired.` },
   { year: '2012', note: `Coordinating digital marketing across 25 countries at ${parker}. First taste of how a Fortune 500 actually moves – and where the gap sits between HQ and the field.` },
   { year: '2005', note: `First job. ${ehl}. The world's leading hospitality school doesn't just teach you to love detail. It trains you to read a room: who feels welcome, who doesn't, what the energy needs. The origin is here.` },
 ];
 
-const principles = [
-  {
-    title: 'Clarity before cleverness.',
-    body: 'I would rather say the obvious thing first and be useful than say the interesting thing first and be impressive. Most founders and CEOs are drowning in clever. What they need is a person who will tell them the obvious, out loud.',
-  },
-  {
-    title: 'Curiosity is the work.',
-    body: 'The best solutions don\'t live in any one person\'s head. Curiosity allows me to tap into the collective intelligence, and surface what no single perspective could see alone. It also implies the need for a low ego, that makes it possible to be genuinely open to someone else\'s point of view. It all travels together: when you stay curious, and hold your ideas loosely, you give everyone – including yourself – the best shot at the right answer.',
-  },
-  {
-    title: 'Less, but fully.',
-    body: 'Discipline, thoughtfulness and essentialism are some of the words you\'ll hear me use when describing how I work. Most problems don\'t need more – they need less, done better, repeatedly. It means finding the lever that moves everything else, and pulling it with full attention. Constant progress on the right problem beats frantic motion on the wrong ones every time.',
-  },
+// On the private side – Stève's own text (19.11.2026), design A (canvas).
+// The shelf under "I create it" – books Stève picked (19.11.2026).
+// `why` is his one line per book, still to come.
+const books: { title: string; author: string; why?: string }[] = [
+  { title: 'Radical Candor', author: 'Kim Scott' },
+  { title: 'Essentialism', author: 'Greg McKeown' },
+  { title: 'Obviously Awesome', author: 'April Dunford' },
+  { title: 'The Culture Code', author: 'Daniel Coyle' },
+  { title: 'The Creative Act', author: 'Rick Rubin' },
 ];
+
+const privateText = [
+  "I grew up in the Swiss countryside, in a house where everyone felt welcome – for a coffee, a drink or something to eat. It was always lively, filled with loud voices and laughter. That sense of hospitality, love for people and a good laugh shape the life I'm building now – and the way I lead teams.",
+  "I'm working hard to be the coolest uncle my nephews can have, and I'd like to believe I mostly succeed – except for those moments when they roll their eyes. In May, I'll get married in Menorca, a wedding we designed as a small holiday and a moment of joyful connection with the people we love. Before that, I'll complete my training as a yoga teacher in Bali. Yoga keeps me centered and grounded – it's the yin to the yang of my ambition and energy. It's also one more piece of the self-development puzzle I love working on.",
+  "When I'm not working, you'll find me hiking, skiing, at the gym, or on a plane somewhere.",
+  "Last but not least, you'll find four tattoos on my arms: a lighthouse and a heart, one on each wrist, a lion, and “J’aime” in my partner’s handwriting. Each of them has a specific meaning we can chat about when we meet.",
+];
+
 ---
 
 <BaseLayout
   title="About • Stève Cattin"
   description="Twenty years across GTM, Ops and People – fifteen in B2B tech, two exits, and a love for the obvious question nobody's asking."
 >
-  <div class="glow-scope">
-  <GlowBackground strength={0.3} />
-
-  <!-- Hero -->
-  <section class="about-hero container">
-    <h1 class="about-hero__title">
-      The obvious question is usually the <span class="accent">right</span> one.
-    </h1>
-    <p class="about-hero__lede">
-      I help founders and senior leaders achieve their biggest ambitions or tackle
-      their most complex challenges, with care, respect and curiosity.
-    </p>
+  <!-- Hero: dusk (v3) -->
+  <section class="about-hero v3-dusk">
+    <NightLights pale={false} />
+    <div class="container-wide">
+      <h1 class="about-hero__title">
+        The obvious question is usually the <span class="accent">right</span> one.
+      </h1>
+      <p class="about-hero__lede">
+        I help founders and senior leaders achieve their biggest ambitions or tackle
+        their most complex challenges, with energy, respect and curiosity.
+      </p>
+    </div>
   </section>
 
-  <!-- Who is Stève — the six facets -->
-  <Facets />
+  <!-- Who is Stève — the six facets, on night (v3) -->
+  <section class="about-facets v3-night">
+    <span class="v3-grain" aria-hidden="true"></span>
+    <Facets night />
+  </section>
 
-  <hr class="rule" />
+  <div class="glow-scope glow-scope--below">
+  <GlowBackground strength={0.3} />
 
   <!-- The Learning(s) -->
-  <section class="about-body container section-tight">
-    <h2>The Learning(s)</h2>
+  <section class="about-learn container-wide" aria-labelledby="learn-title">
+    <h2 id="learn-title" class="about-learn__title">
+      Most people wait for clarity. <span class="accent">I create it.</span>
+    </h2>
 
-    <p>
-      When something isn't working, it's rarely just the plan. And it's rarely
-      just the team. It's usually the space, the stories and the conversations
-      between them. Where clarity breaks down, where ownership gets fuzzy, where
-      smart people produce the wrong results anyway.
-    </p>
+    <div class="about-learn__grid">
+      <div class="about-learn__prose">
+        <p class="about-learn__lead">
+          I've spent most of my career working in in-between spaces. Where stories
+          are not told, conversations are not happening, clarity breaks down and
+          ownership gets fuzzy. Situations in which smart people produce the wrong
+          results anyway.
+        </p>
+        <p>
+          I love translating between worlds and helping a technical founder
+          learning to be a storyteller, a marketer learning to run a P&amp;L, or a
+          CEO trying to build a company that matches who they actually are, rather
+          than who they thought they were supposed to be.
+        </p>
+      </div>
 
-    <p><strong>I've spent most of my career working in those in-between spaces.</strong></p>
-    <ul class="about-betweens">
-      <li>Between the people building features and the customers paying for benefits – which is often the most expensive translation no one budgets for.</li>
-      <li>Between American ambition and European execution.</li>
-      <li>Between the strategy that makes sense on paper, the team that has to believe it enough to deliver it, and the operating system that makes the work progress.</li>
-    </ul>
+      <div class="about-betweens">
+        <p class="about-betweens__label">I work between</p>
+        <p class="about-between">The people building features <span class="about-between__b"><span class="about-between__amp">&amp;</span> the customers paying for benefits</span></p>
+        <p class="about-between">American ambition <span class="about-between__b"><span class="about-between__amp">&amp;</span> European execution</span></p>
+        <p class="about-between is-coral">The strategy that makes sense on paper <span class="about-between__b"><span class="about-between__amp">&amp;</span> the team that has to believe it enough to deliver it</span></p>
+      </div>
+    </div>
 
-    <p>
-      I'm drawn to people who are translating between worlds – a technical
-      founder learning to be a storyteller, a marketer learning to run a P&amp;L,
-      a CEO trying to build a company that matches who they actually are,
-      rather than who they thought they were supposed to be.
-    </p>
+    <div class="about-shelf">
+      <p class="about-shelf__label">On my shelf</p>
+      <ul class="about-shelf__list">
+        {books.map((bk) => (
+          <li class="about-shelf__book">
+            <span class="v3-grain" aria-hidden="true"></span>
+            <span class="about-shelf__spine">
+              <span class="about-shelf__title">{bk.title}</span>
+              <span class="about-shelf__author">{bk.author}</span>
+            </span>
+          </li>
+        ))}
+        <li class="about-shelf__lean" aria-hidden="true"></li>
+      </ul>
+    </div>
+  </section>
 
-    <blockquote class="about-pullquote">
-      I've been lucky enough to do that work from the inside and lived through
-      some very defining experiences: <strong>2 acquisitions</strong>, building and scaling
-      small-team Series A companies and also the difficult task of downsizing
-      them. From <strong>VC-funded startups in Switzerland</strong>, <strong>Fortune 500
-      companies</strong>, and all the way to the executive leadership of a
-      <strong>US-headquartered, PE-backed company</strong>. From <strong>Marketing to People, to
-      Operations</strong>. From hands-on work with the team – aligning elements on a
-      slide deck – to <strong>strategic conversations with my peers and the Board</strong>.
-    </blockquote>
-
-    <p>
-      Through it all, one constant: the better path is one made of curiosity,
-      lack of ego and a genuine love for succeeding collectively rather than
-      individually.
-    </p>
-
-    <h2>The Future</h2>
-
-    <p>
+  <!-- Why now -->
+  <section class="about-now container-wide" aria-labelledby="now-title">
+    <h2 id="now-title" class="about-now__title">
+      Fewer companies than I could take. <span class="accent">More depth with each.</span>
+    </h2>
+    <p class="about-now__text">
       The obvious next step after a seat at the executive table would be another
       seat at the executive table. That's not what pulls me. What gives me
       energy is the creative part – solving problems, and the quiet conversation
-      with a leader about what's really going on. I also want the future to hold
-      space for a personal dream that is close to my heart, and this is why a
-      different path attracts me:
+      with a leader about what's really going on.
     </p>
-
-    <ul>
-      <li>
-        I want to sit with founders and CEOs whose teams are stuck and who
-        can't quite name why. Where the strategy looks fine on paper, the hires
-        are good, and yet things aren't landing.
-      </li>
-      <li>
-        Or with founders whose companies have outgrown the way they're run. It
-        usually shows up first as marketing that stopped working and a budget
-        going nowhere, but the real work is the operating model underneath, and
-        what the business needs to become.
-      </li>
-      <li>
-        Or with board members and investors whose portfolio companies are
-        talented, well-funded, and somehow still slow. Sometimes the right
-        intervention is a fractional operator. Sometimes it's an honest sparring
-        partner for the founder.
-      </li>
-      <li>
-        And with leaders who sense that the hardest problem they're carrying
-        is the one inside themselves, and want a sparring partner – privately –
-        to create the space to share and work through it.
-      </li>
-    </ul>
-
-    <p>
-      Fewer companies than I could take. More depth with each.
-    </p>
-
-    <p>If any of that resonates, <button class="about-inline-trigger" data-contact-trigger>reach out</button>!</p>
   </section>
 
-  <hr class="rule" />
+  <!-- Twenty years, on night -->
+  <section class="about-timeline v3-night v3-night--rise" aria-labelledby="timeline-title">
+    <NightLights coral />
+    <div class="container-wide">
+      <header class="about-timeline__header">
+        <div>
+          <p class="section-eyebrow">Twenty years</p>
+          <h2 id="timeline-title" class="about-timeline__title">Twenty years, <span class="accent">compressed.</span></h2>
+        </div>
+      </header>
 
-  <!-- Timeline -->
-  <section class="about-timeline section container">
-    <header class="about-timeline__header">
-      <h2>Twenty years, compressed.</h2>
-    </header>
+      <ol class="about-timeline__list">
+        {milestones.map((m) => (
+          <li class:list={['about-timeline__item', { 'is-exit': m.exit }]}>
+            <p class="about-timeline__yearline">
+              <span class="about-timeline__year">{m.year}</span>
+              {m.exit && <span class="about-timeline__tag">Exit</span>}
+            </p>
+            <p class="about-timeline__note" set:html={m.note} />
+          </li>
+        ))}
+      </ol>
 
-    <p class="about-timeline__pattern">A pattern you'll notice below: I come in for one thing and end up in the room for all of it. Marketing, then People, then Operations, then the executive table.</p>
-
-    <p class="about-timeline__linkedin">Want the full detail? It's all on my <a href="https://linkedin.com/in/stevecattin" target="_blank" rel="noopener noreferrer">LinkedIn profile</a>.</p>
-
-    <ol class="about-timeline__list">
-      {milestones.map((m) => (
-        <li class="about-timeline__item">
-          <span class="about-timeline__year">{m.year}</span>
-          <p class="about-timeline__note" set:html={m.note} />
-        </li>
-      ))}
-    </ol>
-  </section>
-
-  <hr class="rule" />
-
-  <!-- Principles -->
-  <section class="about-principles section container">
-    <header class="about-principles__header">
-      <h2>How I work.</h2>
-    </header>
-
-    <div class="about-principles__grid">
-      {principles.map((p, i) => (
-        <article class="about-principles__card">
-          <span class="eyebrow eyebrow-amber">№ {String(i + 1).padStart(2, '0')}</span>
-          <h3>{p.title}</h3>
-          <p>{p.body}</p>
-        </article>
-      ))}
+      <p class="about-timeline__linkedin">Want the full detail? It's all on my <a href="https://linkedin.com/in/stevecattin" target="_blank" rel="noopener noreferrer">LinkedIn profile</a>.</p>
     </div>
+  </section>
 
-    <p class="about-principles__link">The <a href="/practice">Work with me</a> page is where principles meet practice.</p>
+  <!-- On the private side -->
+  <section class="about-private v3-after-night" aria-labelledby="private-title">
+    <span class="about-private__light" aria-hidden="true"></span>
+    <div class="container-wide about-private__grid">
+      <img
+        class="about-private__photo"
+        src="/images/private-kway-600.webp"
+        srcset="/images/private-kway-600.webp 600w, /images/private-kway.webp 1078w"
+        sizes="(max-width: 960px) 100vw, 560px"
+        alt="Stève in a K-way rain jacket, a basalt canyon and a waterfall behind him"
+        width="600"
+        height="760"
+        loading="lazy"
+        decoding="async"
+      />
+      <div class="about-private__text">
+        <h2 id="private-title" class="about-private__title">On the private <span class="accent">side.</span></h2>
+        <p class="about-private__open">"Hi, I'm Stève. No, not Steve – Stève."</p>
+        {privateText.map((t) => <p>{t}</p>)}
+        <p class="about-private__sign">With love,<img class="about-private__signature" src="/signature.svg" alt="Stève" width="783" height="302" loading="lazy" decoding="async" /></p>
+      </div>
+    </div>
   </section>
 
   <CTABlock
     id="book"
+    wide
     night
-    eyebrow="Are we a match?"
-    headline="Let's have the conversation before anything else."
-    body="A forty-five-minute intro conversation. No deck, no pre-work. I'll ask what's actually going on. If the fit is real, we'll both know by the end."
-    ctaLabel="Reach out"
-    ctaModal={true}
-    secondaryLabel="Read some writing first"
-    secondaryHref="/blog"
+    eyebrow=""
+    headline="Everything starts with a story."
+    body="A simple first chat: you tell me what's happening, I listen and share what I see."
+    ctaLabel="Tell me your story →"
+    ctaModal
   />
   </div>
 </BaseLayout>
@@ -210,107 +201,123 @@ const principles = [
   /* No max-width and no bottom padding – the container sets the frame and the
      section below brings its own top padding. See docs/layout-width-rule.md. */
   .about-hero {
-    padding-top: clamp(4rem, 4vw + 3rem, 7rem);
-    padding-bottom: 0;
+    --s: 45%;
+    min-height: 720px;
+    box-sizing: border-box;
+    padding-top: calc(var(--nav-h) + 120px);
+    padding-bottom: 120px;
   }
 
   .about-hero__title {
     font-family: var(--font-display);
-    font-size: var(--text-hero);
-    line-height: 0.98;
-    letter-spacing: -0.035em;
-    margin-bottom: var(--space-6);
-    max-width: 18ch;
+    font-weight: 700;
+    font-size: clamp(46px, 6.6vw, 96px);
+    line-height: 0.96;
+    letter-spacing: -0.04em;
+    color: var(--color-ink);
+    margin: 0;
+    max-width: 13em;
+    text-wrap: balance;
   }
   .about-hero__title .accent {
     color: var(--color-cobalt);
   }
 
   .about-hero__lede {
-    font-size: var(--text-lg);
+    margin: 36px 0 0;
+    font-size: 19px;
+    font-weight: 500;
     line-height: var(--lh-normal);
     color: var(--color-graphite);
-    max-width: 58ch;
+    max-width: 600px;
+    text-wrap: pretty;
   }
 
-  /* -------- Body -------- */
-  /* The section runs at container width so its left edge lines up with the
-     hero and the timeline. Measure is capped on the children instead, which
-     keeps the prose readable without moving the spine. */
-  .about-body > * {
-    max-width: var(--max-w-prose);
+  /* The facets sit in the night and fade back to paper below. */
+  .about-facets {
+    padding-bottom: calc(var(--dawn) - 40px);
   }
 
-  .about-body h2 {
+  @media (max-width: 760px) {
+    .about-hero { --s: 64%; min-height: 0; padding-top: calc(var(--nav-h) + 64px); padding-bottom: 96px; }
+    .about-facets { --dawn: 260px; }
+  }
+
+  /* -------- v3 lower page (option B, 19.11.2026) --------- */
+  .about-learn { padding-top: 96px; }
+  .about-learn__title {
     font-family: var(--font-display);
-    font-size: var(--text-display);
-    line-height: var(--lh-tight);
-    letter-spacing: var(--tracking-tight);
-    margin-top: var(--space-16);
-    margin-bottom: var(--space-6);
-  }
-  .about-body h2:first-child { margin-top: 0; }
-
-  .about-body p {
-    font-size: 1.05rem;
-    line-height: var(--lh-prose);
-    margin-bottom: var(--space-5);
+    font-weight: 700;
+    font-size: clamp(40px, 1.4rem + 3.8vw, 76px);
+    line-height: 0.98;
+    letter-spacing: -0.04em;
     color: var(--color-ink);
+    margin: 0 0 72px;
+    max-width: 14em;
+    text-wrap: balance;
   }
+  .about-learn__title .accent { color: var(--color-cobalt); }
 
-  .about-pullquote {
-    border-left: 3px solid var(--color-cobalt);
-    margin: var(--space-8) 0;
-    padding: var(--space-6) var(--space-8);
-    background: var(--color-mist);
-    border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
-    font-size: 1.12rem;
+  .about-learn__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+    gap: clamp(48px, 7vw, 96px);
+    align-items: start;
+  }
+  .about-learn__prose p {
+    font-size: 17px;
     line-height: var(--lh-prose);
-    color: var(--color-ink);
-    font-style: normal;
+    color: var(--color-graphite);
+    margin: 0 0 var(--space-5);
+    max-width: 62ch;
   }
+  .about-learn__prose .about-learn__lead { font-size: 19px; color: var(--color-ink); }
 
-  .about-pullquote strong {
-    color: var(--color-cobalt);
-    font-weight: 500;
-  }
-
-  .about-body ul {
-    margin-bottom: var(--space-5);
-    padding-left: var(--space-6);
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-4);
-  }
-
-  .about-body ul li {
-    font-size: 1.05rem;
-    line-height: var(--lh-prose);
-    color: var(--color-ink);
-  }
-
-  .about-betweens {
-    list-style: none;
-    padding-left: 0;
-    counter-reset: betweens;
-  }
-
-  .about-betweens li {
-    counter-increment: betweens;
-    display: flex;
-    gap: var(--space-5);
-  }
-
-  .about-betweens li::before {
-    content: counter(betweens, decimal-leading-zero);
+  /* The in-between spaces: three statements on hairlines – B4. */
+  .about-betweens { padding-top: 6px; }
+  .about-betweens__label {
     font-family: var(--font-mono);
     font-size: var(--text-mono-sm);
-    font-weight: 500;
+    text-transform: uppercase;
     letter-spacing: var(--tracking-wide);
     color: var(--color-cobalt);
-    flex-shrink: 0;
-    padding-top: 0.25em;
+    margin: 0 0 12px;
   }
+  .about-between {
+    margin: 0;
+    padding-block: 18px;
+    border-top: 1px solid var(--color-line);
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(20px, 1rem + 0.6vw, 24px);
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    color: var(--color-ink);
+  }
+  .about-between:last-child { border-bottom: 1px solid var(--color-line); }
+  .about-between__b { display: block; font-weight: 400; color: var(--color-graphite); }
+  .about-between__amp { color: var(--color-cobalt); font-weight: 600; }
+  .about-between.is-coral .about-between__amp { color: var(--color-night-coral); }
+
+  /* Why now: one line and one short paragraph, side by side. */
+  .about-now {
+    padding-top: 140px;
+    display: grid;
+    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+    gap: clamp(48px, 7vw, 96px);
+    align-items: end;
+  }
+  .about-now__title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(34px, 1.2rem + 2.4vw, 52px);
+    line-height: 1;
+    letter-spacing: -0.035em;
+    color: var(--color-ink);
+    margin: 0;
+  }
+  .about-now__title .accent { color: var(--color-cobalt); }
+  .about-now__text { margin: 0; font-size: 18px; line-height: var(--lh-prose); color: var(--color-graphite); max-width: 52ch; }
 
   .about-inline-trigger {
     background: none;
@@ -322,142 +329,257 @@ const principles = [
     text-underline-offset: 3px;
     cursor: pointer;
   }
+  .about-inline-trigger:hover { color: var(--color-ink); }
 
-  .about-inline-trigger:hover {
-    color: var(--color-ink);
+  /* Twenty years: a second night, rising from paper and fading back. */
+  .about-timeline {
+    margin-top: 180px;
+    padding-block: calc(var(--rise) + 20px) calc(var(--dawn) - 20px);
   }
-
-  /* -------- Timeline -------- */
   .about-timeline__header {
-    margin-bottom: var(--space-10);
-    max-width: 680px;
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 60px;
+    margin-bottom: 64px;
   }
-
-  .about-timeline__header h2 {
+  .about-timeline__title {
     font-family: var(--font-display);
-    font-size: var(--text-display);
-    letter-spacing: var(--tracking-tight);
-    margin-top: var(--space-3);
+    font-weight: 700;
+    font-size: clamp(40px, 1.4rem + 3vw, 64px);
+    line-height: 0.98;
+    letter-spacing: -0.04em;
+    color: var(--color-white);
+    margin: 0;
   }
-
-  .about-timeline__pattern {
-    font-size: 1.05rem;
-    line-height: var(--lh-prose);
-    color: var(--color-ink);
-    max-width: 60ch;
-    margin-bottom: var(--space-5);
-  }
-
-  .about-timeline__linkedin {
-    font-size: var(--text-sm);
-    color: var(--color-graphite);
-    margin-bottom: var(--space-8);
-  }
-
-  .about-timeline__linkedin a,
-  .about-timeline__note a {
-    color: var(--color-cobalt);
-    text-decoration: underline;
-    text-underline-offset: 3px;
-  }
-
-  .about-timeline__note a:hover {
-    color: var(--color-ink);
-  }
-
+  .about-timeline__pattern { margin: 0; max-width: 440px; font-size: 17px; line-height: 1.6; color: var(--color-night-haze); }
   .about-timeline__list {
     list-style: none;
-    display: flex;
-    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0 48px;
   }
-
   .about-timeline__item {
-    display: grid;
-    grid-template-columns: 120px 1fr;
-    gap: var(--space-8);
-    padding-block: var(--space-6);
-    border-top: 1px solid var(--color-line);
-    align-items: baseline;
+    position: relative;
+    padding: 28px 0 36px;
+    border-top: 1px solid rgba(196, 214, 240, 0.18);
   }
-  .about-timeline__item:last-child {
-    border-bottom: 1px solid var(--color-line);
+  .about-timeline__item::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: -4px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--color-night-sky);
   }
-
+  .about-timeline__item.is-exit::before { background: var(--color-night-coral); }
+  .about-timeline__yearline { display: flex; align-items: baseline; gap: 14px; margin: 0 0 12px; }
   .about-timeline__year {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 36px;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--color-white);
+  }
+  .about-timeline__tag {
     font-family: var(--font-mono);
-    font-size: var(--text-base);
-    color: var(--color-cobalt);
-    font-weight: 500;
-    letter-spacing: var(--tracking-mono);
+    font-size: var(--text-mono-sm);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+    color: var(--color-night-coral);
+  }
+  .about-timeline__note { margin: 0; font-size: 15px; line-height: 1.6; color: var(--color-night-powder); }
+  .about-timeline__note :global(a) {
+    color: var(--color-white);
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+  }
+  .about-timeline__note :global(a:hover) { border-color: var(--color-white); }
+  .about-timeline__linkedin { margin: 24px 0 0; font-size: 14px; color: var(--color-night-sky); }
+  .about-timeline__linkedin a { color: var(--color-white); border-bottom: 1px solid rgba(255, 255, 255, 0.55); }
+
+  @media (max-width: 960px) {
+    .about-learn__grid,
+    .about-now { grid-template-columns: 1fr; }
+    .about-now { padding-top: 96px; gap: 24px; }
+    .about-learn__title { margin-bottom: 48px; }
+    .about-timeline__header { flex-direction: column; align-items: start; gap: 24px; }
+    .about-timeline__list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 640px) {
+    .about-learn { padding-top: 64px; }
+    .about-timeline { margin-top: 120px; --rise: 200px; --dawn: 240px; }
+    .about-timeline__list { grid-template-columns: 1fr; }
   }
 
-  .about-timeline__note {
-    font-size: 1.02rem;
-    line-height: var(--lh-normal);
-    color: var(--color-ink);
-    max-width: 60ch;
+  /* On the private side (design A): a soft dusk band, photo and text
+     in the page container. The band fades to transparent at both ends, so the paper
+     lights of the glow scope never meet a hard edge. */
+  .about-private {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    overflow: clip;
+    padding-block: 140px;
+    margin-bottom: 80px;
+    background: linear-gradient(180deg,
+      transparent 0,
+      color-mix(in srgb, var(--color-night-haze) 80%, transparent) 18%,
+      color-mix(in srgb, var(--color-night-powder) 45%, var(--color-night-haze)) 50%,
+      color-mix(in srgb, var(--color-night-haze) 80%, transparent) 82%,
+      transparent 100%);
   }
-
-  /* -------- Principles -------- */
-  .about-principles__header {
-    margin-bottom: var(--space-10);
-    max-width: 680px;
+  .about-private__light {
+    position: absolute;
+    z-index: -1;
+    right: -120px;
+    top: 120px;
+    width: 620px;
+    height: 520px;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, rgba(249, 107, 84, 0.14), rgba(249, 107, 84, 0));
+    animation: v3-drift-d 26s ease-in-out infinite;
+    will-change: transform;
   }
+  .is-idle .about-private__light { animation-play-state: paused; }
+  @media (prefers-reduced-motion: reduce) { .about-private__light { animation: none; } }
 
-  .about-principles__header h2 {
-    font-family: var(--font-display);
-    font-size: var(--text-display);
-    letter-spacing: var(--tracking-tight);
-    margin-top: var(--space-3);
-  }
-
-  .about-principles__grid {
+  .about-private__grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--space-6);
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    gap: clamp(48px, 6.5vw, 96px);
+    align-items: start;
   }
-
-  .about-principles__card {
-    background: var(--color-mist);
-    padding: var(--space-8);
-    border-radius: var(--radius-lg);
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-3);
+  .about-private__photo {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 600 / 760;
+    object-fit: cover;
+    object-position: 50% 40%;
+    border-radius: var(--radius-sm);
   }
-
-  .about-principles__card h3 {
+  .about-private__text { max-width: 620px; }
+  .about-private__title {
     font-family: var(--font-display);
-    font-size: var(--text-xl);
-    letter-spacing: var(--tracking-tight);
+    font-weight: 700;
+    font-size: clamp(34px, 1.2rem + 2.4vw, 52px);
+    line-height: 1;
+    letter-spacing: -0.035em;
     color: var(--color-ink);
+    margin: 0 0 40px;
   }
-
-  .about-principles__card p {
-    font-size: 0.98rem;
-    line-height: var(--lh-normal);
+  .about-private__title .accent { color: var(--color-cobalt); }
+  .about-private__text p {
+    margin: 0 0 var(--space-5);
+    font-size: 18px;
+    line-height: 1.7;
     color: var(--color-graphite);
   }
-
-  .about-principles__link {
-    margin-top: var(--space-10);
-    font-size: 1.05rem;
-    color: var(--color-graphite);
+  .about-private__text .about-private__open {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(21px, 1rem + 0.8vw, 26px);
+    line-height: 1.35;
+    letter-spacing: -0.012em;
+    color: var(--color-ink);
+    margin-bottom: 28px;
+  }
+  .about-private__text .about-private__sign {
+    margin: 32px 0 0;
+    color: var(--color-ink);
+    font-weight: 500;
+  }
+  .about-private__signature {
+    display: block;
+    width: 150px;
+    height: auto;
+    margin-top: 12px;
+  }
+  @media (max-width: 960px) {
+    .about-private { padding-block: 96px; }
+    .about-private__grid { grid-template-columns: 1fr; }
+    .about-private__photo { aspect-ratio: 4 / 5; max-width: 520px; border-radius: var(--radius-sm); }
   }
 
-  .about-principles__link a {
-    color: var(--color-cobalt);
-    text-decoration: underline;
-    text-underline-offset: 3px;
+  /* On my shelf (S2): book spines of different heights and blues,
+     standing on a line, the last one leaning. Titles run up the spine. */
+  .about-shelf { margin-top: 72px; }
+  .about-shelf__label {
+    font-family: var(--font-mono);
+    font-size: var(--text-mono-sm);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+    color: var(--color-ash);
+    margin: 0 0 16px;
   }
-
-  @media (max-width: 800px) {
-    .about-timeline__item {
-      grid-template-columns: 1fr;
-      gap: var(--space-2);
-    }
-    .about-principles__grid {
-      grid-template-columns: 1fr;
-    }
+  .about-shelf__list {
+    list-style: none;
+    margin: 0;
+    padding: 0 0 0 12px;
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+    border-bottom: 3px solid var(--color-ink);
+  }
+  .about-shelf__book {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 300px;
+    border-radius: 2px 2px 0 0;
+    background: var(--color-night);
+    color: var(--color-white);
+  }
+  .about-shelf__book:nth-child(2) { width: 56px; height: 330px; background: var(--color-night-deep); }
+  .about-shelf__book:nth-child(3) { width: 66px; height: 350px; background: var(--color-night-royal); }
+  .about-shelf__book:nth-child(4) { width: 58px; height: 315px; background: var(--color-night-azure); }
+  .about-shelf__book:nth-child(5) { width: 62px; height: 320px; background: var(--color-night-coral); }
+  .about-shelf__book .v3-grain { z-index: -1; opacity: 0.25; }
+  .about-shelf__spine {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    white-space: nowrap;
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+  .about-shelf__title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 0.01em;
+  }
+  .about-shelf__author {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    opacity: 0.75;
+  }
+  .about-shelf__lean {
+    width: 28px;
+    height: 150px;
+    margin-left: 10px;
+    background: var(--color-night-haze);
+    border: 1px solid var(--color-line);
+    border-radius: 2px 2px 0 0;
+    transform: rotate(14deg);
+    transform-origin: bottom left;
+  }
+  @media (max-width: 640px) {
+    .about-shelf__list { padding-left: 4px; gap: 4px; }
+    .about-shelf__book { width: 50px !important; }
+    .about-shelf__lean { display: none; }
   }
 </style>

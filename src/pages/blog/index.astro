@@ -1,15 +1,16 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import GlowBackground from '../../components/GlowBackground.astro';
-import PostCard from '../../components/PostCard.astro';
-import FeaturedPostCard from '../../components/FeaturedPostCard.astro';
+import NightLights from '../../components/NightLights.astro';
 import { getCollection } from 'astro:content';
 
 const posts = (await getCollection('blog', ({ data }) => !data.draft))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
 const featured = posts[0];
-const rest = posts.filter((p) => p.slug !== featured.slug);
+
+const formatDate = (d: Date) =>
+  d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 // Derived from posts – new categories appear automatically when used
 const categories = ['Leadership', 'Marketing', 'Founding', 'Personal'].filter(
   (c) => posts.some((p) => p.data.category === c)
@@ -20,68 +21,70 @@ const categories = ['Leadership', 'Marketing', 'Founding', 'Personal'].filter(
   title="Writing • Stève Cattin"
   description="Essays on leadership, brand, founding, and the quieter seasons in between."
 >
-  <div class="glow-scope">
+  <!-- v3: the page opens on night with the latest essay, then fades to
+       paper for the list. -->
+  <section class="blog-hero v3-night v3-night--top">
+    <NightLights coral openTop />
+    <div class="container-wide blog-hero__inner">
+      <div>
+        <h1 class="blog-hero__title">Notes from the <span class="accent">work.</span></h1>
+        <p class="blog-hero__lede">
+          Essays on leadership, marketing, and the occasional personal piece.
+          Published when I have something honest to say, not on a schedule.
+        </p>
+      </div>
+
+      {featured && (
+        <a href={`/blog/${featured.slug}/`} class="blog-latest">
+          <p class="blog-latest__meta"><span>Latest</span> · {featured.data.category} · {formatDate(featured.data.pubDate)}</p>
+          <h2 class="blog-latest__title">{featured.data.title}</h2>
+          {featured.data.description && <p class="blog-latest__desc">{featured.data.description}</p>}
+          <span class="v3-link blog-latest__cta">Read the essay →</span>
+        </a>
+      )}
+    </div>
+  </section>
+
+  <div class="glow-scope glow-scope--below">
   <GlowBackground strength={0.3} />
 
-  <section class="blog-hero container">
-    <p class="eyebrow">Writing</p>
-    <h1 class="blog-hero__title">
-      Notes from the work.
-    </h1>
-    <p class="blog-hero__lede">
-      Essays on leadership, marketing, and the occasional personal piece.
-      Published when I have something honest to say, not on a schedule.
-    </p>
-
-    <ul class="blog-hero__tags" id="category-filters">
-      <li>
-        <button class="eyebrow filter-btn is-active" data-filter="all">All</button>
-      </li>
+  <section class="blog-list container-wide" aria-label="All essays">
+    <ul class="blog-tabs" id="category-filters" aria-label="Filter by category">
+      <li><button class="filter-btn is-active" data-filter="all" aria-pressed="true">All</button></li>
       {categories.map((c) => (
-        <li>
-          <button class="eyebrow filter-btn" data-filter={c}>{c}</button>
+        <li><button class="filter-btn" data-filter={c} aria-pressed="false">{c}</button></li>
+      ))}
+    </ul>
+
+    <ul class="blog-rows">
+      <li class="blog-framework">
+        <a href="/aima" class="blog-row blog-row--framework">
+          <span class="blog-row__cat">Framework</span>
+          <span class="blog-row__main">
+            <span class="blog-row__title">The AI Marketing Ascendancy Framework</span>
+            <span class="blog-row__desc">A living page now, not a post. Open the framework →</span>
+          </span>
+          <span class="blog-row__cone" aria-hidden="true">
+            <svg viewBox="0 0 580 200" width="100%">
+              <defs><linearGradient id="blog-cone" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#2830FF" /><stop offset="0.4" stop-color="#4D5BFF" /><stop offset="0.72" stop-color="#B46BB0" /><stop offset="1" stop-color="#F96B54" /></linearGradient></defs>
+              <path d="M 0 97 C 261 92, 406 60, 580 0 L 580 200 C 406 140, 261 108, 0 103 Z" fill="url(#blog-cone)" />
+            </svg>
+          </span>
+        </a>
+      </li>
+      {posts.map((post, i) => (
+        <li data-post-category={post.data.category} data-featured={i === 0 ? '' : undefined} hidden={i === 0}>
+          <a href={`/blog/${post.slug}/`} class="blog-row">
+            <span class="blog-row__cat">{post.data.category}</span>
+            <span class="blog-row__title">{post.data.title}</span>
+            <span class="blog-row__meta">
+              {formatDate(post.data.pubDate)}{post.data.readingTime && ` · ${post.data.readingTime.replace(' read', '')}`}
+            </span>
+            <span class="blog-row__arrow" aria-hidden="true">→</span>
+          </a>
         </li>
       ))}
     </ul>
-  </section>
-
-  <section class="container blog-list section-tight">
-    <a href="/aima" class="framework-feature">
-      <div class="framework-feature__text">
-        <span class="framework-feature__eyebrow">Framework · v2.1</span>
-        <h2 class="framework-feature__title">The AI Marketing Ascendancy Framework</h2>
-        <p class="framework-feature__desc">The framework I built for moving marketing teams from AI-curious to AI-confident – the challenges, a use-case library, a maturity model, and the economics. A living page now, not a post.</p>
-      </div>
-      <span class="framework-feature__cta">Open the framework →</span>
-    </a>
-
-    {featured && (
-      <div data-post-category={featured.data.category}>
-        <FeaturedPostCard
-          href={`/blog/${featured.slug}/`}
-          title={featured.data.title}
-          description={featured.data.description}
-          category={featured.data.category}
-          pubDate={featured.data.pubDate}
-          readingTime={featured.data.readingTime}
-        />
-      </div>
-    )}
-
-    <div class="blog-grid">
-      {rest.map((post, i) => (
-        <div data-post-category={post.data.category} class:list={[{ 'col-span-2': i % 5 === 3 }]}>
-          <PostCard
-            href={`/blog/${post.slug}/`}
-            title={post.data.title}
-            category={post.data.category}
-            pubDate={post.data.pubDate}
-            readingTime={post.data.readingTime}
-            wide={i % 5 === 3}
-          />
-        </div>
-      ))}
-    </div>
   </section>
   </div>
 </BaseLayout>
@@ -89,147 +92,185 @@ const categories = ['Leadership', 'Marketing', 'Founding', 'Personal'].filter(
 <script>
   const filterBtns = document.querySelectorAll<HTMLButtonElement>('.filter-btn');
   const postItems = document.querySelectorAll<HTMLElement>('[data-post-category]');
+  const framework = document.querySelector<HTMLElement>('.blog-framework');
 
   filterBtns.forEach((btn) => {
     btn.addEventListener('click', () => {
       const filter = btn.dataset.filter!;
 
-      // Update active button
-      filterBtns.forEach((b) => b.classList.remove('is-active'));
-      btn.classList.add('is-active');
-
-      // Show / hide posts
-      postItems.forEach((item) => {
-        const match = filter === 'all' || item.dataset.postCategory === filter;
-        item.style.display = match ? '' : 'none';
+      filterBtns.forEach((b) => {
+        b.classList.toggle('is-active', b === btn);
+        b.setAttribute('aria-pressed', String(b === btn));
       });
+
+      // The latest essay already sits in the hero: it only joins the list
+      // when a category is picked, so that category is complete.
+      postItems.forEach((item) => {
+        const match = filter === 'all'
+          ? !item.hasAttribute('data-featured')
+          : item.dataset.postCategory === filter;
+        item.hidden = !match;
+      });
+      if (framework) framework.hidden = filter !== 'all' && filter !== 'Marketing';
     });
   });
 </script>
 
 <style>
+  /* -------- Hero: opens on night (v3) -------- */
   .blog-hero {
-    padding-block: clamp(4rem, 4vw + 3rem, 7rem);
-    max-width: 900px;
+    --dawn: 300px;
+    padding-top: calc(var(--nav-h) + 110px);
+    padding-bottom: calc(var(--dawn) + 30px);
   }
 
-  .blog-hero .eyebrow {
-    margin-bottom: var(--space-5);
+  .blog-hero__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: clamp(40px, 6vw, 80px);
+    align-items: end;
   }
 
   .blog-hero__title {
     font-family: var(--font-display);
-    font-size: var(--text-hero);
-    line-height: 0.98;
-    letter-spacing: -0.035em;
-    margin-bottom: var(--space-5);
-    max-width: 18ch;
+    font-weight: 700;
+    font-size: clamp(46px, 6.6vw, 96px);
+    line-height: 0.96;
+    letter-spacing: -0.04em;
+    color: var(--color-white);
+    margin: 0;
+    text-wrap: balance;
   }
 
   .blog-hero__lede {
-    font-size: var(--text-lg);
+    margin: 30px 0 0;
+    max-width: 580px;
+    font-size: 19px;
     line-height: var(--lh-normal);
-    color: var(--color-graphite);
-    max-width: 58ch;
-    margin-bottom: var(--space-8);
+    color: var(--color-night-haze);
   }
 
-  .blog-hero__tags {
-    list-style: none;
-    display: flex;
-    gap: var(--space-2);
-    flex-wrap: wrap;
+  /* The latest essay, beside the headline. */
+  .blog-latest {
+    display: block;
+    padding-left: 40px;
+    border-left: 1px solid rgba(196, 214, 240, 0.22);
+    color: var(--color-white);
   }
-
-  .filter-btn {
-    padding: 6px 10px;
-    border: 0.5px solid var(--color-line);
-    border-radius: var(--radius-sm);
-    color: var(--color-graphite);
-    background: transparent;
-    cursor: pointer;
-    transition: border-color var(--dur-fast) var(--ease-out),
-                color var(--dur-fast) var(--ease-out),
-                background var(--dur-fast) var(--ease-out);
-  }
-
-  .filter-btn:hover {
-    border-color: var(--color-cobalt);
-    color: var(--color-cobalt);
-  }
-
-  .filter-btn.is-active {
-    border-color: var(--color-cobalt);
-    color: var(--color-cobalt);
-    background: var(--color-cobalt-tint);
-  }
-
-  .framework-feature {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--space-6);
-    padding: var(--space-7) var(--space-8);
-    margin-bottom: var(--space-6);
-    background: var(--color-cobalt-tint);
-    border: 1px solid color-mix(in srgb, var(--color-cobalt) 30%, transparent);
-    border-radius: var(--radius-md);
-    transition: border-color var(--dur-fast) var(--ease-out);
-  }
-  .framework-feature:hover { border-color: var(--color-cobalt); }
-  .framework-feature__eyebrow {
+  .blog-latest__meta {
+    margin: 0 0 16px;
     font-family: var(--font-mono);
     font-size: var(--text-mono-sm);
-    letter-spacing: var(--tracking-wide);
     text-transform: uppercase;
-    color: var(--color-cobalt);
+    letter-spacing: var(--tracking-wide);
+    color: var(--color-night-sky);
   }
-  .framework-feature__title {
+  .blog-latest__meta span { color: var(--color-white); }
+  .blog-latest__title {
+    margin: 0 0 14px;
     font-family: var(--font-display);
-    font-size: var(--text-2xl);
-    letter-spacing: var(--tracking-tight);
-    color: var(--color-ink);
-    margin: var(--space-2) 0 var(--space-2);
-    line-height: var(--lh-snug);
+    font-weight: 600;
+    font-size: clamp(26px, 2.4vw, 34px);
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    color: var(--color-white);
+    text-wrap: balance;
   }
-  .framework-feature__desc {
-    font-size: var(--text-base);
-    line-height: var(--lh-normal);
+  .blog-latest__desc {
+    margin: 0 0 20px;
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--color-night-powder);
+  }
+  .blog-latest:hover .blog-latest__title { color: var(--color-night-sky); }
+
+  /* -------- The list, on paper -------- */
+  .blog-list { padding-block: var(--space-4) var(--space-24); }
+
+  .blog-tabs {
+    list-style: none;
+    margin: 0 0 22px;
+    padding: 0;
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+  .filter-btn {
+    background: none;
+    border: 0;
+    padding: 0 0 8px;
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: var(--text-mono-sm);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
     color: var(--color-graphite);
-    max-width: 60ch;
+    transition: color var(--dur-fast) var(--ease-out);
   }
-  .framework-feature__cta {
-    flex: none;
-    font-family: var(--font-body);
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--color-cobalt);
-    white-space: nowrap;
-  }
-  @media (max-width: 640px) {
-    .framework-feature { flex-direction: column; align-items: flex-start; gap: var(--space-4); }
+  .filter-btn:hover { color: var(--color-ink); }
+  .filter-btn.is-active { color: var(--color-ink); box-shadow: inset 0 -2px 0 var(--color-cobalt); }
+
+  .blog-rows {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--color-line);
   }
 
-  .blog-list {
-    padding-top: var(--space-8);
-    border-top: 0.5px solid var(--color-line);
-  }
-
-  .blog-grid {
+  .blog-row {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--space-4);
+    grid-template-columns: 160px minmax(0, 1fr) auto 24px;
+    align-items: baseline;
+    gap: var(--space-6);
+    padding-block: var(--space-7, 28px);
+    border-bottom: 1px solid var(--color-line);
+    color: var(--color-ink);
   }
+  .blog-row__cat,
+  .blog-row__meta {
+    font-family: var(--font-mono);
+    font-size: var(--text-mono-sm);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+  }
+  .blog-row__cat { color: var(--color-cobalt); }
+  .blog-row__meta { color: var(--color-ash); white-space: nowrap; }
+  .blog-row__title {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(22px, 2.2vw, 26px);
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    transition: color var(--dur-fast) var(--ease-out);
+  }
+  .blog-row__arrow { font-size: 20px; transition: transform var(--dur-fast) var(--ease-out); }
+  .blog-row:hover .blog-row__title { color: var(--color-cobalt); }
+  .blog-row:hover .blog-row__arrow { transform: translateX(4px); }
 
-  .blog-grid .col-span-2 {
-    grid-column: span 2;
+  /* The framework: first row, with a small cone. */
+  .blog-row--framework {
+    grid-template-columns: 160px minmax(0, 1fr) 260px;
+    align-items: center;
   }
+  .blog-row__main { display: flex; flex-direction: column; gap: 6px; }
+  .blog-row__desc { font-size: 15px; color: var(--color-graphite); }
+  .blog-row__cone svg { display: block; }
 
-  @media (max-width: 960px) {
-    .blog-grid { grid-template-columns: repeat(2, 1fr); }
-  }
-  @media (max-width: 640px) {
-    .blog-grid { grid-template-columns: 1fr; }
-    .blog-grid .col-span-2 { grid-column: span 1; }
+  @media (max-width: 760px) {
+    .blog-hero { --dawn: 240px; padding-top: calc(var(--nav-h) + 64px); }
+    .blog-hero__inner { grid-template-columns: 1fr; gap: 48px; }
+    .blog-latest { padding-left: 20px; }
+    .blog-row {
+      grid-template-columns: 1fr auto;
+      grid-template-areas: "cat arrow" "title title" "meta meta";
+      row-gap: var(--space-2);
+    }
+    .blog-row__cat { grid-area: cat; }
+    .blog-row__title { grid-area: title; }
+    .blog-row__meta { grid-area: meta; }
+    .blog-row__arrow { grid-area: arrow; }
+    .blog-row--framework { grid-template-columns: 1fr; grid-template-areas: none; }
+    .blog-row--framework > * { grid-area: auto; }
+    .blog-row__cone { max-width: 220px; }
   }
 </style>

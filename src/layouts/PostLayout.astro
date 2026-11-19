@@ -1,6 +1,9 @@
 ---
 import BaseLayout from './BaseLayout.astro';
 import GlowBackground from '../components/GlowBackground.astro';
+import GlowRing from '../components/GlowRing.astro';
+import NightLights from '../components/NightLights.astro';
+import { getCollection } from 'astro:content';
 
 export interface Props {
   frontmatter: {
@@ -18,6 +21,11 @@ export interface Props {
 
 const { frontmatter, ogImage } = Astro.props;
 const { title, description, pubDate, updatedDate, category, readingTime } = frontmatter;
+
+// Keep reading: the two most recent other essays.
+const next = (await getCollection('blog', ({ data }) => !data.draft && data.title !== title))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 2);
 
 const dateLabel = new Date(pubDate).toLocaleDateString('en-US', {
   year: 'numeric',
@@ -64,21 +72,48 @@ const dateLabel = new Date(pubDate).toLocaleDateString('en-US', {
       <slot />
     </div>
 
-    <footer class="container-prose post__footer">
-      <hr class="rule" />
-      <p class="post__sig">
-        Written by Stève Cattin.
-        <button class="post__reach-out" data-contact-trigger>Reach out</button> or
-        <a href="/blog">read more writing</a>.
-      </p>
-    </footer>
   </article>
   </div>
+
+  <!-- v3: every essay ends by fading into night – who wrote it, the one
+       action, and what to read next. -->
+  <footer class="post-end v3-night v3-night--end">
+    <NightLights coral pale={false} />
+    <div class="post-end__inner">
+      <div class="post-end__sig">
+        <GlowRing portrait size={96} sizeSm={80} />
+        <div class="post-end__who">
+          <p class="post-end__name">Written by Stève Cattin.</p>
+          <p class="post-end__role">CMO &amp; GTM Advisor</p>
+        </div>
+        <button class="v3-btn post-end__cta" data-contact-trigger>Tell me your story →</button>
+      </div>
+
+      {next.length > 0 && (
+        <>
+          <p class="post-end__eyebrow">Keep reading</p>
+          <ul class="v3-rows post-end__rows">
+            {next.map((p) => (
+              <li>
+                <a href={`/blog/${p.slug}/`} class="v3-row">
+                  <span class="v3-row__cat">{p.data.category}</span>
+                  <span class="v3-row__title">{p.data.title}</span>
+                  <span class="v3-row__meta">{p.data.readingTime?.replace(' read', '')}</span>
+                  <span class="v3-row__arrow" aria-hidden="true">→</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
+      <a href="/blog" class="v3-link post-end__all">All writing →</a>
+    </div>
+  </footer>
 </BaseLayout>
 
 <style>
   .post {
-    padding-top: var(--space-16);
+    padding-top: calc(var(--space-16) + 40px);
   }
 
   .post__header {
@@ -112,13 +147,16 @@ const dateLabel = new Date(pubDate).toLocaleDateString('en-US', {
     border-radius: 50%;
   }
 
+  /* v3: the homepage headline voice, a size down. */
   .post__title {
     font-family: var(--font-display);
-    font-size: clamp(2.25rem, 1.5rem + 3vw, 3.5rem);
-    line-height: var(--lh-tight);
-    letter-spacing: var(--tracking-tight);
-    margin-bottom: var(--space-5);
-    max-width: 22ch;
+    font-weight: 700;
+    font-size: clamp(40px, 1.5rem + 3.6vw, 76px);
+    line-height: 0.98;
+    letter-spacing: -0.04em;
+    margin-bottom: var(--space-6);
+    max-width: 16ch;
+    text-wrap: balance;
   }
 
   .post__lede {
@@ -267,27 +305,60 @@ const dateLabel = new Date(pubDate).toLocaleDateString('en-US', {
     text-align: center;
   }
 
-  .post__footer {
-    margin-top: var(--space-16);
+  /* -------- The ending, on night (v3) -------- */
+  .post-end {
+    margin-top: var(--space-24);
+    /* paper → night over the first 300px, then night to the end */
+    background: linear-gradient(180deg,
+      var(--color-paper) 0,
+      var(--color-night-haze) 70px,
+      var(--color-night-powder) 120px,
+      var(--color-night-azure) 190px,
+      var(--color-night-deep) 250px,
+      var(--color-night) 300px);
+    padding: 420px var(--space-6) var(--space-24);
   }
-
-  /* "Reach out" button — looks like a link, triggers modal */
-  .post__reach-out {
-    display: inline;
-    font: inherit;
-    color: var(--color-cobalt);
-    text-decoration: none;
-    cursor: pointer;
-    padding: 0;
-    background: none;
-    border: none;
-    transition: color var(--dur-fast) var(--ease-out);
+  .post-end > :global(.v3-lights) {
+    -webkit-mask-image: linear-gradient(180deg, transparent 0, transparent 260px, #000 420px);
+            mask-image: linear-gradient(180deg, transparent 0, transparent 260px, #000 420px);
   }
-  .post__reach-out:hover { color: var(--color-cobalt-deep); }
+  .post-end > :global(.v3-grain) {
+    -webkit-mask-image: linear-gradient(180deg, transparent 0, transparent 160px, #000 320px);
+            mask-image: linear-gradient(180deg, transparent 0, transparent 160px, #000 320px);
+  }
+  .post-end__inner { max-width: 900px; margin: 0 auto; }
 
-  .post__sig {
-    margin-top: var(--space-6);
-    color: var(--color-graphite);
-    font-size: var(--text-base);
+  .post-end__sig {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    padding-bottom: var(--space-10);
+  }
+  .post-end__who { min-width: 0; }
+  .post-end__name {
+    margin: 0 0 4px;
+    font-family: var(--font-display);
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--color-white);
+  }
+  .post-end__role { margin: 0; font-size: 15px; color: var(--color-night-powder); }
+  .post-end__cta { margin-left: auto; }
+
+  .post-end__eyebrow {
+    margin: var(--space-6) 0 var(--space-2);
+    font-family: var(--font-mono);
+    font-size: var(--text-mono-sm);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+    color: var(--color-night-sky);
+  }
+  .post-end__rows { border-top: 1px solid rgba(196, 214, 240, 0.18); }
+  .post-end__all { display: inline-block; margin-top: var(--space-7, 28px); }
+
+  @media (max-width: 760px) {
+    .post-end { padding-top: 360px; }
+    .post-end__sig { flex-wrap: wrap; }
+    .post-end__cta { margin-left: 0; }
   }
 </style>
