@@ -1,19 +1,18 @@
 ---
 import NightLights from './NightLights.astro';
 /**
- * Facets – "Who is Stève", told by scroll.
- * A faint ring (the whole person) fills in, segment by segment, in the
- * AIMA beam's cobalt → coral as you scroll; each segment is a facet and
- * its voice + proof cross-fade in beside the ring. The sixth segment
- * closes the ring. Clicking a facet scrolls to it. Phones, short screens
- * and reduced motion get a stacked list with the same ring.
+ * Facets – "Who is Stève" as an accordion on night (P2, 20.11.2026).
+ * Six rows, each with its opening line; open one to read its voice and
+ * the proof underneath. A small ring lights the open facet's segment.
+ * No scroll lock: the whole section fits in about one screen. Phones get
+ * the proof headlines only, to stay light.
  */
 
 interface Proof { l: string; b: string; }
 interface Facet {
-  ring: string;        // short label on the ring
-  lines: string[];     // ring label split for legibility
-  name: string;        // panel title
+  ring: string;
+  lines: string[];
+  name: string;
   voice: string[];
   proofs: Proof[];
 }
@@ -105,514 +104,258 @@ const FACETS: Facet[] = [
   },
 ];
 
-interface Props {
-  /** v3: the ring and panel set on night (About). */
-  night?: boolean;
-}
-const { night = false } = Astro.props;
-
 const N = FACETS.length;
-const CX = 300, CY = 300, R = 200, RL = 238;
-// The lit ring runs the AIMA beam's colours: cobalt → violet → coral.
-const SEG_COLORS = ['#2830FF', '#4D5BFF', '#7A63D8', '#B46BB0', '#D86C86', '#F96B54'];
+const SEG = ['#2830FF', '#4D5BFF', '#7A63D8', '#B46BB0', '#D86C86', '#F96B54'];
+const C = 120, R = 80;
 const r1 = (v: number) => Math.round(v * 10) / 10;
 const polar = (deg: number, rad: number) => {
   const a = (deg * Math.PI) / 180;
-  return [CX + rad * Math.cos(a), CY + rad * Math.sin(a)];
+  return [r1(C + rad * Math.cos(a)), r1(C + rad * Math.sin(a))];
 };
 const nodes = FACETS.map((f, i) => {
   const deg = -90 + (i * 360) / N;
   const [x, y] = polar(deg, R);
-  const [lx, ly] = polar(deg, RL);
-  const c = Math.cos((deg * Math.PI) / 180);
-  const anchor = c > 0.2 ? 'start' : c < -0.2 ? 'end' : 'middle';
-  const lines = [String(i + 1).padStart(2, '0'), ...f.lines];
-  const firstDy = 0.32 - (lines.length - 1) * 0.55;
   const [sx, sy] = polar(deg, R);
   const [ex, ey] = polar(deg + 360 / N, R);
-  const arc = `M ${r1(sx)} ${r1(sy)} A ${R} ${R} 0 0 1 ${r1(ex)} ${r1(ey)}`;
-  return { ...f, i, x: r1(x), y: r1(y), lx: r1(lx), ly: r1(ly), anchor, lines, firstDy, arc, color: SEG_COLORS[i] };
+  return { i, x, y, arc: `M ${sx} ${sy} A ${R} ${R} 0 0 1 ${ex} ${ey}`, color: SEG[i] };
 });
-const total = String(N).padStart(2, '0');
+const firstLine = (v: string) => (v.match(/^.*?[.!?](\s|$)/)?.[0] ?? v).trim();
 ---
 
-<section class:list={['facets', { 'facets--night': night }]} aria-label="Who is Stève – six facets" style={`--n: ${N}`}>
-  <div class="facets__track">
-    <div class="facets__pin">
-      {night && <NightLights coral grain={false} />}
-      <div class="container-wide facets__stage">
-        <div class="facets__ringwrap">
-          <svg class="facets__svg" viewBox="-60 40 720 520" role="group" aria-label="Six facets of Stève on one ring – the ring completes as you scroll">
-            <defs>
-              <filter id="facets-halo" x="-150%" y="-150%" width="400%" height="400%">
-                <feGaussianBlur stdDeviation="9" />
-              </filter>
-              <filter id="facets-arc-glow" x="-20%" y="-20%" width="140%" height="140%">
-                <feGaussianBlur stdDeviation="7" />
-              </filter>
-            </defs>
+<section class="facets" aria-label="Who is Stève – six facets">
+  <NightLights coral grain={false} />
+  <div class="container-wide facets__grid">
+    <div class="facets__ring" aria-hidden="true">
+      <svg viewBox="0 0 240 240" class="facets__svg">
+        <circle class="facets__ghost" cx={C} cy={C} r={R} />
+        {nodes.map((n) => (
+          <path class="facets__arc" data-arc={n.i} d={n.arc} style={`stroke: ${n.color}`} />
+        ))}
+        {nodes.map((n) => (
+          <g class="facets__node" data-node={n.i} style={`--seg: ${n.color}`}>
+            <circle class="facets__halo" cx={n.x} cy={n.y} r="16" />
+            <circle class="facets__dot" cx={n.x} cy={n.y} r="6" />
+          </g>
+        ))}
+        <circle class="facets__core" cx={C} cy={C} r="30" />
+        <text class="facets__core-eyebrow" x={C} y={C - 4} text-anchor="middle">WHO IS</text>
+        <text class="facets__core-name" x={C} y={C + 13} text-anchor="middle">Stève</text>
+      </svg>
+    </div>
 
-            <!-- Ghost ring: the whole person, before you've met them -->
-            <circle class="facets__ghost" cx={CX} cy={CY} r={R} />
-
-            <!-- Lit ring: one segment per facet, drawn by scroll -->
-            <g class="facets__arcs-glow" filter="url(#facets-arc-glow)" aria-hidden="true">
-              {nodes.map((n) => (
-                <path class="facets__arc" data-arc={n.i} d={n.arc} pathLength="1" style={`stroke: ${n.color}`} />
-              ))}
-            </g>
-            <g class="facets__arcs" aria-hidden="true">
-              {nodes.map((n) => (
-                <path class="facets__arc" data-arc={n.i} d={n.arc} pathLength="1" style={`stroke: ${n.color}`} />
-              ))}
-            </g>
-
-            {nodes.map((n) => (
-              <path class="facets__spoke" data-spoke={n.i} d={`M ${CX} ${CY} L ${n.x} ${n.y}`} pathLength="1" style={`stroke: ${n.color}`} />
-            ))}
-
-            <circle class="facets__core-glow" cx={CX} cy={CY} r="64" filter="url(#facets-halo)" />
-            <circle class="facets__core" cx={CX} cy={CY} r="46" />
-            <text class="facets__core-eyebrow" x={CX} y={CY - 8} text-anchor="middle">WHO IS</text>
-            <text class="facets__core-name" x={CX} y={CY + 17} text-anchor="middle">Stève</text>
-
-            {nodes.map((n) => (
-              <g
-                class="facets__node"
-                data-i={n.i}
-                role="button"
-                tabindex="0"
-                aria-label={`${n.name} – facet ${n.i + 1} of ${N}`}
-                aria-current={n.i === 0 ? 'step' : undefined}
-                style={`--seg: ${n.color}`}
-              >
-                <circle class="facets__halo" cx={n.x} cy={n.y} r="26" filter="url(#facets-halo)" />
-                <circle class="facets__hit" cx={n.x} cy={n.y} r="40" />
-                <circle class="facets__dot" cx={n.x} cy={n.y} r="9" />
-                <text class="facets__label" x={n.lx} y={n.ly} text-anchor={n.anchor}>
-                  {n.lines.map((ln, k) => (
-                    <tspan x={n.lx} dy={`${k === 0 ? n.firstDy : 1.1}em`} class={k === 0 ? 'facets__label-n' : ''}>{ln}</tspan>
-                  ))}
-                </text>
-              </g>
-            ))}
-          </svg>
-        </div>
-
-        <div class="facets__panel">
-          <div class="facets__mini" aria-hidden="true">
-            <div class="facets__mini-bar">
-              {nodes.map((n) => <span class="facets__mini-seg" style={`--seg: ${n.color}`}></span>)}
+    <div class="facets__list">
+      {FACETS.map((f, i) => (
+        <div class:list={['facets__row', { 'is-open': i === 0 }]} style={`--seg: ${SEG[i]}`}>
+          <h3 class="facets__head">
+            <button
+              class="facets__btn"
+              type="button"
+              id={`facet-btn-${i}`}
+              aria-expanded={i === 0 ? 'true' : 'false'}
+              aria-controls={`facet-panel-${i}`}
+              data-i={i}
+            >
+              <span class="facets__n">{String(i + 1).padStart(2, '0')}</span>
+              <span class="facets__name">{f.name}</span>
+              <span class="facets__first">{firstLine(f.voice[0])}</span>
+              <span class="facets__sign" aria-hidden="true"></span>
+            </button>
+          </h3>
+          <div
+            class="facets__panel"
+            id={`facet-panel-${i}`}
+            role="region"
+            aria-labelledby={`facet-btn-${i}`}
+            hidden={i !== 0}
+          >
+            <div class="facets__voice">
+              {f.voice.map((v) => <p>{v}</p>)}
             </div>
-            <p class="facets__mini-name"><span class="facets__mini-n">01</span> <span class="facets__mini-t">{FACETS[0].ring}</span></p>
+            <ul class="facets__proofs" aria-label="The proof underneath">
+              {f.proofs.map((p) => (
+                <li class="facets__proof">
+                  <p class="facets__proof-l">{p.l}</p>
+                  <p class="facets__proof-b">{p.b}</p>
+                </li>
+              ))}
+            </ul>
           </div>
-          {FACETS.map((f, i) => (
-            <article class="facets__view" data-panel={String(i)} aria-labelledby={`facet-name-${i}`}>
-              <p class="facets__facet-eyebrow">{String(i + 1).padStart(2, '0')} <span>/ {total}</span></p>
-              <h3 class="facets__facet-name" id={`facet-name-${i}`}>{f.name}</h3>
-              {f.voice.map((v) => <p class="facets__voice">{v}</p>)}
-              <p class="facets__proof-head">The proof underneath</p>
-              <ul class="facets__proofs">
-                {f.proofs.map((p) => (
-                  <li class="facets__proof">
-                    <p class="facets__proof-l">{p.l}</p>
-                    <p class="facets__proof-b">{p.b}</p>
-                  </li>
-                ))}
-              </ul>
-            </article>
-          ))}
         </div>
-      </div>
+      ))}
     </div>
   </div>
 </section>
 
 <style>
-  /* Two modes, chosen in the script:
-     - pinned  (default on desktop): the stage holds still while you scroll;
-       the ring fills segment by segment and the facets cross-fade in place.
-     - stacked (phones, short screens, reduced motion): facets scroll past
-       as a normal list while the ring sits sticky beside / above them. */
-  .facets { --nav-h: 64px; --step: 62vh; padding-block: var(--space-12) var(--space-16); }
-
-  .facets.is-pinned .facets__track { height: calc(100vh - var(--nav-h) + var(--n) * var(--step)); }
-  .facets.is-pinned .facets__pin {
-    position: sticky;
-    top: var(--nav-h);
-    height: calc(100vh - var(--nav-h));
-    display: flex;
-    align-items: center;
+  .facets {
+    position: relative;
+    isolation: isolate;
+    padding-block: 96px 40px;
   }
+  .facets > :global(.v3-lights) { --dawn: 0px; }
 
-  .facets__stage {
+  .facets__grid {
     display: grid;
-    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-    gap: clamp(40px, 5vw, 88px);
-    align-items: center;
-    width: 100%;
+    grid-template-columns: 240px minmax(0, 1fr);
+    gap: clamp(40px, 5vw, 72px);
+    align-items: start;
   }
 
-  .facets__ringwrap { width: 100%; max-width: 500px; }
-  .facets.is-stacked .facets__ringwrap { position: sticky; top: calc(var(--nav-h) + 40px); align-self: start; }
-
-  .facets__svg { width: 100%; height: auto; display: block; overflow: visible; }
-
-  /* -------- Ring -------- */
-  .facets__ghost { fill: none; stroke: var(--color-ink); stroke-opacity: 0.14; stroke-width: 1.5; stroke-dasharray: 2 6; }
-
-  .facets__arc {
-    fill: none;
-    stroke-width: 4;
-    stroke-linecap: butt;
-    stroke-dasharray: 1;
-    stroke-dashoffset: var(--off, 1);
-  }
-  .facets__arcs-glow .facets__arc { stroke-width: 10; opacity: 0.45; }
-
-  .facets__spoke {
-    fill: none;
-    stroke-width: 1.5;
-    stroke-dasharray: 1;
-    stroke-dashoffset: 1;
-    opacity: 0.9;
-    transition: stroke-dashoffset 500ms var(--ease-out);
-  }
-  .facets__spoke.is-on { stroke-dashoffset: 0; }
-
-  .facets__core { fill: var(--color-ink); }
-  .facets__core-glow { fill: var(--color-glow-blue); opacity: 0; transition: opacity 900ms var(--ease-out); }
-  .facets.is-complete .facets__core-glow { opacity: 0.5; }
-  .facets__core-eyebrow { fill: var(--color-paper); font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.22em; }
-  .facets__core-name { fill: var(--color-paper); font-family: var(--font-display); font-weight: 500; font-size: 24px; }
-
-  /* -------- Nodes -------- */
-  .facets__node { cursor: pointer; }
-  .facets__node:focus { outline: none; }
-  .facets__hit { fill: transparent; }
-  .facets__halo { fill: var(--seg); opacity: 0; transition: opacity var(--dur-slow) var(--ease-out); }
+  /* -------- The small ring -------- */
+  .facets__ring { position: sticky; top: 120px; }
+  .facets__svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .facets__ghost { fill: none; stroke: var(--color-night-powder); stroke-opacity: 0.3; stroke-width: 1.5; stroke-dasharray: 2 6; }
+  .facets__arc { fill: none; stroke-width: 4; opacity: 0; transition: opacity var(--dur-med) var(--ease-out); }
+  .facets__arc.is-on { opacity: 1; }
+  .facets__halo { fill: var(--seg); opacity: 0; transition: opacity var(--dur-med) var(--ease-out); }
   .facets__dot {
-    fill: var(--color-paper);
-    stroke: var(--color-ink);
-    stroke-opacity: 0.4;
+    fill: var(--color-night);
+    stroke: var(--color-night-powder);
+    stroke-opacity: 0.6;
     stroke-width: 1.5;
     transition: fill var(--dur-med) var(--ease-out), stroke var(--dur-med) var(--ease-out);
   }
-  .facets__label {
-    fill: var(--color-graphite);
-    font-family: var(--font-mono);
-    font-size: 14px;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    transition: fill var(--dur-med) var(--ease-out);
-  }
-  .facets__label-n { fill: var(--color-ash); }
+  .facets__node { cursor: pointer; }
+  .facets__node.is-on .facets__halo { opacity: 0.35; }
+  .facets__node.is-on .facets__dot { fill: var(--seg); stroke: var(--seg); stroke-opacity: 1; }
+  .facets__core { fill: var(--color-night-royal); stroke: rgba(196, 214, 240, 0.7); stroke-width: 1; }
+  .facets__core-eyebrow { fill: var(--color-night-powder); font-family: var(--font-mono); font-size: 7px; letter-spacing: 0.2em; }
+  .facets__core-name { fill: var(--color-white); font-family: var(--font-display); font-weight: 600; font-size: 15px; }
 
-  /* passed: the dot takes its segment colour */
-  .facets__node.is-passed .facets__dot { fill: var(--seg); stroke: var(--seg); stroke-opacity: 1; }
-  .facets__node.is-passed .facets__label { fill: var(--color-ink); }
-  /* current */
-  .facets__node[aria-current='step'] .facets__dot { fill: var(--seg); stroke: var(--seg); stroke-opacity: 1; }
-  .facets__node[aria-current='step'] .facets__halo { opacity: 0.6; }
-  .facets__node[aria-current='step'] .facets__label,
-  .facets__node[aria-current='step'] .facets__label-n { fill: var(--seg); }
-
-  @media (hover: hover) and (pointer: fine) {
-    .facets__node:hover .facets__label { fill: var(--color-ink); }
-    .facets__node:hover .facets__dot { stroke-opacity: 1; }
-  }
-  .facets__node:focus-visible .facets__dot { stroke: var(--color-cobalt); stroke-width: 3; stroke-opacity: 1; }
-
-  @keyframes facets-glow { 0%, 100% { opacity: 0.4; } 50% { opacity: 0.75; } }
-  /* Desktop-only pulse (a blurred SVG circle redrawn every frame); touch
-     screens keep the halo steady. */
-  @media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
-    .facets__node[aria-current='step'] .facets__halo { animation: facets-glow 3.6s ease-in-out infinite; }
-  }
-
-  /* -------- Panel -------- */
-  .facets.is-pinned .facets__panel { display: grid; }
-  .facets.is-pinned .facets__view {
-    grid-area: 1 / 1;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(14px);
-    transition: opacity 420ms var(--ease-out), transform 420ms var(--ease-out), visibility 0s linear 420ms;
-  }
-  .facets.is-pinned .facets__view.is-on {
-    opacity: 1;
-    visibility: visible;
-    transform: none;
-    transition: opacity 420ms var(--ease-out) 80ms, transform 420ms var(--ease-out) 80ms, visibility 0s;
-  }
-
-  .facets.is-stacked .facets__view { padding-block: var(--space-12); border-top: 1px solid var(--color-line); }
-  .facets.is-stacked .facets__view:first-child { border-top: 0; padding-top: 0; }
-
-  .facets__facet-eyebrow {
-    font-family: var(--font-mono);
-    font-size: var(--text-mono-sm);
-    text-transform: uppercase;
-    letter-spacing: var(--tracking-wide);
-    color: var(--color-cobalt);
-    font-weight: 500;
-    margin: 0 0 var(--space-3);
-  }
-  .facets__facet-eyebrow span { color: var(--color-ash); }
-  .facets__facet-name {
-    font-family: var(--font-display);
-    font-weight: 500;
-    font-size: clamp(32px, 3.2vw, 46px);
-    line-height: 1.02;
-    letter-spacing: var(--tracking-tight);
-    color: var(--color-ink);
-    margin: 0 0 var(--space-5);
-  }
-  .facets__voice {
-    font-size: 17px;
-    line-height: 1.55;
-    color: var(--color-ink);
-    margin: 0 0 var(--space-3);
-    max-width: 62ch;
-  }
-  .facets__proof-head {
-    font-family: var(--font-mono);
-    font-size: var(--text-mono-sm);
-    text-transform: uppercase;
-    letter-spacing: var(--tracking-wide);
-    color: var(--color-ash);
-    margin: var(--space-6) 0 0;
-  }
-  .facets__proofs { list-style: none; margin: var(--space-3) 0 0; padding: 0; }
-  .facets__proof {
+  /* -------- Rows -------- */
+  .facets__row { border-top: 1px solid rgba(196, 214, 240, 0.18); }
+  .facets__row:last-child { border-bottom: 1px solid rgba(196, 214, 240, 0.18); }
+  .facets__head { margin: 0; }
+  .facets__btn {
+    all: unset;
+    box-sizing: border-box;
+    width: 100%;
     display: grid;
-    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
-    gap: var(--space-6);
-    padding-block: var(--space-3);
-    border-top: 0.5px solid var(--color-line);
+    grid-template-columns: 56px minmax(0, 300px) minmax(0, 1fr) 32px;
+    gap: 20px;
+    align-items: baseline;
+    padding-block: 20px;
+    cursor: pointer;
+    color: var(--color-white);
   }
+  .facets__btn:focus-visible { outline: 2px solid var(--color-night-sky); outline-offset: 4px; border-radius: 2px; }
+  .facets__n {
+    font-family: var(--font-mono);
+    font-size: var(--text-mono-sm);
+    letter-spacing: var(--tracking-wide);
+    color: var(--seg);
+  }
+  .facets__name {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(22px, 1rem + 0.8vw, 28px);
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+  }
+  .facets__first { font-size: 15px; line-height: 1.5; color: var(--color-night-powder); }
+  .is-open .facets__first { visibility: hidden; }
+  .facets__sign { position: relative; justify-self: end; width: 14px; height: 14px; align-self: center; }
+  .facets__sign::before,
+  .facets__sign::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 6px;
+    width: 14px;
+    height: 2px;
+    border-radius: 1px;
+    background: var(--color-night-sky);
+    transition: transform var(--dur-med) var(--ease-out);
+  }
+  .facets__sign::after { transform: rotate(90deg); }
+  .is-open .facets__sign::after { transform: rotate(0deg); }
+  @media (hover: hover) and (pointer: fine) {
+    .facets__btn:hover .facets__name { color: var(--color-night-sky); }
+  }
+
+  /* -------- Open panel -------- */
+  .facets__panel {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 20px 40px;
+    padding: 0 0 28px 76px;
+    animation: facets-in 360ms var(--ease-out);
+  }
+  .facets__panel[hidden] { display: none; }
+  @keyframes facets-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  .facets__voice p { margin: 0 0 var(--space-3); font-size: 17px; line-height: 1.6; color: var(--color-night-haze); }
+  .facets__voice p:last-child { margin-bottom: 0; }
+  .facets__proofs { list-style: none; margin: 0; padding: 0; }
+  .facets__proof { padding-block: 12px; border-top: 1px solid rgba(196, 214, 240, 0.18); }
+  .facets__proof:first-child { border-top: 0; padding-top: 0; }
   .facets__proof-l {
+    margin: 0 0 4px;
     font-family: var(--font-display);
     font-weight: 500;
     font-size: 17px;
     line-height: 1.3;
-    color: var(--color-ink);
-    letter-spacing: -0.01em;
-    margin: 0;
+    color: var(--color-white);
   }
-  .facets__proof-b { font-size: 15px; line-height: 1.5; color: var(--color-graphite); margin: 0; }
+  .facets__proof-b { margin: 0; font-size: 14px; line-height: 1.55; color: var(--color-night-powder); }
 
-  /* -------- Responsive -------- */
-  /* Phone progress strip: six segments in the ring's colours + current name. */
-  .facets__mini { display: none; }
+  @media (prefers-reduced-motion: reduce) {
+    .facets__panel { animation: none; }
+  }
+
+  /* -------- Tablet and phone -------- */
   @media (max-width: 960px) {
-    .facets__stage { grid-template-columns: 1fr; gap: var(--space-8); }
-    .facets.is-stacked .facets__ringwrap { position: static; max-width: 340px; margin-inline: auto; }
-    .facets__label { font-size: 18px; }
-    .facets.is-stacked .facets__mini {
-      display: flex;
-      align-items: center;
-      gap: var(--space-4);
-      position: sticky;
-      top: var(--nav-h);
-      z-index: 2;
-      margin-inline: calc(-1 * var(--space-6));
-      padding: 12px var(--space-6);
-      background: color-mix(in srgb, var(--color-paper) 92%, transparent);
-      backdrop-filter: blur(8px);
-      border-bottom: 0.5px solid var(--color-line);
+    .facets { padding-top: 64px; }
+    .facets__grid { grid-template-columns: 1fr; gap: 16px; }
+    .facets__ring { position: static; width: 170px; margin-inline: auto; }
+    .facets__btn {
+      grid-template-columns: 32px minmax(0, 1fr) 20px;
+      grid-template-areas: "n name sign" ". first first";
+      row-gap: 6px;
+      gap: 12px;
+      padding-block: 16px;
     }
-    .facets__mini-bar { display: flex; gap: 4px; flex: 0 0 auto; }
-    .facets__mini-seg { width: 18px; height: 4px; border-radius: 2px; background: color-mix(in srgb, var(--color-ink) 12%, transparent); transition: background var(--dur-med) var(--ease-out); }
-    .facets__mini-seg.is-passed, .facets__mini-seg.is-on { background: var(--seg); }
-    .facets__mini-name { margin: 0; font-family: var(--font-mono); font-size: var(--text-mono-sm); text-transform: uppercase; letter-spacing: var(--tracking-wide); color: var(--color-ink); white-space: nowrap; }
-    .facets__mini-n { color: var(--color-ash); }
-  }
-  @media (max-width: 640px) {
-    .facets.is-stacked .facets__ringwrap { max-width: 320px; }
-    .facets__label { font-size: 22px; }
-    .facets__proof { grid-template-columns: 1fr; gap: var(--space-1); }
-  }
-
-  /* Touch screens: the sticky bar is 92% paper already – the live blur
-     behind it cost a re-render on every scroll frame for no visible gain. */
-  @media (hover: none) and (pointer: coarse) {
-    .facets.is-stacked .facets__mini {
-      background: color-mix(in srgb, var(--color-paper) 96%, transparent);
-      -webkit-backdrop-filter: none;
-      backdrop-filter: none;
-    }
-  }
-
-  /* -------- v3: on night (About) -------- */
-  .facets--night { --nav-h: 80px; }
-  .facets--night .facets__pin { position: relative; isolation: isolate; }
-  .facets--night.is-pinned .facets__pin { position: sticky; }
-  .facets--night .facets__pin > :global(.v3-lights) { --dawn: 0px; }
-  .facets--night .facets__ghost { stroke: var(--color-night-powder); stroke-opacity: 0.32; }
-  .facets--night .facets__core { fill: var(--color-night-royal); stroke: rgba(196, 214, 240, 0.7); stroke-width: 1; }
-  .facets--night .facets__core-glow { fill: var(--color-night-azure); opacity: 0.45; }
-  .facets--night.is-complete .facets__core-glow { opacity: 0.7; }
-  .facets--night .facets__core-eyebrow { fill: var(--color-night-powder); }
-  .facets--night .facets__core-name { fill: var(--color-white); }
-  .facets--night .facets__dot { fill: var(--color-night); stroke: var(--color-night-powder); stroke-opacity: 0.6; }
-  .facets--night .facets__label { fill: var(--color-night-sky); }
-  .facets--night .facets__label-n { fill: var(--color-night-azure); }
-  .facets--night .facets__node.is-passed .facets__label { fill: var(--color-white); }
-  .facets--night .facets__node[aria-current='step'] .facets__label,
-  .facets--night .facets__node[aria-current='step'] .facets__label-n { fill: var(--color-white); }
-  .facets--night .facets__node:last-of-type .facets__label-n { fill: var(--color-night-coral); }
-  @media (hover: hover) and (pointer: fine) {
-    .facets--night .facets__node:hover .facets__label { fill: var(--color-white); }
-  }
-  .facets--night .facets__facet-eyebrow { color: var(--color-white); }
-  .facets--night .facets__facet-eyebrow span { color: var(--color-night-sky); }
-  .facets--night .facets__facet-name { color: var(--color-white); }
-  .facets--night .facets__voice { color: var(--color-night-haze); }
-  .facets--night .facets__proof-head { color: var(--color-night-azure); }
-  .facets--night .facets__proof { border-top-color: rgba(196, 214, 240, 0.18); border-top-width: 1px; }
-  .facets--night .facets__proof-l { color: var(--color-white); }
-  .facets--night .facets__proof-b { color: var(--color-night-powder); }
-  .facets--night.is-stacked .facets__view { border-top-color: rgba(196, 214, 240, 0.18); }
-  .facets--night.is-stacked .facets__mini + .facets__view { border-top: 0; padding-top: 0; }
-  @media (max-width: 960px) {
-    .facets--night.is-stacked .facets__mini {
-      background: color-mix(in srgb, var(--color-night) 94%, transparent);
-      border-bottom-color: rgba(196, 214, 240, 0.18);
-      -webkit-backdrop-filter: none;
-      backdrop-filter: none;
-    }
-    .facets--night .facets__mini-seg { background: rgba(196, 214, 240, 0.18); }
-    .facets--night .facets__mini-name { color: var(--color-white); }
-    .facets--night .facets__mini-n { color: var(--color-night-sky); }
+    .facets__n { grid-area: n; }
+    .facets__name { grid-area: name; font-size: 20px; }
+    .facets__first { grid-area: first; font-size: 13px; }
+    .is-open .facets__first { display: none; }
+    .facets__sign { grid-area: sign; }
+    .facets__panel { grid-template-columns: 1fr; padding-left: 44px; gap: 14px; }
+    .facets__voice p { font-size: 15px; }
+    /* Phones: proof headlines only – light, but the evidence stays. */
+    .facets__proof-b { display: none; }
+    .facets__proof { padding-block: 8px; }
+    .facets__proof-l { font-size: 15px; margin: 0; }
   }
 </style>
 
 <script>
   function initFacets(root: HTMLElement) {
-    const track = root.querySelector<HTMLElement>('.facets__track')!;
-    const pin = root.querySelector<HTMLElement>('.facets__pin')!;
-    const nodes = Array.from(root.querySelectorAll<SVGGElement>('.facets__node'));
-    const spokes = Array.from(root.querySelectorAll<SVGPathElement>('.facets__spoke'));
+    const rows = Array.from(root.querySelectorAll<HTMLElement>('.facets__row'));
+    const btns = rows.map((r) => r.querySelector<HTMLButtonElement>('.facets__btn')!);
+    const panels = rows.map((r) => r.querySelector<HTMLElement>('.facets__panel')!);
     const arcs = Array.from(root.querySelectorAll<SVGPathElement>('.facets__arc'));
-    const arcOff: string[] = [];
-    const views = Array.from(root.querySelectorAll<HTMLElement>('.facets__view'));
-    const n = views.length;
-    const miniSegs = Array.from(root.querySelectorAll<HTMLElement>('.facets__mini-seg'));
-    const miniN = root.querySelector<HTMLElement>('.facets__mini-n');
-    const miniT = root.querySelector<HTMLElement>('.facets__mini-t');
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const narrow = window.matchMedia('(max-width: 960px)');
-    let mode: 'pinned' | 'stacked' = 'stacked';
-    let cur = -1;
-    let ticking = false;
+    const nodes = Array.from(root.querySelectorAll<SVGGElement>('.facets__node'));
 
-    // Pinned only if every facet fits on one screen beside the ring.
-    function chooseMode() {
-      root.classList.remove('is-pinned');
-      root.classList.add('is-stacked');
-      if (reduce.matches || narrow.matches) { mode = 'stacked'; return; }
-      const avail = window.innerHeight - 64 - 48;
-      const tallest = Math.max(...views.map((v) => v.getBoundingClientRect().height));
-      const stackedPad = 96; // padding added in stacked mode
-      const fits = tallest - stackedPad <= avail;
-      mode = fits ? 'pinned' : 'stacked';
-      root.classList.toggle('is-pinned', fits);
-      root.classList.toggle('is-stacked', !fits);
-    }
-
-    function setActive(i: number) {
-      if (i === cur) return;
-      cur = i;
-      nodes.forEach((el, k) => {
-        if (k === i) el.setAttribute('aria-current', 'step'); else el.removeAttribute('aria-current');
-        el.classList.toggle('is-passed', k < i);
+    function show(open: number) {
+      rows.forEach((r, k) => {
+        const on = k === open;
+        r.classList.toggle('is-open', on);
+        btns[k].setAttribute('aria-expanded', on ? 'true' : 'false');
+        panels[k].hidden = !on;
       });
-      spokes.forEach((sp) => sp.classList.toggle('is-on', Number(sp.dataset.spoke) === i));
-      miniSegs.forEach((sg, k) => { sg.classList.toggle('is-passed', k < i); sg.classList.toggle('is-on', k === i); });
-      if (miniN) miniN.textContent = String(i + 1).padStart(2, '0');
-      if (miniT) miniT.textContent = nodes[i]?.getAttribute('aria-label')?.split(' – ')[0].replace(/^The /, '') ?? '';
-      if (mode === 'pinned') {
-        views.forEach((v, k) => {
-          const on = k === i;
-          v.classList.toggle('is-on', on);
-          v.setAttribute('aria-hidden', on ? 'false' : 'true');
-        });
-      }
+      arcs.forEach((a) => a.classList.toggle('is-on', Number(a.dataset.arc) === open));
+      nodes.forEach((n) => n.classList.toggle('is-on', Number(n.dataset.node) === open));
     }
 
-    function setArc(p: number) {
-      // p: 0..1 through the section. The ring closes just before the end.
-      const t = Math.min(1, Math.max(0, p / 0.94)) * n;
-      arcs.forEach((a, j) => {
-        const k = Number(a.dataset.arc);
-        const fill = Math.min(1, Math.max(0, t - k));
-        const off = (1 - fill).toFixed(3);
-        if (arcOff[j] === off) return; // unchanged: skip the repaint
-        arcOff[j] = off;
-        a.style.setProperty('--off', off);
-      });
-      root.classList.toggle('is-complete', t >= n - 0.001);
-    }
-
-    function progress() {
-      if (mode === 'pinned') {
-        const range = track.offsetHeight - pin.offsetHeight;
-        const top = track.getBoundingClientRect().top - 64;
-        return range > 0 ? Math.min(1, Math.max(0, -top / range)) : 0;
-      }
-      const rect = root.querySelector<HTMLElement>('.facets__panel')!.getBoundingClientRect();
-      const mid = window.innerHeight * 0.5;
-      return Math.min(1, Math.max(0, (mid - rect.top) / rect.height));
-    }
-
-    function update() {
-      ticking = false;
-      // All reads first, then the writes – reading positions after a write
-      // forces the browser to lay the page out again, every frame.
-      const p = progress();
-      let idx = 0;
-      if (mode === 'pinned') {
-        idx = Math.min(n - 1, Math.floor(p * n));
-      } else {
-        const mid = window.innerHeight * 0.5;
-        views.forEach((v, k) => { if (v.getBoundingClientRect().top <= mid) idx = k; });
-      }
-      setArc(p);
-      setActive(idx);
-    }
-
-    function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
-
-    function goTo(i: number) {
-      const smooth = reduce.matches ? 'auto' : 'smooth';
-      if (mode === 'pinned') {
-        const range = track.offsetHeight - pin.offsetHeight;
-        const trackTop = track.getBoundingClientRect().top + window.scrollY - 64;
-        window.scrollTo({ top: trackTop + ((i + 0.5) / n) * range, behavior: smooth as ScrollBehavior });
-      } else {
-        const top = views[i].getBoundingClientRect().top + window.scrollY - window.innerHeight * 0.3;
-        window.scrollTo({ top, behavior: smooth as ScrollBehavior });
-      }
-    }
-
-    nodes.forEach((node) => {
-      const i = Number(node.dataset.i);
-      node.addEventListener('click', () => goTo(i));
-      node.addEventListener('keydown', (e: KeyboardEvent) => {
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goTo(i); }
-        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); const j = Math.min(n - 1, i + 1); goTo(j); nodes[j].focus(); }
-        if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); const j = Math.max(0, i - 1); goTo(j); nodes[j].focus(); }
-      });
-    });
-
-    function relayout() { cur = -1; chooseMode(); update(); }
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', relayout);
-    reduce.addEventListener('change', relayout);
-    relayout();
+    btns.forEach((b, k) => b.addEventListener('click', () => {
+      show(rows[k].classList.contains('is-open') ? -1 : k);
+    }));
+    nodes.forEach((n) => n.addEventListener('click', () => {
+      const k = Number(n.dataset.node);
+      show(k);
+      btns[k].focus({ preventScroll: true });
+    }));
+    show(0);
   }
-
   document.querySelectorAll<HTMLElement>('.facets').forEach(initFacets);
 </script>

@@ -27,13 +27,14 @@ const milestones: { year: string; note: string; exit?: boolean }[] = [
 
 // On the private side – Stève's own text (19.11.2026), design A (canvas).
 // The shelf under "I create it" – books Stève picked (19.11.2026).
-// `why` is his one line per book, still to come.
-const books: { title: string; author: string; why?: string }[] = [
+const books: { title: string; author: string }[] = [
+  { title: 'The Creative Act', author: 'Rick Rubin' },
+  { title: 'Courage is Calling', author: 'Ryan Holiday' },
+  { title: 'The Comfort Book', author: 'Matt Haig' },
   { title: 'Radical Candor', author: 'Kim Scott' },
-  { title: 'Essentialism', author: 'Greg McKeown' },
   { title: 'Obviously Awesome', author: 'April Dunford' },
   { title: 'The Culture Code', author: 'Daniel Coyle' },
-  { title: 'The Creative Act', author: 'Rick Rubin' },
+  { title: 'The Pathless Path', author: 'Paul Millerd' },
 ];
 
 const privateText = [
@@ -66,7 +67,7 @@ const privateText = [
   <!-- Who is Stève — the six facets, on night (v3) -->
   <section class="about-facets v3-night">
     <span class="v3-grain" aria-hidden="true"></span>
-    <Facets night />
+    <Facets />
   </section>
 
   <div class="glow-scope glow-scope--below">
@@ -81,29 +82,29 @@ const privateText = [
     <div class="about-learn__grid">
       <div class="about-learn__prose">
         <p class="about-learn__lead">
-          I've spent most of my career working in in-between spaces. Where stories
-          are not told, conversations are not happening, clarity breaks down and
-          ownership gets fuzzy. Situations in which smart people produce the wrong
-          results anyway.
+          I love translating between worlds and helping a technical founder learn
+          to be a storyteller, a marketer learn to run a P&amp;L, or a CEO build a
+          company that matches who they actually are, rather than who they thought
+          they were supposed to be.
         </p>
         <p>
-          I love translating between worlds and helping a technical founder
-          learning to be a storyteller, a marketer learning to run a P&amp;L, or a
-          CEO trying to build a company that matches who they actually are, rather
-          than who they thought they were supposed to be.
+          I've spent a lot of my career in those in-between spaces, and I enjoy
+          them. That's where the untold stories live, where two teams need someone
+          to translate, and where clarity and ownership get built – before smart
+          people end up producing the wrong results anyway.
         </p>
       </div>
 
       <div class="about-betweens">
-        <p class="about-betweens__label">I work between</p>
-        <p class="about-between">The people building features <span class="about-between__b"><span class="about-between__amp">&amp;</span> the customers paying for benefits</span></p>
-        <p class="about-between">American ambition <span class="about-between__b"><span class="about-between__amp">&amp;</span> European execution</span></p>
-        <p class="about-between is-coral">The strategy that makes sense on paper <span class="about-between__b"><span class="about-between__amp">&amp;</span> the team that has to believe it enough to deliver it</span></p>
+        <p class="about-betweens__label">In-betweens I enjoy</p>
+        <p class="about-between">Between the people building features <span class="about-between__b"><span class="about-between__amp">&amp;</span> the customers paying for benefits</span></p>
+        <p class="about-between">Between American ambition <span class="about-between__b"><span class="about-between__amp">&amp;</span> European execution</span></p>
+        <p class="about-between is-coral">Between the strategy that makes sense on paper <span class="about-between__b"><span class="about-between__amp">&amp;</span> the team that has to believe it enough to deliver it</span></p>
       </div>
     </div>
 
     <div class="about-shelf">
-      <p class="about-shelf__label">On my shelf</p>
+      <h3 class="about-shelf__label">Some books currently shaping how I see the world</h3>
       <ul class="about-shelf__list">
         {books.map((bk) => (
           <li class="about-shelf__book">
@@ -116,19 +117,22 @@ const privateText = [
         ))}
         <li class="about-shelf__lean" aria-hidden="true"></li>
       </ul>
+      <div class="about-shelf__line" aria-hidden="true"></div>
     </div>
   </section>
 
   <!-- Why now -->
   <section class="about-now container-wide" aria-labelledby="now-title">
     <h2 id="now-title" class="about-now__title">
-      Fewer companies than I could take. <span class="accent">More depth with each.</span>
+      My energy goes everywhere. <span class="accent">My focus doesn&rsquo;t.</span>
     </h2>
     <p class="about-now__text">
-      The obvious next step after a seat at the executive table would be another
-      seat at the executive table. That's not what pulls me. What gives me
-      energy is the creative part – solving problems, and the quiet conversation
-      with a leader about what's really going on.
+      What gives me energy is creativity, ambition, and the quiet conversation
+      with a leader about what's really going on. I naturally want to be
+      everywhere and do everything, but I've learned that focus, method and
+      discipline are how breakthroughs happen. In a room, I read the energy
+      first. Then I know when to lift it toward more ambition, and when to
+      slow things down so we solve the right problem.
     </p>
   </section>
 
@@ -138,7 +142,6 @@ const privateText = [
     <div class="container-wide">
       <header class="about-timeline__header">
         <div>
-          <p class="section-eyebrow">Twenty years</p>
           <h2 id="timeline-title" class="about-timeline__title">Twenty years, <span class="accent">compressed.</span></h2>
         </div>
       </header>
@@ -299,13 +302,13 @@ const privateText = [
   .about-between__amp { color: var(--color-cobalt); font-weight: 600; }
   .about-between.is-coral .about-between__amp { color: var(--color-night-coral); }
 
-  /* Why now: one line and one short paragraph, side by side. */
+  /* Why now: one line and one short paragraph, side by side, top-aligned. */
   .about-now {
     padding-top: 140px;
     display: grid;
     grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
     gap: clamp(48px, 7vw, 96px);
-    align-items: end;
+    align-items: start;
   }
   .about-now__title {
     font-family: var(--font-display);
@@ -426,8 +429,8 @@ const privateText = [
     isolation: isolate;
     overflow: hidden;
     overflow: clip;
-    padding-block: 140px;
-    margin-bottom: 80px;
+    padding-block: 140px 56px;
+    margin-bottom: 0;
     background: linear-gradient(180deg,
       transparent 0,
       color-mix(in srgb, var(--color-night-haze) 80%, transparent) 18%,
@@ -503,48 +506,70 @@ const privateText = [
     margin-top: 12px;
   }
   @media (max-width: 960px) {
-    .about-private { padding-block: 96px; }
+    .about-private { padding-block: 96px 40px; }
     .about-private__grid { grid-template-columns: 1fr; }
     .about-private__photo { aspect-ratio: 4 / 5; max-width: 520px; border-radius: var(--radius-sm); }
   }
 
-  /* On my shelf (S2): book spines of different heights and blues,
-     standing on a line, the last one leaning. Titles run up the spine. */
-  .about-shelf { margin-top: 72px; }
+  /* The shelf: book spines of different heights and blues, standing on
+     a line, centered under the section; the last one leans. Spines wrap,
+     but the list is one spine tall – on a narrow screen only the books
+     that fit on one line show.  */
+  .about-shelf { margin-top: 88px; text-align: center; }
   .about-shelf__label {
-    font-family: var(--font-mono);
-    font-size: var(--text-mono-sm);
-    text-transform: uppercase;
-    letter-spacing: var(--tracking-wide);
-    color: var(--color-ash);
-    margin: 0 0 16px;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(20px, 1rem + 0.5vw, 24px);
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    color: var(--color-ink);
+    margin: 0 0 28px;
   }
   .about-shelf__list {
+    --shelf-h: 350px;
     list-style: none;
-    margin: 0;
-    padding: 0 0 0 12px;
+    margin: 0 auto;
+    padding: 0;
     display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     align-items: flex-end;
-    gap: 6px;
-    border-bottom: 3px solid var(--color-ink);
+    align-content: flex-start;
+    gap: 0 6px;
+    height: var(--shelf-h);
+    overflow: hidden;
+    max-width: 760px;
+  }
+  .about-shelf__line {
+    max-width: 760px;
+    height: 3px;
+    margin: 0 auto;
+    background: var(--color-ink);
+    border-radius: 2px;
   }
   .about-shelf__book {
+    --h: 300px;
     position: relative;
     isolation: isolate;
     overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
+    flex: 0 0 auto;
     width: 60px;
-    height: 300px;
+    height: var(--h);
+    /* every spine ends on the same shelf line */
+    margin-top: calc(var(--shelf-h) - var(--h));
     border-radius: 2px 2px 0 0;
     background: var(--color-night);
     color: var(--color-white);
   }
-  .about-shelf__book:nth-child(2) { width: 56px; height: 330px; background: var(--color-night-deep); }
-  .about-shelf__book:nth-child(3) { width: 66px; height: 350px; background: var(--color-night-royal); }
-  .about-shelf__book:nth-child(4) { width: 58px; height: 315px; background: var(--color-night-azure); }
-  .about-shelf__book:nth-child(5) { width: 62px; height: 320px; background: var(--color-night-coral); }
+  .about-shelf__book:nth-child(7n+2) { --h: 330px; width: 56px; background: var(--color-night-deep); }
+  .about-shelf__book:nth-child(7n+3) { --h: 315px; width: 62px; background: var(--color-night-royal); }
+  .about-shelf__book:nth-child(7n+4) { --h: 340px; width: 58px; background: var(--color-night-azure); }
+  .about-shelf__book:nth-child(7n+5) { --h: 350px; width: 66px; background: var(--color-night); }
+  .about-shelf__book:nth-child(7n+6) { --h: 320px; width: 58px; background: var(--color-night-deep); }
+  .about-shelf__book:nth-child(7n+7) { --h: 325px; width: 62px; background: var(--color-night-coral); }
   .about-shelf__book .v3-grain { z-index: -1; opacity: 0.25; }
   .about-shelf__spine {
     writing-mode: vertical-rl;
@@ -568,8 +593,10 @@ const privateText = [
     opacity: 0.75;
   }
   .about-shelf__lean {
+    flex: 0 0 auto;
     width: 28px;
     height: 150px;
+    margin-top: calc(var(--shelf-h) - 150px);
     margin-left: 10px;
     background: var(--color-night-haze);
     border: 1px solid var(--color-line);
@@ -578,8 +605,8 @@ const privateText = [
     transform-origin: bottom left;
   }
   @media (max-width: 640px) {
-    .about-shelf__list { padding-left: 4px; gap: 4px; }
-    .about-shelf__book { width: 50px !important; }
+    .about-shelf { margin-top: 64px; }
+    .about-shelf__list { gap: 0 4px; }
     .about-shelf__lean { display: none; }
   }
 </style>
