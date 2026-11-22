@@ -287,8 +287,10 @@ const moments = [
 
   /* -------- When to work with me: on night (v3) -------- */
   .moments {
-    padding-block: 75px calc(var(--dawn) + 60px);
-    scroll-margin-top: 0;
+    --moments-pt: 75px;
+    padding-block: var(--moments-pt) calc(var(--dawn) + 60px);
+    /* Anchor offset: land the heading 48px below the fixed nav. */
+    scroll-margin-top: calc(var(--nav-h, 80px) + 48px - var(--moments-pt));
   }
 
   .moments__title {
@@ -363,7 +365,7 @@ const moments = [
     .moments__list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   }
   @media (max-width: 640px) {
-    .moments { padding-block: var(--space-16) calc(var(--dawn) + 40px); --dawn: 260px; }
+    .moments { --moments-pt: var(--space-16); padding-block: var(--moments-pt) calc(var(--dawn) + 40px); --dawn: 260px; }
     .moments__list { grid-template-columns: 1fr; row-gap: var(--space-10); }
     .moments__item-title { font-size: 24px; }
   }
